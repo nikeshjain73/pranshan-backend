@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Coat Paint</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        .header {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .header4 {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .header3 {
+            font-weight: bold;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .header1 {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .header2 {
+            font-weight: bold;
+            font-size: 9px;
+            text-align: left;
+        }
+
+        .footer {
+            font-weight: bold;
+            text-align: left;
+            font-size: 10px;
+            margin-top: 20px;
+        }
+
+        .left-alignment {
+            text-align: left;
+        }
+
+        .truncate-cell {
+            height: 10px;
+            max-height: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        @media print {
+            thead {
+                display: table-header-group;
+                /* Repeat headers on each page */
+            }
+
+            tfoot {
+                display: table-footer-group;
+                /* Ensure footer is on the last page */
+            }
+
+            tr.page-break {
+                page-break-after: always;
+                /* Force page break after each table */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <% const hasWpsAndAccept=items.some(detail=> detail.average_dft_final_coat);
+        let itemsPerPage = 8;
+        let totalPages = Math.ceil(items.length / itemsPerPage);
+        for (let page = 0; page < totalPages; page++) { let start=page * itemsPerPage; let end=start + itemsPerPage; let
+            currentItems=items.slice(start, end); %>
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="16" class="header">
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <img src="<%= logoUrl1 %>" alt="Company Logo"
+                                    style="max-width: 200px; height: 80px; margin-right: 20px;" />
+                                <div style="flex: 1; text-align: center; font-size: 17px;">
+                                    <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                    GROUP OF COMPANIES<br />
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="30" class="header">
+                            <% if (hasWpsAndAccept) { %>
+                                FINAL / TOP COAT PAINT INSPECTION REPORT
+                            <% } else { %>
+                                FINAL / TOP COAT PAINT INSPECTION OFFER
+                            <% } %>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="header">CLIENT</td>
+                        <td colspan="2"><%= headerInfo.client || '--' %></td>
+                        <td colspan="1" class="header">PROJECT</td>
+                        <td colspan="2"><%= headerInfo.project_name || '--' %></td>
+                        <td colspan="1" class="header">REPORT NO.</td>
+                        <td colspan="3"><%= headerInfo.report_no || '--' %></td>
+                    </tr>  
+                    <tr>
+                        <td colspan="1" class="header">WO/PO NO</td>
+                        <td colspan="2"><%= headerInfo.wo_no || '--' %></td>
+                        <td colspan="1" class="header">PROCEDURE NO.</td>
+                        <td colspan="2"><%= headerInfo.procedure_no || '--' %></td>
+                        <td colspan="1" class="header">OFFER DATE</td>
+                        <td colspan="3"><%= headerInfo.offer_date ? new Date(headerInfo.offer_date).toISOString().slice(0,10).split('-').reverse().join('/') : '--' %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" class="header3">WEATHER CONDITION</td>
+                    </tr>
+                    <tr>
+                        <th rowspan="2" style="width: 80px;">ACTIVITY</th>
+                        <th rowspan="2" style="width: 110px;">DATE PERFORMED</th>
+                        <th rowspan="1" colspan="4">START TIME - <%= headerInfo.start_time || '--' %></th>
+                        <th rowspan="1" colspan="4">FINISH TIME- <%= headerInfo.end_time || '--' %></th>
+                    </tr>
+                    <tr>
+                        <th style="width: 110px;">SURFACE OR METAL TEMP °C</th>
+                        <th style="width: 80px;">DEW POINT °C</th>
+                        <th style="width: 80px;">RELATIVE HUMIDITY %</th>
+                        <th style="width: 110px;">AMBIENT TEMP °C</th>
+                        <th style="width: 80px;">SURFACE OR METAL TEMP °C</th>
+                        <th style="width: 80px;">DEW POINT °C</th>
+                        <th style="width: 80px;">RELATIVE HUMIDITY %</th>
+                        <th style="width: 80px;">AMBIENT TEMP °C</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% headerInfo.weather_condition.forEach(function(order, index) { %>
+                        <tr>
+                            <td><%= order.activity_type || '--' %></td>
+                            <td><%= order.performed_date ? new Date(order.performed_date).toISOString().slice(0,10).split('-').reverse().join('/') : '--' %></td>
+                            <td><%= order.start_surface_temp || '--' %></td>
+                            <td><%= order.start_dew_point || '--' %></td>
+                            <td><%= order.start_relative_humidity || '--' %></td>
+                            <td><%= order.start_ambient_temp || '--' %></td>
+                            <td><%= order.finish_surface_temp || '--' %></td>
+                            <td><%= order.finish_dew_point || '--' %></td>
+                            <td><%= order.finish_relative_humidity || '--' %></td>
+                            <td><%= order.finish_ambient_temp || '--' %></td>
+                          </tr>
+                    <% }) %>
+                </tbody>
+                <tr>
+                    <td colspan="10" class="header3">FINAL / TOP COATING</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header2">FINAL PAINT/SHADE</td>
+                    <td colspan="1"><%= headerInfo.final_paint || '--' %></td>
+                    <td colspan="2" class="header2">APP. METHOD</td>
+                    <td colspan="1"><%= headerInfo.final_paint_app_method || '--' %></td>
+                    <td colspan="2" class="header2">FINAL DATE</td>
+                    <td colspan="2"><%= headerInfo.final_date ? new Date(headerInfo.final_date).toISOString().slice(0,10).split('-').reverse().join('/') : '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header2">PAINT MANUFACTURER</td>
+                    <td colspan="1"><%= headerInfo.paint_manufacturer || '--' %></td>
+                    <td colspan="2" class="header2">DFT RANGE</td>
+                    <td colspan="1"><%= headerInfo.final_paint_dft_range || '--' %></td>
+                    <td colspan="2" class="header2">TIME</td>
+                    <td colspan="2"><%= headerInfo.time || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header2">PAINT BATCH NO. (BASE)</td>
+                    <td colspan="1"><%= headerInfo.paint_batch_base || '--' %></td>
+                    <td colspan="2" class="header2">MANUFACTURE DATE</td>
+                    <td colspan="1"><%= headerInfo.manufacture_date ? new Date(headerInfo.manufacture_date).toISOString().slice(0,
+                            10).split('-').reverse().join('/') : '--' %>
+                    </td>
+                    <td colspan="2" class="header2">SHELF LIFE</td>
+                    <td colspan="2"><%= headerInfo.shelf_life || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header2">PAINT BATCH NO. (HARDNER)</td>
+                    <td colspan="1"><%= headerInfo.paint_batch_hardner || '--' %></td>
+                    <td colspan="3"></td>
+                    <td colspan="4"></td>
+                </tr>
+                <% if (hasWpsAndAccept) { %>
+                    <tr>
+                        <th rowspan="2" colspan="1" class="header">SR. NO.</th>
+                        <th rowspan="2" colspan="2" class="header">DRAWING NO.</th>
+                        <th rowspan="2" colspan="1" class="header">REV</th>
+                        <th rowspan="2" colspan="1" class="header">ASSEMBLY NUMBER</th>
+                        <th rowspan="2" colspan="1" class="header">GRID NUMBER</th>
+                        <th rowspan="2" colspan="1" class="header">GRID QTY</th>
+                        <th rowspan="1" colspan="2" class="header">Average DFT</th>
+                        <th rowspan="2" colspan="2" class="header">ACC/REJ</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2" class="header">FINAL / TOP COAT</th>
+                    </tr>
+                    <% currentItems.forEach((detail, index)=> { %>
+                        <tr>
+                            <td colspan="1" class="truncate-cell"><%= start + index + 1 %></td>
+                            <td colspan="2" class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                            <td colspan="1" class="truncate-cell"><%= detail.rev %></td>
+                            <td colspan="1" class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                            <td colspan="1" class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                            <td colspan="1" class="truncate-cell"><%= detail.fc_used_grid_qty || '--' %></td>
+                            <td colspan="2" class="truncate-cell"><%= detail.average_dft_final_coat || '--' %></td>
+                            <td colspan="2" class="truncate-cell"><%= detail.accept || '--' %></td>
+                          </tr>
+                    <% }) %>
+                    <tr>
+                        <td colspan="1" class="header">NOTE</td>
+                        <td colspan="9"><%= headerInfo.qc_notes || '--' %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td colspan="4" class="header">VISHAL QC</td>
+                        <td colspan="5" class="header">CLIENT / TPIA</td>
+                    </tr>
+                    <t  r>
+                        <td colspan="1" class="header">SIGN</td>
+                        <td colspan="4"></td>
+                        <td colspan="5"></td>
+                    </t>
+                    <tr>
+                        <td colspan="1" class="header">NAME</td>
+                        <td colspan="4"><%= headerInfo.qc_name || '--' %></td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="header">DATE</td>
+                        <td colspan="4"><%= headerInfo.qc_date ? new Date(headerInfo.qc_date).toISOString().slice(0,10).split('-').reverse().join('/') : '--' %></td>
+                        <td colspan="5"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="text-align: left;">VE-DOC-28 REV.00</td>
+                    </tr>
+                <% } else { %>
+                    <tr>
+                        <th colspan="1" class="header">SR. NO.</th>
+                        <th colspan="2" class="header">DRAWING NO.</th>
+                        <th rowspan="1" class="header">REV</th>
+                        <th colspan="2" class="header">ASSEMBLY NUMBER</th>
+                        <th colspan="1" class="header">GRID NUMBER</th>
+                        <th colspan="1" class="header">GRID QTY</th>
+                        <th colspan="3" class="header">REMARKS</th>
+                    </tr>
+                    <% currentItems.forEach((detail, index) => { %>
+                    <tr>
+                        <td colspan="1" class="truncate-cell"><%= start + index + 1 %></td>
+                        <td colspan="2" class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                        <td colspan="1" class="truncate-cell"><%= detail.rev %></td>
+                        <td colspan="2" class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                        <td colspan="1" class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                        <td colspan="1" class="truncate-cell"><%= detail.fc_used_grid_qty || '--' %></td>
+                        <td colspan="3" class="truncate-cell"><%= detail.remarks || '--' %></td>
+                    </tr>
+                    <% }) %>
+                    <tr>
+                        <td colspan="1" class="header">NOTE</td>
+                        <td colspan="9"><%= headerInfo.offer_notes || '--' %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td colspan="9" class="header">OFFERED BY</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="header">SIGN</td>
+                        <td colspan="9"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="header">NAME</td>
+                        <td colspan="9"><%= headerInfo.offer_name || '--' %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="header">DATE</td>
+                        <td colspan="9"><%= headerInfo.offer_date ? new Date(headerInfo.offer_date).toISOString().slice(0,10).split('-').reverse().join('/') : '--' %></td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="text-align: left;">VE-DOC-27 REV.00</td>
+                    </tr>
+                <% } %>     
+            </table>
+        <% if (page !==totalPages - 1) { %>
+            <div class="page-break"></div>
+        <% } } %>
+</body>
+</html>

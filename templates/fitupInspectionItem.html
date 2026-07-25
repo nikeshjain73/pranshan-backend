@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fit Up </title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order) { 
+      const hasWpsAndAccept = order.items.some(detail => detail.wps_no || detail.accept);
+      const projectColspan = hasWpsAndAccept ? 4 : 3;
+      const reportColspan = hasWpsAndAccept ? 4 : 3;
+    %>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="18" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 20px;"
+                />
+                <div style="flex: 1; text-align: center;  font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                  GROUP OF COMPANIES<br />
+                </div>
+                // <img
+                //     src="<%= logoUrl2 %>"
+                //     alt="Company Logo"
+                //     style="max-width: 100px; height: 100px; margin-right: 0px;"
+                // />
+              </div>
+            </td>
+          </tr>
+        </tr>
+          <td colspan="15" class="header"><% if (hasWpsAndAccept) { %>
+                FIT-UP INSPECTION REPORT (STRUCTURE)
+              <% } else { %>
+                FIT-UP INSPECTION OFFER LIST
+              <% } %>
+          </td>
+        </tr> 
+          <tr>
+            <td colspan="1" class="header">CLIENT</td>
+            <td colspan="4"><%= order.client || '--' %></td>
+            <td colspan="1" class="header">PROJECT</td>
+            <td colspan=<%= projectColspan %>><%= order.project_name || '--' %></td>
+            <td colspan="1" class="header">REPORT NO.</td>
+            <td colspan=<%= reportColspan %>><%= order.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="1" class="header">WO NO./PO NO.</td>
+            <td colspan="4"><%= order.wo_no || '--' %></td>
+            <td colspan="1" class="header">PROJECT PO NO.</td>
+            <td colspan=<%= projectColspan %>><%= order.project_po_no || '--' %></td>
+            <td colspan="1" class="header">Date :</td>
+            <td colspan=<%= reportColspan %>>
+              <!-- <%= order.date ? new Date(order.date).toLocaleDateString() : '--' %> -->
+              <%= order.date 
+              ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr>
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>SHEET NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>ITEM NUMBER</th>
+            <th>QTY(Nos)</th>
+            <th>PROFILE</th>
+            <th>IMIR NO.</th>
+            <th>HEAT NO.</th>
+            <th>JOINT TYPE</th>
+            <% if (hasWpsAndAccept) { %>
+              <th>WPS NO.</th>
+              <th>ACC/REJ</th>
+            <% } %>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% order.items.forEach(function(detail, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= detail.drawing_no || '--' %></td>
+            <td><%= detail.rev || '--' %></td>
+            <td><%= detail.sheet_no || '--' %></td>
+            <td><%= detail.assembly_no || '--' %></td>
+            <td><%= detail.grid_no || '--' %></td>
+            <td><%= detail.item_no || '--' %></td>
+            <td><%= detail.issued_qty || '--' %></td>
+            <td><%= detail.profile || '--' %></td>
+            <td><%= detail.imir_no || '--' %></td>
+            <td><%= detail.heat_no || '--' %></td>
+            <!-- <td><%= detail.joint_type || '--' %></td> -->
+             <td>
+              <% if (detail.joint_type && detail.joint_type.length) { %>
+                <%= detail.joint_type.map((joint) => joint.name).join(', ') %>
+              <% } else { %>
+                --
+              <% } %>
+             </td>
+            <% if (hasWpsAndAccept) { %>
+              <td><%= detail.wps_no || '--' %></td>
+              <td><%= detail.accept || '--' %></td>
+            <% } %>
+            <td><%= detail.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        <% if (hasWpsAndAccept) { %>
+              <tr>
+                <td colspan="10" class="header">INSPECTION CHECK</td>
+                <td colspan="5" class="header">REMARKS</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> DIR & ORIENTATION</div>
+                  <div class="checkbox-item"><input type="checkbox" /> FLANGE STRADLING </div>
+                  <div class="checkbox-item"><input type="checkbox" /> PAINTING LINES FOR ERECTED SPOOLS</div>
+                </td>
+                <td colspan="2" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> W.E.P AS PER WPS</div>
+                  <div class="checkbox-item"><input type="checkbox" /> EREC. COORDINATES</div>
+                </td>
+                <td colspan="2" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> DIMENSIONS</div>
+                  <div class="checkbox-item"><input type="checkbox" /> PHYSICAL CONDITION</div>
+                  <div class="checkbox-item"><input type="checkbox" /> EREC. VERTICALITY</div>
+                </td>
+                <td colspan="2" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> SQUARENESS</div>
+                  <div class="checkbox-item"><input type="checkbox" /> ARC STRIKE</div>
+                  <div class="checkbox-item"><input type="checkbox" /> PRESERVATION</div>
+                </td>
+                <td colspan="1" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> OFFSET</div>
+                  <div class="checkbox-item"><input type="checkbox" /> SLOPE</div>
+                  <div class="checkbox-item"><input type="checkbox" /> VISUAL</div>
+                </td>
+                <td colspan="5"></td>
+              </tr>
+              <tr>
+                <td colspan="2"></td>
+                <td colspan="6" class="header">VE QC</td>
+                <td colspan="7" class="header">CLIENT QC/TPI</td>
+              </tr>
+              <tr>
+                <td colspan="2">SIGNATURE</td>
+                <td colspan="6"></td>
+                <td colspan="7"></td>
+              </tr>
+              <tr>
+                <td colspan="2">NAME</td>
+                <td colspan="6"><%= order.qc_name || '--' %></td>
+                <td colspan="7"></td>
+              </tr>
+              <tr>
+                <td colspan="2">DATE</td>
+                <td colspan="6">
+                  <!-- <%= order.date ? new Date(order.date).toLocaleDateString() : '--' %> -->
+                  <%= order.date 
+                  ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                  : '--' %>  
+                </td>
+                <td colspan="7"></td>
+              </tr>
+              <tr>
+                <td colspan="17" style="text-align: left;">VE-STR-10</td>
+              </tr>
+        <% } else { %>
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="13" class="header">OFFERED BY</td>
+          </tr>
+          <tr>
+            <td colspan="2">SIGNATURE</td>
+            <td colspan="13"></td>
+          </tr>
+          <tr>
+            <td colspan="2">NAME</td>
+            <td colspan="13"><%= order.offer_name || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2">DATE</td>
+            <td colspan="13">
+              <!-- <%= order.date ? new Date(order.date).toLocaleDateString() : '--' %> -->
+              <%= order.date 
+              ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr>
+            <td colspan="17" style="text-align: left;">VE-DOC-09 REV.00</td>
+          </tr>
+        <% } %>
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Ledger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            margin: 20px auto;
+            page-break-after: always;
+        }
+        .header {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .emp-box{
+            display: flex;
+            justify-content: space-between;
+        }
+        .employee-info {
+            margin-bottom: 20px;
+        }
+        .details {
+            margin-right: 50px;
+        }
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .attendance-table th, .attendance-table td {
+            border: 1px solid #000;
+            text-align: center;
+            padding: 2px;
+        }
+        .attendance-sections {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .section {
+            width: 48%;
+        }
+        .section-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <% requestData.forEach(function (employee) { %>
+        <div class="container">
+            <div class="header">
+                Pranhans engineering
+            </div>
+            <div class="emp-box">
+                <div class="employee-info">
+                    <strong>Department:</strong> <%= employee.dept_name %><br />
+                    <strong>Employee Name:</strong> <%= employee.employee_name %><br />
+                    <strong>Pass No:</strong> <%= employee.card_no %><br />
+                    <strong>Designation:</strong> <%= employee?.designation[0]?.name  %><br />
+                </div>
+                <div class="employee-info details">
+                    <strong>Area:</strong><br />
+                    <strong>Month-Year:</strong> <%= employee?.month %>-<%= new Date(employee?.syear.start_year).getFullYear() %><br />
+                    <strong>Project Name:</strong><br />
+               
+                </div>
+            </div>
+            <div class="attendance-sections">
+                <!-- First Half Section -->
+                <div class="section">
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>In Time</th>
+                                <th>Out Time</th>
+                                <th>OT</th>
+                                <th>Sign</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% employee?.first_half_records?.forEach(function (record) { %>
+                                <tr>
+                                    <td><%= record.day %></td>
+                                    <td><%= record?.record?.sum_Apchar  %></td>
+                                    <td><%= record.out_time  %></td>
+                                    <td><%= record?.record?.ot_hour %></td>
+                                    <td></td>
+                                </tr>
+                            <% }) %>
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Second Half Section -->
+                <div class="section">
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>In Time</th>
+                                <th>Out Time</th>
+                                <th>OT</th>
+                                <th>Sign</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% employee?.second_half_records?.forEach(function (record) { %>
+                                <tr>
+                                    <td><%= record.day %></td>
+                                    <td><%= record?.record?.sum_Apchar %></td>
+                                    <td><%= record.out_time %></td>
+                                    <td><%= record?.record?.ot_hour  %></td>
+                                    <td></td>
+                                </tr>
+                            <% }) %>
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td><%= employee?.total_present_days %></td>
+                                <td></td>
+                                <td><%= employee?.total_ot_hours %></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</body>
+</html>

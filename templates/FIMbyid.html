@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FIM Packing List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 6px;
+      font-size: 10px;
+      text-align: center;
+    }
+    .header {
+      font-weight: bold;
+      font-size: 12px;
+      text-align: left;
+    }
+    .title-row td {
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .remarks {
+      height: 60px;
+    }
+    @media print {
+      thead {
+        display: table-header-group;
+      }
+      .page-break {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <%
+    const itemsPerPage = 8;
+    const totalPages = Math.ceil(fim.items.length / itemsPerPage);
+    for (let page = 0; page < totalPages; page++) {
+      const start = page * itemsPerPage;
+      const end = start + itemsPerPage;
+      const currentItems = fim.items.slice(start, end);
+      const showReject = fim.send_to_qc === true;
+      const headColspan =  2;
+      const bodyColspan = 3;
+      const titleColspan =  10;
+      const footersection = 8;
+
+
+  %>
+
+  <table>
+    <tr>
+      <td colspan="<%= titleColspan %>">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <img src="<%= logoUrl1 %>" style="max-height: 80px;" />
+          <div style="text-align: center; flex: 1;">
+            <strong style="font-size: 16px;">VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED<br/>
+            <span style="font-size: 14px;">GROUP OF COMPANIES</span><br/></strong>
+            <span style="font-size: 13px;">FIM PACKING LIST - STRUCTURE (FIM INSPECTION OFFER LIST)</span>
+          </div>
+          <img src="<%= logoUrl2 %>" style="max-height: 80px;" />
+        </div>
+      </td>
+    </tr>
+    <!-- </table>
+
+    <table> -->
+      <!-- <thead> -->
+        <tr>
+          <td class="header" colspan="<%= headColspan %>">CLIENT</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.project?.party?.name || '--' %></td>
+          <td class="header" colspan="<%= headColspan %>">RECEIVING DATE</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.receiving_date ? new Date(fim.receiving_date).toLocaleDateString() : '--' %></td>
+        </tr>
+        <tr>
+          <td class="header" colspan="<%= headColspan %>">PROJECT</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.project?.name || '--' %></td>
+          <td class="header" colspan="<%= headColspan %>">RECEIVED BY</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.received_by?.user_name || '--' %></td>
+        </tr>
+         <tr>
+          <td class="header" colspan="<%= headColspan %>">PACKING LIST NO.</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.fim_lot_no || '--' %></td>
+          <td class="header" colspan="<%= headColspan %>">PACKING LIST DATE</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.packing_date ? new Date(fim.packing_date).toLocaleDateString() : '--' %></td>
+        </tr>
+        <tr>
+           <td class="header" colspan="<%= headColspan %>">RGP NO.</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.rgp_no || '--' %></td>
+          <td class="header" colspan="<%= headColspan %>">FIM LOT NO.</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.fim_lot_no || '--' %></td>
+        </tr>
+        <tr>
+          <td class="header" colspan="<%= headColspan %>">VEHICLE NUMBER</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.vehicle_number || '--' %></td>
+          <td class="header" colspan="<%= headColspan %>">RETURNABLE / NON RETURNABLE</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.returnable_type || '--' %></td>
+        </tr>
+         <tr>
+          <td class="header" colspan="<%= headColspan %>">SUPPLIER</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.supplier || '--' %></td>
+          <td class="header" colspan="<%= headColspan %>">E-WAY BILL</td>
+          <td colspan="<%= bodyColspan %>"><%= fim.eway_bill || '--' %></td>
+        </tr>
+
+      <!-- </thead>
+  </table>
+  <table>
+    <thead> -->
+      <tr>
+        <th>Sr.</th>
+        <th>Section Details</th>
+        <th>Material Grade</th>
+        <th>Weight as per Packing List (Kg)</th>
+        <th>Numbers as per Packing List</th>
+        <th>Received Weight (Kg)</th>
+        <th>Received Length (MM)</th>
+        <th>Received Width (MM)</th>
+        <th>Received Nos</th>
+        <th>Remarks</th>
+      </tr>
+    <!-- </thead>
+    <tbody> -->
+      <% currentItems.forEach((item, index) => { %>
+        <tr>
+          <td><%= start + index + 1 %></td>
+          <td><%= item.item_id?.name || '--' %></td>
+          <td><%= item.item_id?.material_grade || '--' %></td>
+          <td><%= item.weight_as_per_list || 0 %></td>
+          <td><%= item.numbers_as_per_list || 0 %></td>
+          <td><%= item.received_weight || 0 %></td>
+          <td><%= item.received_length || 0 %></td>
+          <td><%= item.received_width || 0 %></td>
+          <td><%= item.received_nos || 0 %></td>
+          <td><%= item.remarks || '--' %></td>
+        </tr>
+      <% }) %>
+
+      <% if (page === totalPages - 1) { %>
+        <!-- Signature Section -->
+        <tr class="signature-section">
+          <td colspan="2" class="header">SIGNATURE</td>
+          <td colspan="<%= footersection %>"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="header">DATE</td>
+          <td colspan="<%= footersection %>"><%= fim.receive_date ? new Date(fim.receive_date).toLocaleDateString() : '--' %></td>
+        </tr>
+         <tr>
+          <td colspan="<%= titleColspan %>" style="text-align: left; font-size: 8px;">Doc: VE-DOC-45</td>
+        </tr>
+      <% } %>
+    <!-- </tbody> -->
+  </table>
+
+  <% if (page !== totalPages - 1) { %>
+    <div class="page-break"></div>
+  <% } } %>
+</body>
+</html>

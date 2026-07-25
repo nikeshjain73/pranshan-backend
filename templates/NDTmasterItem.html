@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NDT Master List</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+    <div>
+      <table>
+        <thead>
+            <tr style="height: 55px;"> 
+                <td colspan="14" class="header" style="padding: 0; vertical-align: middle;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                      <img
+                          src="<%= logoUrl1 %>"
+                          alt="Company Logo"
+                          style="max-width: 100px; height: 100px; margin-right: 20px;"
+                      />
+                      <div style="flex: 1; text-align: center; font-size: 22px;">
+                          <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                          GROUP OF COMPANIES<br />
+                      </div>
+                      <img
+                          src="<%= logoUrl2 %>"
+                          alt="Company Logo"
+                          style="max-width: 100px; height: 100px; margin-right: 0px;"
+                      />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+              <td colspan="15" class="header">NDT MASTER LIST</td>
+            </tr>
+          <tr>
+            <td colspan="2" class="header">CLIENT</td>
+            <td colspan="11"><%= order.client || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">PROJECT</td>
+            <td colspan="11"><%= order.project_name || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">WO NO./PO NO.</td>
+            <td colspan="11"><%= order.wo_no || '--' %></td>
+          </tr>
+          <tr class="">
+            <th rowspan="2">SR. NO.</th>
+            <th rowspan="2">DRAWING NO.</th>
+            <th rowspan="2">REV</th>
+            <th rowspan="2">ASSEMBLY NUMBER</th>
+            <th rowspan="2">GRID NUMBER</th>
+            <th rowspan="2">PROFILE</th>
+            <th rowspan="2">TYPE OF WELD</th>
+            <th rowspan="2">WELDING PROCESS</th>
+            <th rowspan="2">WELDER NO.</th>
+            <th colspan="4">NDT REQUIREMENTS</th>
+          </tr>
+          <tr>
+            <th>UT</th>
+            <th>RT</th>
+            <th>LPT</th>
+            <th>MPT</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+                <% order.items.forEach(function(detail, index) { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= detail.drawing_no || '--' %></td>
+                      <td><%= detail.rev || '--' %></td>
+                      <td><%= detail.assembly_no || '--' %></td>
+                      <td><%= detail.grid_no || '--' %></td>
+                      <td><%= detail.profile || '--' %></td>
+                      <td><%= detail.joint_type || '--' %></td>
+                      <td><%= detail.weld_process || '--' %></td>
+                      <td><%= detail.welder_no || '--' %></td>
+                          <% 
+                            const columns = ["UT", "LPT", "MPT", "RT"];
+                          %>
+
+                          <% columns.forEach(function(column) { %>
+                      <td>
+                          <% if (detail.ndt_requirements.includes(column)) { %>
+                             &#10004; <!-- Checkmark -->
+                          <% } else { %>
+                             &#10008; <!-- Cross -->
+                          <% } %>
+                      </td>
+                      <% }) %>
+                    </tr>
+                  <% }) %>
+            </tr>
+            <tr>
+                <td colspan="14" style="text-align: left;">VE-NDT-STR-01</td>
+          </tr>
+        </tbody>
+      </table> 
+    </div>
+    <% }) %>
+  </body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ultrasonic Test Report</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 12px;
+          text-align: left;
+      } 
+      .header1 {
+          font-weight: bold;
+          font-size: 16px;
+      } 
+      .header2 {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+      .header3 {
+          font-weight: bold;
+          font-size: 12px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+    <div>
+      <table>
+        <thead>
+         
+            <tr>
+                <td colspan="14" class="header">
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <img
+                        src="<%= logoUrl1 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 10px;"
+                    />
+                    <div style="flex: 1; text-align: center; font-size: 24px;">
+                      <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                          GROUP OF COMPANIES<br />
+                    </div>
+                    <img
+                        src="<%= logoUrl2 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 0px;"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="15" class="header1">ULTRASONIC TEST REPORT</td>
+              </tr>
+              <tr>
+                <td colspan="14" class="header2">JOB DETAILS</td>
+              </tr>
+            </tr>
+          <tr>
+            <td colspan="3" class="header">CLIENT</td>
+            <td colspan="4"><%= order.client || '--' %></td>
+            <td colspan="2" class="header">REPORT NO.</td>
+            <td colspan="4"><%= order.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">PROJECT</td>
+            <td colspan="4"><%= order.project_name || '--' %></td>
+            <td colspan="2" class="header">REPORT DATE</td>
+            <td colspan="4">
+              <!-- <%= order.report_date ? new Date(order.report_date).toLocaleDateString() : '--' %> -->
+              <%= order.report_date 
+              ? new Date(order.report_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">W.O. NO./CONTRACT NO</td>
+            <td colspan="4"><%= order.wo_no || '--' %></td>
+            <td colspan="2" class="header">TEST DATE</td>
+            <td colspan="4">
+              <!-- <%= order.test_date ? new Date(order.test_date).toLocaleDateString() : '--' %> -->
+              <%= order.test_date 
+              ? new Date(order.test_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">PROCEDURE NO.</td>
+            <td colspan="4"><%= order.procedure_no || '--' %></td>
+            <td colspan="2" class="header">ACCEPTANCE STANDARD</td>
+            <td colspan="4"><%= order.accept_standard || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="14" class="header2">TEST DETAILS</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">Surface Condition</td>
+            <td colspan="4"><%= order.surface_condition || '--' %></td>
+            <td colspan="2" class="header">Extent of examination</td>
+            <td colspan="4"><%= order.extent_examination || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Examination Stage</td>
+            <td colspan="4"><%= order.examination_stage || '--' %></td>
+            <td colspan="2" class="header">Examination Surface</td>
+            <td colspan="4"><%= order.examination_surface || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Technique</td>
+            <td colspan="4"><%= order.technique || '--' %></td>
+            <td colspan="2" class="header">Basic Cal. Block</td>
+            <td colspan="4"><%= order.basic_cal_block || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Equipment Model & Make</td>
+            <td colspan="4"><%= order.equip_model || '--' %></td>
+            <td colspan="2" class="header">Reference Block Id</td>
+            <td colspan="4"><%= order.ref_block_id || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Equipment No</td>
+            <td colspan="4"><%= order.equip_no || '--' %></td>
+            <td colspan="2" class="header">Scanning Sensitivity Level</td>
+            <td colspan="4"><%= order.scanning_senstive_level || '--' %></td>
+          </tr>
+          </tr> <tr>
+            <td colspan="3" class="header">Couplant</td>
+            <td colspan="4"><%= order.couplant || '--' %></td>
+            <td colspan="2" class="header">Ref. Sensitivity Level</td>
+            <td colspan="4"><%= order.ref_sensitivity_level || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="14" class="header2">CALIBRATION DETAILS</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">SEARCH UNIT SR. NO.</td>
+            <td colspan="4"><%= order.search_unit_no || '--' %></td>
+            <td colspan="2" class="header">TEST RANGE</td>
+            <td colspan="4"><%= order.test_range || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">MODEL</td>
+            <td colspan="4"><%= order.model || '--' %></td>
+            <td colspan="2" class="header">REF DB</td>
+            <td colspan="4"><%= order.ref_db || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">WAVE MODE</td>
+            <td colspan="4"><%= order.wave_mode || '--' %></td>
+            <td colspan="2" class="header">TRANS. CORR.</td>
+            <td colspan="4"><%= order.trans_corr || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">FREQ</td>
+            <td colspan="4"><%= order.frequency || '--' %></td>
+            <td colspan="2" class="header">REFERANGLE</td>
+            <td colspan="4"><%= order.refer_angle || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="14" class="header2">RESULT SUMMARY</td>
+          </tr>
+          <tr class="">
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>REV</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>PROFILE</th>
+            <th>TYPE OF WELD</th>
+            <th>WELDING PROCESS</th>
+            <th>WELDER NO.</th>
+            <th>THICKNESS (mm)</th>
+            <th>DISC. TYPE</th>
+            <th>TEST RESULT (ACC/REJ)</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% order.items.forEach(function(detail, index) { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= detail.drawing_no || '--' %></td>
+                  <td><%= detail.rev || '--' %></td>
+                  <td><%= detail.assembly_no || '--' %></td>
+                  <td><%= detail.grid_no || '--' %></td>
+                  <td><%= detail.profile || '--' %></td>
+                  <td><%= detail.joint_type || '--' %></td>
+                  <td><%= detail.weld_process || '--' %></td>
+                  <td><%= detail.welder_no || '--' %></td>
+                  <td><%= detail.thickness || '--' %></td>
+                  <td><%= detail.disc_type || '--' %></td>
+                  <td><%= detail.accept || '--' %></td>
+                  <td><%= detail.remarks || '--' %></td>
+                </tr>
+                <% }) %>
+        </tbody>
+        <tr>
+          <td class="header">NOTE</td>
+          <td colspan="14"><%= order.final_remarks || '' %></td>
+        </tr>
+        <tr>
+          <td colspan="1"></td>
+          <td colspan="4" class="header3">EXAMINED BY (LEVEL II / III)</td>
+          <td colspan="4" class="header3">VE APPROVED BY (LEVEL II / III)</td>
+          <td colspan="4" class="header3">WITNESSED / APPROVED / REVIEWED BY (CLIENT / TPIA)</td>
+        </tr>
+        <tr>
+          <td>SIGNATURE</td>
+          <td colspan="4"></td>
+          <td colspan="4"></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td>NAME</td>
+          <td colspan="4"></td>
+          <td colspan="4"><%= order.qc_name || '--' %></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td>DATE</td>
+          <td colspan="4"></td>
+          <td colspan="4">
+              <!-- <%= order.qc_time ? new Date(order.qc_time).toLocaleDateString() : '--' %> -->
+              <%= order.qc_time 
+              ? new Date(order.qc_time).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>
+            </td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td colspan="14" style="text-align: left;">VE-QA-FORMAT-50</td>
+        </tr>
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

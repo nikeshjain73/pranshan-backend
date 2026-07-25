@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Store Re-order Item List</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+      .header1 {
+          font-weight: bold;
+          font-size: 12px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="15" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 10px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <img
+                    src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 0px;"
+                />
+              </div>
+            </td>
+          </tr>
+            <tr>
+              <td colspan="15" class="header">MAIN STORE RE-ORDER ITEM LIST</td>
+            </tr>
+          <tr class="">
+            <th rowspan="2" style="width: 40px;">SR. NO.</th>
+            <th rowspan="2" style="width: 150px;">ITEM NAME</th>
+            <th rowspan="2" style="width: 50px;">ITEM ID</th>
+            <th rowspan="2" style="width: 50px;">ITEM CATEGORY</th>
+            <th rowspan="2" style="width: 50px;">UNIT</th>
+            <th rowspan="2" style="width: 60px;">M CODE</th>
+            <th rowspan="2" style="width: 70px;">HSN CODE</th>
+            <th rowspan="2" style="width: 60px;">RE_ORDER QTY</th>
+            <th rowspan="2" style="width: 60px;">BALANCE QTY</th>
+            <th rowspan="2" style="width: 60px;">ORDER QTY</th>
+            <th rowspan="1" colspan="4">LAST PURCHASE</th>
+            <th rowspan="1" colspan="1">LAST ISSUE</th>
+          </tr>
+          <tr>
+            <th colspan="1" style="width: 100px;">DATE</th>
+            <th colspan="1" style="width: 130px;">PARTY</th>
+            <th colspan="1" style="width: 130px;">VOUCHER NO.</th>
+            <th colspan="1" style="width: 100px;">RATE</th>
+            <th colspan="1" style="width: 100px;">DATE</th>
+        </tr>
+        </thead>
+        <tbody>
+            <% requestData.forEach(function(order, index) { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= order.item_name || '--' %></td>
+                    <td><%= order.ItemId || '--' %></td>
+                    <td><%= order.category || '--' %></td>
+                    <td><%= order.unit || '--' %></td>
+                    <td><%= order.m_code || '--' %></td>
+                    <td><%= order.hsn_code || '--' %></td>
+                    <td><%= (order.reorder_quantity ? order.reorder_quantity.toFixed(3) : '0') %></td>
+                    <td><%= (order.balance ? order.balance.toFixed(3) : '0') %></td>
+                    <td><%= (order.order_qty ? order.order_qty.toFixed(3) : '0') %></td>
+                    <td><%= order.lastPurchaseDate ? new Date(order.lastPurchaseDate).toLocaleDateString() : '--' %></td>
+                    <td><%= order.lastPurchaseParty || '--' %></td>
+                    <td><%= order.lastPurchaseVoucher || '--' %></td>
+                    <td><%= order.lastPurchaseRate || '--' %></td>
+                    <td><%= order.lastIssueDate ? new Date(order.lastIssueDate).toLocaleDateString() : '--' %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+      </table> 
+    </div>
+  </body>
+</html>

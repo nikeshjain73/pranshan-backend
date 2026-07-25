@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inspection Summary Report</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+      <% const projectColspan = (order.actual_dimension || order.accept) ? 4 : 2; %>
+    <div>
+      <table>
+        <thead>
+         
+          <tr>
+            <td colspan="18" class="header">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center;">
+                        <img
+                            src="<%= logoUrl1 %>"
+                            alt="Company Logo"
+                            style="max-width: 100px; height: 100px; margin-right: 20px;"
+                        />
+                        <img
+                            src="<%= logoUrl2 %>"
+                            alt="Company Logo"
+                            style="max-width: 100px; height: 100px;"
+                        />
+                        <div style="text-align: center; font-size: 24px; margin-left: 20px;">
+                            <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                            GROUP OF COMPANIES<br />
+                        </div>
+                    </div>
+                   
+                    <img
+                        src="<%= logoUrl2 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px;"
+                    />
+                </div>
+            </td>
+        </tr>
+            <tr>    
+              <td colspan="18" class="header">INSPECTION SUMMARY REPORT</td>
+            </tr>
+          <tr>
+            <td colspan="3" class="header">CLIENT</td>
+            <td colspan="4"><%= order.client || '--' %></td>
+            <td colspan="2" class="header">REPORT NO.</td>
+            <td colspan="4"><%= order.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">PROJECT</td>
+            <td colspan="4"><%= order.project_name || '--' %></td>
+            <td colspan="2" class="header">DATE</td>
+            <td colspan="4">
+              <!-- <%= order.date ? new
+              Date(order.date).toLocaleDateString() : '--' %> -->
+              <%= order.date 
+              ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">WO NO./PO NO.</td>
+            <td colspan="10"><%= order.wo_no || '--' %></td>
+          </tr>
+          <tr class="">
+            <th>SR NO.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>FITUP INSPECTION REPORT</th>
+            <th>WELD VISUAL INSPECTION REPORT</th>
+            <th>UT REPORT</th>
+            <th>RT REPORT</th>
+            <th>MPT REPORT</th>
+            <th>LPT REPORT</th>
+            <th>FINAL DIMENSION REPORT</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= order.drawing_no || '--' %></td>
+            <td><%= order.rev || '--' %></td>
+            <td><%= order.assembly_no || '--' %></td>
+            <td><%= order.grid_no || '--' %></td>
+            <td><%= order.fitup_inspection_report || '--' %></td>
+            <td><%= order.weld_inspection_report || '--' %></td>
+            <td><%= order.ut_report || '--' %></td>
+            <td><%= order.rt_report || '--' %></td>
+            <td><%= order.mpt_report || '--' %></td>
+            <td><%= order.lpt_report || '--' %></td>
+            <td><%= order.fd_report || '--' %></td>
+            <td><%= order.remarks || '--' %></td>
+          </tr>
+        </tbody>
+        <tr>
+          <td class="header" colspan="3">NOTE</td>
+          <td colspan="10"></td>
+        </tr>
+        <tr>
+          <td colspan="3"></td>
+          <td colspan="5" class="header">VE-QC</td>
+          <td colspan="5" class="header">CLIENT-QC / TPI</td>
+        </tr>
+        <tr>
+          <td colspan="3">SIGNATURE</td>
+          <td colspan="5"></td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td colspan="3">NAME</td>
+          <td colspan="5"></td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td colspan="3">DATE</td>
+          <td colspan="5"></td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td colspan="13" style="text-align: left;">VE-STR-14</td>
+        </tr>
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

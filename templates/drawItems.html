@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drawing item List</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="16" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 10px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <img
+                    src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 0px;"
+                /> 
+              </div>
+            </td>
+          </tr>
+          <tr>    
+            <td colspan="16" class="header">DRAWING ITEM LIST</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">DRAWING NO.</td>
+            <td colspan="4"><%= order.drawing_no || '--' %></td>
+            <td colspan="2" class="header">MASTER UPDATION DATE</td>
+            <td colspan="4"><%= order.master_updation_date ? new
+                Date(order.master_updation_date).toLocaleDateString() : '--' %></td>
+          </tr>
+          </tr>
+            <td colspan="2" class="header">AREA</td>
+            <td colspan="4"><%= order.unit || '--' %></td>
+            <td colspan="2" class="header">DRAWING RECEIVED DATE</td>
+            <td colspan="4"><%= order.draw_receive_date ? new
+                Date(order.draw_receive_date).toLocaleDateString() : '--' %></td>
+          </tr>
+          </tr>
+            <td colspan="2" class="header">SHEET NO.</td>
+            <td colspan="4"><%= order.sheet_no || '--' %></td>
+            <td colspan="2" class="header">REV NO.</td>
+            <td colspan="4"><%= order.rev || '--' %></td>
+          </tr>
+          </tr>
+            <td colspan="2" class="header">ASSEMBLY NO.</td>
+            <td colspan="4"><%= order.assembly_no || '--' %></td>
+            <td colspan="2" class="header">ASSEMBLY QTY.</td>
+            <td colspan="4"><%= order.assembly_quantity || '--' %></td>
+          </tr>
+          <tr class="">
+            <th>Sr. No.</th>
+            <th>PROFILE</th>
+            <th>GRID NO.</th>
+            <th>ITEM NO.</th>
+            <th>QTY (Nos)</th>
+            <th>LENGTH (mm)</th>
+            <th>WIDTH (mm)</th>
+            <th>ITEM WEIGHT (Kg)</th>
+            <th>ASSEMBLY WEIGHT (Kg)</th>
+            <th>ASSEMBLY SURFACE AREA (sqm)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% order.transItemDetails.forEach(function(detail, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= detail.itemName || '--' %></td>
+            <td><%= detail.grid_no || '--' %></td>
+            <td><%= detail.item_no || '--' %></td>
+            <td><%= detail.quantity || '--' %></td>
+            <td><%= detail.item_length || '--' %></td>
+            <td><%= detail.item_width || '--' %></td>
+            <td><%= detail.item_weight || '--' %></td>
+            <td><%= detail.assembly_weight || '--' %></td>
+            <td><%= detail.assembly_surface_area || '--' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

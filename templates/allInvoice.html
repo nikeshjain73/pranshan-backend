@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+     Invoice Report
+    </title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        font-size: 12px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 14px;
+      } 
+      .header1 {
+        font-weight: bold;
+        font-size: 12px;
+      } 
+      .signature-section td {
+        height: 50px;
+      }
+      .remarks {
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="31" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 10px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <img
+                    src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 0px;"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="31"class="header">
+                INVOICE REPORT
+            </th>
+          </tr>
+            <tr>
+              <th>SR NO.</th>
+              <th>INVOICE NO.</th>
+              <th>INVOICE DATE</th>
+              <th>ORDER NO.</th>
+              <th>PARTY</th>
+              <th>PROJECT</th>
+              <th>LR NO.</th>
+              <th>LR DATE</th>
+              <th>TRANSPORT NAME</th>
+              <th>VEHICLE NO.</th>
+              <th>DRIVER NAME</th>
+              <th style="width:100px">ITEM NAME</th>
+              <th>HSN</th>
+              <th>GST(%)</th>
+              <th>QTY</th>
+              <th>RATE</th>
+              <th>AMOUNT</th>
+              <th>TOTAL AMOUNT</th>
+              <th>+ / - AMOUNT</th>
+              <th>NET AMOUNT</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% requestData.forEach(function(transaction, transIndex) { %>
+                  <% transaction.items.forEach(function(item, itemIndex) { %>
+                    <tr>
+                      <% if (itemIndex === 0) { %>
+                        <td rowspan="<%= transaction.items.length %>"><%= transIndex + 1 %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.invoice_no || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.invoice_date ? new Date(transaction.invoice_date).toLocaleDateString() : '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.project_order_no || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.party_name || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.project_name || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.lr_no || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.lr_date ? new Date(transaction.lr_date).toLocaleDateString() : '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.transport_name || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.vehicle_no || '--' %></td>
+                        <td rowspan="<%= transaction.items.length %>"><%= transaction.driver_name || '--' %></td> 
+                      <% } %>
+                      <td><%= item.item_name || '--' %></td>
+                      <td><%= item.hsn_code || '--' %></td>
+                      <td><%= item.gst || '--' %></td>
+                      <td><%= (item.quantity ? item.quantity.toFixed(3) : '0') %></td>
+                      <td><%= (item.rate ? item.rate.toFixed(2) : '0') %></td>
+                      <td><%= (item.amount ? item.amount.toFixed(2) : '0') %></td>
+                      <% if (itemIndex === 0) { %>
+                        <td rowspan="<%= transaction.items.length %>"></td>
+                        <td rowspan="<%= transaction.items.length %>"></td>
+                        <td rowspan="<%= transaction.items.length %>"></td>
+                      <% } %>
+                    </tr>
+                  <% }) %>
+                  <% if (transaction.party_state.toLowerCase() === "gujarat") { %>
+                    <tr  style="height:25px">
+                  <% } else { %>
+                    <tr  style="height:45px">
+                  <% } %>
+                    <td rowspan="2" colspan="8"></td>
+                    <td rowspan="2" colspan="3" class="header" >Total</td>
+                    <% if (transaction.party_state.toLowerCase() === "gujarat") { %>
+                        <td rowspan="1" class="header" colspan="2" style="text-align: right;">CGST</td>
+                        <td rowspan="1" style="text-align: right;"><%= (transaction.gst_amt ? (transaction.gst_amt / 2).toFixed(2) : '0') %></td>
+                        
+                    <% } else { %>
+                        <td rowspan="2" class="header" colspan="2" style="text-align: right;">IGST</td>
+                        <td rowspan="2" style="text-align: right;"><%= (transaction.gst_amt ? transaction.gst_amt.toFixed(2) : '0') %></td>
+                    <% } %>
+                    <td rowspan="2" class="header"><%= (transaction.total_qty ? transaction.total_qty.toFixed(3) : '0') %></td>
+                    <td rowspan="2"></td>
+                    <td rowspan="2" class="header"><%= (transaction.amt ? transaction.amt.toFixed(2) : '0') %></td>
+                    <td rowspan="2" class="header"><%= (transaction.total_amt ? transaction.total_amt.toFixed(2) : '0') %></td>
+                    <td rowspan="2" class="header"><%= (transaction.round_amt ? transaction.round_amt.toFixed(2) : '0') %></td>
+                    <td rowspan="2" class="header"><%= (transaction.net_amt ? transaction.net_amt.toFixed(2) : '0') %></td>
+                  </tr>
+                  <% if (transaction.party_state.toLowerCase() === "gujarat") { %>
+                    <td class="header" colspan="2" style="text-align: right;">SGST</td>
+                    <td style="text-align: right;"><%= (transaction.gst_amt ? (transaction.gst_amt / 2).toFixed(2) : '0') %></td>
+                  <% } else { %>
+                    <tr  style="height:25px">
+                  <% } %>
+                  <tr style="height:30px">
+                    <td colspan="20"></td>
+                  </tr>
+              <% }) %>
+            </tbody>
+        </table>
+    </div>
+  </body>
+</html>

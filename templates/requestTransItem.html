@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Material Issue Request</title>
+  <style>
+     table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px; /* Space between tables */
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .header {
+            font-weight: bold;
+            font-size: 14px;
+        } 
+        .truncate-cell {
+            height: 12px;
+            max-height: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        @media print {
+            thead {
+                display: table-header-group; /* Repeat headers on each page */
+            }
+            tr.page-break {
+                page-break-after: always; /* Force page break after each table */
+            }
+        }
+  </style>
+</head>
+
+<body>
+<% 
+    let itemsPerPage = 9; 
+    let totalPages = Math.ceil(items.length / itemsPerPage);
+    for (let page = 0; page < totalPages; page++) { 
+        let start = page * itemsPerPage;
+        let end = start + itemsPerPage;
+        let currentItems = items.slice(start, end);
+%>
+<table>
+        <thead>
+            <tr>
+                <td colspan="8" class="header">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center;">
+                            <img
+                                src="<%= logoUrl1 %>"
+                                alt="Company Logo"
+                                style="max-width: 100px; height: 100px; margin-right: 20px;"
+                            />
+                            
+                            <div style="text-align: center; font-size: 24px; margin-left: 20px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" class="header">MATERIAL PURCHASE REQUEST</td>
+            </tr> 
+            <tr>
+                <td colspan="2" class="header">PROJECT LOCATION</td>
+                <td colspan="2"><%= headerInfo.project_location %></td>
+                <td colspan="2" class="header">DATE</td>
+                <td colspan="2"><%= headerInfo.date 
+                  ? new Date(headerInfo.date ).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                  : '--' %>
+                </td>  
+            </tr>
+            <tr>
+              <td colspan="2" class="header">PROJECT</td>
+              <td colspan="2"><%= headerInfo.project_name %></td>  
+              <td colspan="2" class="header">PREPRARED BY</td>
+              <td colspan="2"><%= headerInfo.prepared_by %></td>  
+            </tr>
+            <tr>
+              <td colspan="2" class="header">DEPARTMENT</td>
+              <td colspan="2"><%= headerInfo.department %></td>  
+              <td colspan="2" class="header">APPROVED BY</td>
+              <td colspan="2"><%= headerInfo.approved_by %></td>  
+            </tr>
+            <tr>
+                <td colspan="2" class="header">MATERIAL PO NO.</td>
+                <td colspan="2"><%= headerInfo.material_po_no %></td>
+                <td colspan="2" class="header">SUPPLIER</td>
+                <td colspan="2"><%= headerInfo.main_supplier %></td> 
+            </tr>          
+            <tr>
+                <th style="width: 10%;">SR No.</th>
+                <th style="width: 10%;">SECTION DETAIL</th>
+                <th style="width: 10%;">MATERIAL GRADE</th>
+                <th style="width: 10%;">UOM</th>
+                <th style="width: 10%;">PO QTY</th>
+                <th style="width: 10%;">UNIT RATE</th>
+                <th style="width: 10%;">TOTAL AMOUNT</th>
+                <th style="width: 10%;">PREFERRED MANUFACTURER</th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+        <% currentItems.forEach((item, index) => { %>
+            <tr>
+                <td><%= start + index + 1 %></td> 
+                <td class="truncate-cell"><%= item.item_name %></td>
+                <td class="truncate-cell"><%= item.material_grade || '--'%></td>
+                <td class="truncate-cell"><%= item.unit %></td>
+                <td class="truncate-cell"><%= item.quantity %></td>
+                <td class="truncate-cell"><%= (item.unit_rate || 0).toFixed(2) %></td>
+                <td class="truncate-cell"><%= (item.total_rate || 0).toFixed(2) %></td>
+                <td class="truncate-cell"><%= item.preferred_supplier %></td>
+            </tr>
+
+        <% }); %>
+          <tr>
+            <td colspan="8" style="text-align: left; margin: 0 1rem;">VE-DOC-01 REV.00</td>
+          </tr>
+
+        </tbody>
+
+    </table>
+
+<% if (page !== totalPages - 1) { %> 
+    <div class="page-break"></div> 
+<% } } %>
+</body>
+
+</html>

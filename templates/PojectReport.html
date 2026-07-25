@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Report</title>
+  <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+      .footer {
+        font-weight: bold;
+        text-align: left;
+        font-size: 10px;
+        margin-top: 20px;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      @media print {
+        thead {
+          display: table-header-group; /* Repeat headers on each page */
+        }
+        tfoot {
+          display: table-footer-group; /* Ensure footer is on the last page */
+        }
+        tr.page-break {
+          page-break-after: always; /* Force page break after each table */
+        }
+      }
+    </style>
+</head>
+
+<body>
+  <% 
+  let itemsPerPage = 15; 
+  let totalPages = Math.ceil(items.length / itemsPerPage);
+  for (let page = 0; page < totalPages; page++) { 
+      let start = page * itemsPerPage;
+      let end = start + itemsPerPage;
+      let currentItems = items.slice(start, end);
+      let salaryDatesCount = currentItems.length > 0 ? currentItems[0].salary_by_date.length : 0;
+      let totalColumns = 2 + salaryDatesCount + 1;
+  %>
+      <table>
+        <thead>
+          <tr>
+              <td colspan="<%= totalColumns %>" class="header">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <img
+                      src="<%= logoUrl1 %>"
+                      alt="Company Logo"
+                      style="max-width: 200px; height: 80px; margin-right: 24px;"
+                  />
+                  <div style="flex: 1; text-align: center; font-size: 24px;">
+                    <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED GROUP OF COMPANIES</strong>
+                  </div>
+                </div>
+              </td>
+          </tr> 
+          <tr>
+            <td colspan="<%= totalColumns - 1 %>" class="header">
+                PROJECT SALARY REPORT
+            </td>
+            <td colspan="1" class="header">
+              <%= headerInfo.monthWord %> / <%= headerInfo.year %>
+            </td>
+          </tr>
+          <tr>
+            <th>SR NO.</th>
+            <th>PROJECT NAME</th>
+            <% currentItems[0].salary_by_date.forEach((detail, index) => { %>
+                <th><%= detail.date ? new Date(detail.date).toLocaleDateString() : '--' %></th>
+            <% }) %>
+            <th>TOTAL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% currentItems.forEach((item, index) => { %>
+            <tr>
+                <td class="truncate-cell"><%= start + index + 1 %></td> 
+                <td class="truncate-cell"><%= item.project_name || '--' %></td>
+                <% item.salary_by_date.forEach((salary, idx) => { %> 
+                    <td><%= (salary.total_salary ? salary.total_salary.toFixed(2) : '0.00') %></td>
+                <% }) %>
+                <th class="truncate-cell"><%= item.total_project_salary || '--' %></th>
+            </tr>
+            <% }) %>
+            <tr>
+                <%
+                    const total = Object.values(headerInfo.dateSalarySum).reduce((sum, value) => sum + value, 0);
+                %>
+                <td colspan="2" class="header">Total</td>
+                <% Object.entries(headerInfo.dateSalarySum).forEach(([date, amount]) => { %>
+                    <th><%= amount.toFixed(2) %></th>
+                <% }) %>
+                <th class="header"><%= total.toFixed(2) %></th>
+            </tr>
+        </tbody>  
+      </table>
+    <% if (page !== totalPages - 1) { %> 
+      <div class="page-break"></div> 
+    <% } } %>
+</body>
+
+</html>

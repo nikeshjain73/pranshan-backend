@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        /* Remove body margin */
+        padding: 0;
+        /* Remove body padding */
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        /* Collapse borders */
+        border: 1px solid black;
+        /* Add outer border */
+        margin: 0;
+        /* Remove margin around the table */
+        padding: 0;
+        /* Remove padding around the table */
+      }
+
+      th,
+      td {
+        border: 1px solid black;
+        /* Keep internal borders */
+        padding: 8px;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .header {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .header1 {
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      .signature-section td {
+        height: 50px;
+      }
+
+      .remarks {
+        height: 100px;
+      }
+
+      .nested-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .nested-table td,
+      .nested-table th {
+        padding: 4px;
+        text-align: left;
+      }
+
+      .nested-table tbody tr > td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="10" class="header">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                <img
+                  src="<%= logoUrl1 %>"
+                  alt="Company Logo"
+                  style="max-width: 80px; height: 80px; margin-right: 0px"
+                />
+                <div
+                  style="
+                    flex: 1;
+                    text-align: center;
+                    font-size: 16px;
+                    transform: scaleY(1.2);
+                  "
+                >
+                  <strong
+                    >VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE
+                    LIMITED</strong
+                  ><br />
+                  GROUP OF COMPANIES<br />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="10" class="header">INVOICE</th>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div
+                style="
+                  text-align: left;
+                  line-height: 1;
+                  margin-top: 0;
+                  padding: 0;
+                "
+              >
+                <p>
+                  <strong>Manufacturer's Detail : </strong> <%= invoice.firmName
+                  || '--' %>
+                </p>
+                <p><%= invoice.firmAddress || '--' %></p>
+                <p><%= invoice.firmAddTwo || '--' %></p>
+                <p><%= invoice.firmAddThree || '--' %></p>
+                <p>
+                  <%= invoice.firmCity || '--' %> - <%= invoice.firmPincode ||
+                  '--' %>
+                </p>
+                <p>
+                  <strong>GSTIN: </strong> <%= invoice.firmGstNo || '--' %>
+                </p>
+              </div>
+            </td>
+            <td colspan="5">
+              <div
+                style="
+                  text-align: right;
+                  line-height: 1;
+                  margin-top: 0;
+                  padding: 0;
+                "
+              >
+                <p style="color: red">
+                  <strong><%= invoice.is_original || '--' %></strong>
+                </p>
+                <p><strong>RA: </strong><%= invoice.ra || '--' %></p>
+                <p>
+                  <strong>Invoice No: </strong> <%= invoice.invoiceNo || '--' %>
+                </p>
+                <p>
+                  <strong>Invoice Date: </strong> <%= invoice.invoiceDate ||
+                  '--' %>
+                </p>
+                <p>
+                  <strong>PO No: </strong> <%= invoice.projectPoNo || '--' %>
+                </p>
+                <p>
+                  <strong>PO Date: </strong> <%= invoice.projectPoDate || '--'
+                  %>
+                </p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div
+                style="
+                  text-align: left;
+                  line-height: 1;
+                  margin-top: 0;
+                  padding: 0;
+                "
+              >
+                <p>
+                  <strong>Buyer / Consignee : </strong> <%= invoice.clientName
+                  || '--' %>
+                </p>
+                <p>
+                  <%= invoice.clientCity || '--' %> - <%= invoice.clientPincode
+                  || '--' %>
+                </p>
+                <p><%= invoice.clientAddress || '--' %></p>
+                <p>
+                  <strong>GSTIN: </strong> <%= invoice.clientGSTNo || '--' %>
+                </p>
+              </div>
+            </td>
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <th style="width: 20px">ITEM No.</th>
+            <th style="width: 290px">DESCRIPTION</th>
+            <th style="width: 50px">INVOICE QUANTITY (MT)</th>
+            <th style="width: 40px">UNIT RATE (INR)</th>
+            <th style="width: 40px">PO QTY. (MT)</th>
+            <th style="width: 65px">PO AMOUNT (INR)</th>
+            <th style="width: 65px">UPTO PREVIOUS</th>
+            <th style="width: 65px">THIS INVOICE</th>
+            <th style="width: 65px">CUMMILATIVE</th>
+            <th style="width: 65px">REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(function(detail, index) { %>
+          <tr>
+            <td><%= detail.item_no || '--' %></td>
+            <td style="text-align: left"><%= detail.description || '--' %></td>
+            <td style="text-align: center"><%= detail.quantity || '--' %></td>
+            <td style="text-align: center"><%= detail.unitRate || '--' %></td>
+            <td style="text-align: center">
+              <%= (detail.poQty ? detail.poQty.toFixed(3) : '0.000') %>
+            </td>
+            <td style="text-align: center">
+              <%= (detail.poAmount ? detail.poAmount.toFixed(3) : '0.000') %>
+            </td>
+            <td style="text-align: center">
+              <%= (detail.uptoPrevious ? detail.uptoPrevious.toFixed(2) :
+              '0.00') %>
+            </td>
+            <td style="text-align: center">
+              <%= (detail.thisInvoice ? detail.thisInvoice.toFixed(2) : '0.00')
+              %>
+            </td>
+            <td style="text-align: center">
+              <%= (detail.cummilative ? detail.cummilative.toFixed(2) : '0.00')
+              %>
+            </td>
+            <td style="text-align: center"><%= detail.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+          <tr>
+            <th colspan="7" style="text-align: right">
+              TOTAL AMOUNT BEFORE TAX
+            </th>
+            <th colspan="1" style="text-align: center">
+              <%= (invoice.totalAmount ? (invoice.totalAmount).toFixed(2) :
+              '0.00') %>
+            </th>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th colspan="7" style="text-align: right">ADD : CGST</th>
+            <th colspan="1" style="text-align: center">
+              <%= (invoice.cgst ? (invoice.cgst).toFixed(2) : '0.00') %>
+            </th>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th colspan="7" style="text-align: right">ADD : SGST</th>
+            <th colspan="1" style="text-align: center">
+              <%= (invoice.sgst ? (invoice.sgst).toFixed(2) : '0.00') %>
+            </th>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th colspan="7" style="text-align: right">ADD : IGST</th>
+            <th colspan="1" style="text-align: center">0.00</th>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th colspan="7" style="text-align: right">TAX AMOUNT OF GST</th>
+            <th colspan="1" style="text-align: center">0.00</th>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th colspan="7" style="text-align: right">
+              TOTAL AMOUNT AFTER TAX
+            </th>
+            <th colspan="1" style="text-align: center">
+              <%= (invoice.netAmount ? (invoice.netAmount).toFixed(2) : '0.00')
+              %>
+            </th>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th colspan="5" class="header">BANK DETAIL OF VISHAL ENTERPRISE</th>
+            <th colspan="5" class="header">FOR VISHAL ENTERPRISE</th>
+          </tr>
+          <tr>
+            <td colspan="5">
+              <div
+                style="
+                  text-align: left;
+                  line-height: 1;
+                  margin-top: 0;
+                  padding: 0;
+                "
+              >
+                <p><strong>Axis Bank Ltd. </strong></p>
+                <p>Bank Address : ATHWALINES, SURAT-395007</p>
+                <p><%= invoice.clientAddress || '--' %></p>
+                <p>Account No: 912020016336104</p>
+                <p>IFSC Code: UTIB0001587</p>
+                <p>IFSC Code: UTIB0001587</p>
+                <p>SWIFT Code: AXISINBB047</p>
+              </div>
+            </td>
+            <td colspan="5"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

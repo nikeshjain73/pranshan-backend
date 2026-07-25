@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dispatch Note For Painting</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+    <div>
+      <table>
+        <thead>
+         
+            <tr>
+                <td colspan="14" class="header">
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <img
+                        src="<%= logoUrl1 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 10px;"
+                    />
+                    <div style="flex: 1; text-align: center; font-size: 24px;">
+                      <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                          GROUP OF COMPANIES<br />
+                    </div>
+                    <img
+                        src="<%= logoUrl2 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 0px;"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>    
+                <td colspan="18" class="header">DISPATCH NOTE FOR PAINTING</td>
+              </tr>
+          <tr>
+            <td colspan="2" class="header">CLIENT</td>
+            <td colspan="4"><%= order.client || '--' %></td>
+            <td colspan="1" class="header">LOT NO.</td>
+            <td colspan="5"><%= order.lot_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">PROJECT</td>
+            <td colspan="4"><%= order.project_name || '--' %></td>
+            <td colspan="1" class="header">DATE</td>
+            <td colspan="5">
+              <!-- <%= order.dispatch_date ? new
+              Date(order.dispatch_date).toLocaleDateString() : '--' %> -->
+              <%= order.dispatch_date 
+              ? new Date(order.dispatch_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">WO NO./PO NO.</td>
+            <td colspan="4"><%= order.wo_no || '--' %></td>
+            <td colspan="1" class="header">DISPATCH SITE</td>
+            <td colspan="5"><%= order.dispatch_site || '--' %></td>
+          </tr>
+          <tr class="">
+            <th>SR NO.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>QTY (NOS)</th>
+            <th>ASSEMBLY WEIGHT (Kg)</th>
+            <th>ASSEMBLY SURFACE AREA (sqm)</th>
+            <th>PAINT SYSTEM</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% order.transItemDetails.forEach(function(detail, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= order.drawing_no || '--' %></td>
+            <td><%= order.rev || '--' %></td>
+            <td><%= order.assembly_no || '--' %></td>
+            <td><%= detail.grid_no || '--' %></td>
+            <td><%= order.qty || '--' %></td>
+            <td><%= detail.assembly_weight || '--' %></td>
+            <td><%= detail.assembly_surface_area || '--' %></td>
+            <td><%= order.paint_no || '--' %></td>
+            <td><%= order.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        <tr>
+          <td class="header" colspan="2">NOTE</td>
+          <td colspan="8"></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="4" class="header">PREPARED BY</td>
+          <td colspan="4" class="header">RECEIVED BY</td>
+        </tr>
+        <tr>
+          <td colspan="2">SIGNATURE</td>
+          <td colspan="4"></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td colspan="2">NAME</td>
+          <td colspan="4"><%= order.prepared_name || '--' %></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td colspan="2">DATE</td>
+          <td colspan="4">
+            <!-- <%= order.prepared_date ? new Date(order.prepared_date).toLocaleDateString() : '--' %> -->
+            <%= order.prepared_date 
+              ? new Date(order.prepared_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+          </td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td colspan="13" style="text-align: left;">VE-STR-15</td>
+        </tr>
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YEARLY MONTHLY SUMMARY</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .header {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .footer {
+            font-weight: bold;
+            text-align: left;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .left-alignment {
+            text-align: left;
+        }
+
+        .truncate-cell {
+            height: 12px;
+            max-height: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .truncate-cell2 {
+            font-size: 15px;
+            font-weight: bold;
+            height: 15px;
+            max-height: 15px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        @media print {
+            thead {
+                display: table-header-group;
+            }
+
+            tfoot {
+                display: table-footer-group;
+            }
+
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <% items.forEach((detail, index) => { %>
+        <table>
+            <thead>
+                <tr>
+                  <td colspan="24" class="header">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <img
+                            src="<%= logoUrl1 %>"
+                            alt="Company Logo"
+                            style="max-width: 180px; height: 60px; margin-right: 20px;"
+                        />
+                        <div style="flex: 1; text-align: center; font-size: 20px;">
+                            <strong><%= headerInfo.firmName || '--' %></strong><br />
+                        </div>
+                    </div>
+                    <div style="flex: 1; text-align: center; font-size: 12px;  padding-left: 50px;">
+                        <strong><%= headerInfo.firmAddress || '--' %></strong><br />
+                    </div>
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="22" class="header">YEARLY MONTH SUMMARY</td>
+                    <td colspan="2" class="header"><%= headerInfo.year || '--' %></td>
+                </tr>
+                <tr>
+                    <th>SR NO.</th>
+                    <th>MONTH/YEAR</th>
+                    <th>PER DAY BASIC SALARY</th>
+                    <th>PRESENT DAY</th>
+                    <th>O.T. HOURS</th>
+                    <th>BASIC (BASIC * PRESENT DAY)</th>
+                    <th>OTHER EARNING</th>
+                    <th>GROSS SALARY</th>
+                    <th>MESS</th>
+                    <th>LOAN</th>
+                    <th>ADVANCE</th>
+                    <th>PENALTY</th>
+                    <th>OTHER</th>
+                    <th>ESIC</th>
+                    <th>SOCIETY</th>
+                    <th>INCOME TAX</th>
+                    <th>INSURANCE</th>
+                    <th>OTHER (LWF)</th>
+                    <th>RECOVERIES</th>
+                    <th>PF AMOUNT</th>
+                    <th>PT AMOUNT</th>
+                    <th>TOTAL DEDUCTION</th>
+                    <th>NET SALARY</th>
+                    <th>A/C NO.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="truncate-cell2" colspan="2">EMPLOYEE NAME</td>
+                    <td class="truncate-cell" colspan="4"><%= detail.employeeName || '--' %></td>
+                    <td class="truncate-cell2" colspan="3">PF NO.</td>
+                    <td class="truncate-cell" colspan="4"><%= detail.pf_no || '--' %></td>
+                    <td class="truncate-cell2" colspan="3">DESIGNATION</td>
+                    <td class="truncate-cell" colspan="3"><%= detail.designation || '--' %></td>
+                    <td class="truncate-cell2" colspan="2">DEPARTMENT</td>
+                    <td class="truncate-cell" colspan="3"><%= detail.department || '--' %></td>
+                </tr>
+                <% detail.monthly_data.forEach(function(item, itemIndex) { %>
+                    <tr>
+                        <% if (itemIndex === 0) { %>
+                            <td class="truncate-cell" rowspan="<%= detail.monthly_data.length %>"><%= index + 1 %></td>
+                        <% } %>
+                        <td class="truncate-cell"><%= item.month || '--' %> / <%= item.e_year || '--' %></td>
+                        <td class="truncate-cell"><%= (item.perday_salary || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.work_day || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.ot_hour || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.basic || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.total_earnings || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.gross_wages || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.Mess || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.Loan || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.Advanced || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.Penalty || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.Other || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.pfAmount || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.ptAmount || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.total_deduction || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.net_salary || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (item.bank_account_no || "--") %></td>
+                    </tr>
+                <% }) %>
+                <tr style="height:30px">
+                    <td colspan="3" class="right-alignment"><strong>Monthly Total</strong></td>
+                    <td class="truncate-cell2"><%= (detail.mt_work_day || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_ot_hour || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_basic || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_total_earnings || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_gross_wages || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_Mess || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_Loan || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_Advanced || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_Penalty || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_Other || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_pfAmount || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_ptAmount || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_total_deduction || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (detail.mt_net_salary || 0).toFixed(2) %></td>
+                    <td></td>
+                </tr>
+                <% if (index === items.length - 1) { %>
+                  <tr>
+                    <td colspan="3" class="right-alignment"><strong>Grand Total</strong></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_work_day || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_ot_hour || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_basic || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_total_earnings || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_gross_wages || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_Mess || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_Loan || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_Advanced || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_Penalty || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_Other || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_ptAmount || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_pfAmount || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_total_deduction || 0).toFixed(2) %></td>
+                    <td class="truncate-cell2"><%= (headerInfo.yt_net_salary || 0).toFixed(2) %></td>
+                    <td></td>
+                  </tr>
+              <% } %>
+            </tbody>
+        </table>
+        <% if (index !== items.length - 1) { %>
+            <div class="page-break"></div>
+        <% } %>
+    <% }) %>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Ultrasonic Test Report</title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+                margin-bottom: 14px;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px 4px;
+                text-align: center;
+                font-size: 10px;
+            }
+            .header {
+                font-weight: bold;
+                font-size: 10px;
+            }
+            .header1, .header4 { font-weight: bold; font-size: 11px; }
+            .header2 { font-weight: bold; font-size: 10px; }
+            .header3 { font-weight: bold; font-size: 10px; text-align: left; }
+            .footer { font-weight: bold; text-align: left; font-size: 10px; margin-top: 20px; }
+            .truncate-cell {
+                height: 10px;
+                max-height: 10px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            @media print {
+                thead { display: table-header-group; }
+                tfoot { display: table-footer-group; }
+                tr.page-break { page-break-after: always; }
+            }
+        </style>
+    </head>
+    <body>
+        <% 
+            let itemsPerPage = 10; 
+            let totalPages = Math.ceil(items.length / itemsPerPage);
+            for (let page = 0; page < totalPages; page++) { 
+                let start = page * itemsPerPage;
+                let end = start + itemsPerPage;
+                let currentItems = items.slice(start, end);
+        %>
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="16" class="header">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <img src="<%= logoUrl1 %>" alt="Company Logo" style="max-width: 200px; height: 80px; margin-right: 20px;" />
+                            <div style="flex: 1; text-align: center; font-size: 17px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="15" class="header1">ULTRASONIC TEST REPORT (STRUCTURAL)</td>
+                </tr>
+                <tr>
+                    <td colspan="14" class="header2">JOB DETAILS</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">CLIENT</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.client || '--' %></td>
+                    <td colspan="2" class="header3">REPORT NO.</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.report_no || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">PROJECT</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.project_name || '--' %></td>
+                    <td colspan="2" class="header3">REPORT DATE</td>
+                    <td colspan="6" style="text-align: left;">
+                        <%= headerInfo.offer_date 
+                        ? new Date(headerInfo.offer_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                        : '--' %>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">W.O. NO./CONTRACT NO</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.wo_no || '--' %></td>
+                    <td colspan="2" class="header3">TEST DATE</td>
+                    <td colspan="6" style="text-align: left;">
+                        <%= headerInfo.test_date 
+                        ? new Date(headerInfo.test_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                        : '--' %>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">PROCEDURE NO.</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.procedure_no || '--' %></td>
+                    <td colspan="2" class="header3">ACCEPTANCE STANDARD</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.accept_standard || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="14" class="header2">TEST DETAILS</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">SURFACE CONDITION</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.surface_condition || '--' %></td>
+                    <td colspan="2" class="header3">EXTENT OF EXAMINATION</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.extent_examination || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">EXAMINATION STAGE</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.examination_stage || '--' %></td>
+                    <td colspan="2" class="header3">EXAMINATION SURFACE</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.examination_surface || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">TECHNIQUE</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.technique || '--' %></td>
+                    <td colspan="2" class="header3">BASIC CAL. BLOCK</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.basic_cal_block || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">EQUIPMENT MODEL & MAKE</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.equip_model || '--' %></td>
+                    <td colspan="2" class="header3">REFERENCE BLOCK ID</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.ref_block_id || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">EQUIPMENT NO</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.equip_no || '--' %></td>
+                    <td colspan="2" class="header3">SCANNING SENSITIVITY LEVEL</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.scanning_senstive_level || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">COUPLANT</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.couplant || '--' %></td>
+                    <td colspan="2" class="header3">REF. SENSITIVITY LEVEL</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.ref_sensitivity_level || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="14" class="header2">CALIBRATION DETAILS</td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="header3">SEARCH UNIT SR. NO.</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.search_unit_no || '--' %></td>
+                    <td colspan="2" class="header3">TEST RANGE</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.test_range || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">MODEL</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.model || '--' %></td>
+                    <td colspan="2" class="header3">REF DB</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.ref_db || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">WAVE MODE</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.wave_mode || '--' %></td>
+                    <td colspan="2" class="header3">TRANS. CORR.</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.trans_corr || '--' %></td>
+                </tr> 
+                <tr>
+                    <td colspan="3" class="header3">FREQ</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.frequency || '--' %></td>
+                    <td colspan="2" class="header3">REFERANGLE</td>
+                    <td colspan="6" style="text-align: left;"><%= headerInfo.refer_angle || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="14" class="header2">RESULT SUMMARY</td>
+                </tr>
+                <tr>
+                    <th>SR No.</th>
+                    <th>GRID NUMBER</th>
+                    <th>GRID QTY</th>
+                    <th>DRAWING NO.</th>
+                    <th>REV</th>
+                    <th>ASSEMBLY NUMBER</th>
+                    <th>PROFILE</th>
+                    <th>TYPE OF WELD</th>
+                    <th>WELDING PROCESS</th>
+                    <th>WELDER NO.</th>
+                    <th>THICKNESS (mm)</th>
+                    <th>DISC. TYPE</th>
+                    <th>TEST RESULT (ACC/REJ)</th>
+                    <th>REMARKS</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% currentItems.forEach(function(detail, index) { %>
+                <tr>
+                    <td><%= start + index + 1 %></td> 
+                    <td class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.used_grid_qty || '--' %></td>
+                    <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.rev  %></td>
+                    <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.profile || '--' %></td>
+                    <td class="truncate-cell"><%= detail.joint_type || '--' %></td>
+                    <td class="truncate-cell"><%= detail.weldingProcess || '--' %></td>
+                    <td class="truncate-cell"><%= detail.welder_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.thickness || '--' %></td>
+                    <td class="truncate-cell"><%= detail.disc_type || '--' %></td>
+                    <td class="truncate-cell"><%= detail.accept || '--' %></td>
+                    <td class="truncate-cell"><%= detail.qc_remarks || '--' %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+            <tr>
+                <td colspan="2" class="header">NOTE</td>
+                <td colspan="14"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="2" class="header">EXAMINED BY (LEVEL II / III)</td>
+                <td colspan="5" class="header">VE APPROVED BY (LEVEL II / III)</td>
+                <td colspan="5" class="header">WITNESSED / APPROVED / REVIEWED BY (CLIENT / TPIA)</td>
+            </tr>
+            <tr>
+                <td colspan="2">SIGNATURE</td>
+                <td colspan="2"></td>
+                <td colspan="5"></td>
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td colspan="2">NAME</td>
+                <td colspan="2"></td>
+                <td colspan="5"><%= headerInfo.qc_name || '--' %></td>
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td colspan="2">DATE</td>
+                <td colspan="2"></td>
+                <td colspan="5">
+                    <%= headerInfo.qc_date 
+                    ? new Date(headerInfo.qc_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                    : '--' %>
+                  </td>
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td colspan="14" style="text-align: left;">VE-DOC-13 REV.00</td>
+            </tr>
+        </table>
+        <% if (page !== totalPages - 1) { %> 
+            <div class="page-break"></div> 
+        <% } } %>
+    </body>
+</html> 

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Request</title>
+  <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+      .footer {
+        font-weight: bold;
+        text-align: left;
+        font-size: 10px;
+        margin-top: 20px;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      @media print {
+        thead {
+          display: table-header-group; /* Repeat headers on each page */
+        }
+        tfoot {
+          display: table-footer-group; /* Ensure footer is on the last page */
+        }
+        tr.page-break {
+          page-break-after: always; /* Force page break after each table */
+        }
+      }
+    </style>
+</head>
+
+<body>
+  <% 
+  let itemsPerPage = 12; 
+  let totalPages = Math.ceil(items.length / itemsPerPage);
+  for (let page = 0; page < totalPages; page++) { 
+      let start = page * itemsPerPage;
+      let end = start + itemsPerPage;
+      let currentItems = items.slice(start, end);
+  %>
+      <table>
+        <thead>
+          <tr>
+              <td colspan="9" class="header">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <img
+                      src="<%= logoUrl1 %>"
+                      alt="Company Logo"
+                      style="max-width: 200px; height: 80px; margin-right: 20px;"
+                  />
+                  <div style="flex: 1; text-align: center; font-size: 20px;">
+                    <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                    GROUP OF COMPANIES<br />
+                  </div>
+                </div>
+              </td>
+          </tr> 
+          <tr>
+            <td colspan="9" class="header">
+                PURCHASE REQUEST (PR)
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">STORE LOCATION</td>
+            <td colspan="3"><%= headerInfo.store_location || '--' %></td>
+            <td colspan="2" class="header">DATE :</td>
+            <td colspan="2">
+              <%= headerInfo.pr_date ? new Date(headerInfo.pr_date).toISOString().slice(0, 10).split('-').reverse().join('/') : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">SITE LOCATION</td>
+            <td colspan="3"><%= headerInfo.site_location || '--' %></td>
+            <td colspan="2" class="header">PREPARED BY</td>
+            <td colspan="2"><%= headerInfo.prepared_by || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">DEPARTMENT</td>
+            <td colspan="3"><%= headerInfo.department || '--' %></td>
+            <td colspan="2" class="header">APPROVE BY</td>
+            <td colspan="2"><%= headerInfo.approve_by || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="5" class="header"></td>
+            <td colspan="2" class="header">PR NO.</td>
+            <td colspan="2"><%= headerInfo.pr_no || '--' %></td>
+          </tr>
+          <tr>
+            <th>SR No.</th>
+            <th>CATEGORY</th>
+            <th>ITEM NAME</th>
+            <th>PREFEREDD SUPPLIER</th>
+            <th>UNIT</th>
+            <th>AVAILABLE QTY</th>
+            <th>REQUIRED QTY</th>
+            <th>APPROVE QTY</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentItems.forEach((detail, index) => { %>
+            <tr>
+              <td class="truncate-cell"><%= start + index + 1 %></td> 
+              <td class="truncate-cell"><%= detail.category_name || '--' %></td>
+              <td class="truncate-cell"><%= detail.item_name || '--' %></td>
+              <td class="truncate-cell"><%= detail.party_name || '--' %></td>
+              <td class="truncate-cell"><%= detail.unit || '--' %></td>
+              <td class="truncate-cell"><%= (detail.stock_balance || 0).toFixed(3) %></td>
+              <td class="truncate-cell"><%= (detail.required_qty || 0).toFixed(3) %></td>
+              <td class="truncate-cell"><%= detail.quantity || '--' %></td>
+              <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+      </table>
+    <% if (page !== totalPages - 1) { %> 
+      <div class="page-break"></div> 
+    <% } } %>
+</body>
+
+</html>

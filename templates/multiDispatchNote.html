@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dispatch Note For Painting</title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+                margin-bottom: 14px;
+            }
+            th,
+            td {
+                border: 1px solid black;
+                padding: 8px 4px;
+                text-align: center;
+                font-size: 7px;
+            }
+            .header {
+                font-weight: bold;
+                font-size: 7px;
+            }
+            .footer {
+                font-weight: bold;
+                text-align: left;
+                font-size: 7px;
+                margin-top: 20px;
+            }
+            .left-alignment {
+                text-align: left;
+            }
+            .truncate-cell {
+                height: 10px;
+                max-height: 10px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            @media print {
+                thead {
+                  display: table-header-group; /* Repeat headers on each page */
+                }
+                tfoot {
+                  display: table-footer-group; /* Ensure footer is on the last page */
+                }
+                tr.page-break {
+                  page-break-after: always; /* Force page break after each table */
+                }
+            }
+        </style>
+    </head>
+<body>
+    <% 
+        let itemsPerPage = 10; 
+        let totalPages = Math.ceil(items.length / itemsPerPage);
+        for (let page = 0; page < totalPages; page++) { 
+            let start = page * itemsPerPage;
+            let end = start + itemsPerPage;
+            let currentItems = items.slice(start, end);
+    %>
+      <table>
+        <thead>
+            <tr>
+                <td colspan="16" class="header">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <img
+                            src="<%= logoUrl1 %>"
+                            alt="Company Logo"
+                            style="max-width: 200px; height: 35px; margin-right: 20px;"
+                        />
+                        <div style="flex: 1; text-align: center; font-size: 11px;">
+                            <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                            GROUP OF COMPANIES<br />
+                        </div>
+                    </div>
+                </td>
+            </tr> 
+            <tr>    
+                <td colspan="18" class="header">DISPATCH NOTE FOR PAINTING</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="header">CLIENT</td>
+                <td colspan="5"><%= headerInfo.client || '--' %></td>
+                <td colspan="2" class="header">LOT NO.</td>
+                <td colspan="5"><%= headerInfo.report_no || '--' %></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="header">PROJECT</td>
+                <td colspan="5"><%= headerInfo.project_name || '--' %></td>
+                <td colspan="2" class="header">DISPATCH DATE</td>
+                <td colspan="5">
+                  <%= headerInfo.dispatch_date 
+                  ? new Date(headerInfo.dispatch_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                  : '--' %>  
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="header">WO NO./PO NO.</td>
+                <td colspan="5"><%= headerInfo.wo_no || '--' %></td>
+                <td colspan="2" class="header">DISPATCH SITE</td>
+                <td colspan="5"><%= headerInfo.dispatch_site || '--' %></td>
+            </tr>
+            <tr>
+                <th colspan="1">SR NO.</th>
+                <th colspan="2">DRAWING NO.</th>
+                <th colspan="1">REV.NO.</th>
+                <th colspan="1">ASSEMBLY NUMBER</th>
+                <th colspan="1">GRID NUMBER</th>
+                <th colspan="1">GRID QTY</th>
+                <th colspan="2">ASSEMBLY WEIGHT (Kg)</th>
+                <th colspan="1">ASSEMBLY SURFACE AREA (sqm)</th>
+                <th colspan="2">PAINT SYSTEM</th>
+                <th colspan="2">REMARKS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% currentItems.forEach((detail, index) => { %>
+                <tr>
+                    <td colspan="1" class="truncate-cell"><%= start + index + 1 %></td> 
+                    <td colspan="2" class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                    <td colspan="1" class="truncate-cell"><%= detail.rev  %></td>
+                    <td colspan="1" class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                    <td colspan="1" class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                    <td colspan="1" class="truncate-cell"><%= detail.dn_grid_qty || '--' %></td>
+                    <td colspan="2" class="truncate-cell"><%= detail.ass_weight || '--' %></td>
+                    <td colspan="1" class="truncate-cell"><%= detail.ass_area || '--' %></td>
+                    <td colspan="2" class="truncate-cell"><%= detail.paint_system_no || '--' %></td>
+                    <td colspan="2" class="truncate-cell"><%= detail.remarks || '--' %></td>
+                </tr>
+                <% }) %>
+
+                  <% if (page === totalPages - 1) { %>
+    <tr>
+      <th colspan="6">Sum of total Qty , Weight & Sqaure meter</th>
+    
+       <td colspan="1" class="truncate-cell">
+        <%= items.reduce((sum, d) => sum + (parseFloat(d.dn_grid_qty) || 0), 0).toFixed(2) %>
+      </td>
+   
+      <td colspan="2" class="truncate-cell">
+        <%= items.reduce((sum, d) => sum + (parseFloat(d.ass_weight) || 0), 0).toFixed(2) %>
+      </td>
+      <td colspan="1" class="truncate-cell">
+        <%= items.reduce((sum, d) => sum + (parseFloat(d.ass_area) || 0), 0).toFixed(2) %>
+      </td>
+      <td colspan="4"></td>
+    </tr>
+  <% } %>
+        </tbody>
+
+        <tr>
+            <th>PAINT MANUFACTURE</th>
+            <th>SURFACE PREPARATION</th>
+            <th>PROFILE REQUIREMENTS</th>
+            <th>SALT TEST REQUIREMENTS</th>
+            <th>PRIMER SHADE</th>
+            <th>PRIMER APP. METHODE</th>
+            <th>PRIMER DFT RANGE</th>
+            <th>MIO SHADE</th>
+            <th>MIO APP. METHODE</th>
+            <th>MIO DFT RANGE</th>
+            <th>FINAL SHADE</th>
+            <th>FINAL APP. METHODE</th>
+            <th>FINAL DFT RANGE</th>
+            <th>TOTAL DFT REQUIREMENTS</th>
+        </tr>
+        <tr>
+            <td class="truncate-cell"><%= headerInfo.paintman_name || '--' %></td> 
+            <td class="truncate-cell"><%= headerInfo.paint_surface_preparation || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_profile_requirement || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_salt_test || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_prime_paint || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_primer_app_method || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_primer_dft_range || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_mio_paint || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_mio_app_method || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_mio_dft_range || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_final_paint || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_final_paint_app_method || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_final_paint_dft_range || '--' %></td>
+            <td class="truncate-cell"><%= headerInfo.paint_total_dft_requirement || '--' %></td>
+        </tr>
+        <tr>
+          <td class="header" colspan="2">NOTE</td>
+          <td colspan="12"></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td colspan="7" class="header">PREPARED BY</td>
+          <td colspan="5" class="header">RECEIVED BY</td>
+        </tr>
+        <tr>
+          <td class="header" colspan="2">SIGNATURE</td>
+          <td colspan="7"></td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="header" colspan="2">NAME</td>
+          <td colspan="7"><%= headerInfo.prepared_by || '--' %></td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td class="header" colspan="2">DATE</td>
+          <td colspan="7">
+            <%= headerInfo.dispatch_date 
+              ? new Date(headerInfo.dispatch_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+          </td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <td colspan="14" style="text-align: left;">VE-DOC-22 REV.00</td>
+        </tr>
+    </table>
+    <% if (page !== totalPages - 1) { %> 
+        <div class="page-break"></div> 
+    <% } } %>
+
+
+
+</body>
+</html>

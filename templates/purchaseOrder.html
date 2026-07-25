@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% requestData.forEach(function(order, index) { %> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        Purchase Order Report
+    </title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        font-size: 12px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 14px;
+      } 
+      .signature-section td {
+        height: 50px;
+      }
+      .remarks {
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="10" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 80px; height: 80px; margin-right: 0px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 16px; transform: scaleY(1.2);">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <img
+                    src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 80px; height: 80px; margin-right: 0px;"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="10"class="header"> PURCHASE ORDER BILL</th>
+          </tr>
+          <tr>
+            <td colspan="3"  class="header">
+                <div style="text-align:left">
+                    <p><span><strong>Client Name : </strong> <%= order.party_name || '--' %></span></p>
+                    <p><span><strong>Address: </strong> <%= order.party_full_address || '--' %></span></p>
+                    <p><span><strong>GST No. : </strong> <%= order.party_gstNumber || '--' %></span></p>
+                    <p><span><strong>Email : </strong> <%= order.party_email || '--' %></span></p>
+                    <p><span><strong>Mobile No. : </strong> <%= order.party_phone || '--' %></span></p>
+                </div>
+            </td>
+            <td colspan="4"  class="header"  style="vertical-align: top;">
+                <div style="text-align:left">
+                    <p><span><strong>Order No. : </strong> <%= order.voucher_no || '--' %></span></p>
+                    <p><span><strong>Order Date : </strong> <%= order.order_date ? new Date(order.order_date).toLocaleDateString() : '--' %></span></p>
+                    <p><span><strong>Project : </strong> <%= order.project_name || '--' %></span></p>
+                </div>
+            </td>
+          </tr>
+        </tr>
+          <tr>
+            <th>SR No.</th>
+            <th style="width: 350px;">ITEM NAME</th>
+            <th>UNIT</th>
+            <th>GST</th>
+            <th>QTY</th>
+            <th>RATE</th>
+            <th>AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% order.items.forEach(function(detail, index) { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= detail.item_name || '--' %></td>
+              <td><%= detail.unit || '--' %></td>
+              <td><%= detail.gst || '--' %></td>
+              <td><%= (detail.quantity ? detail.quantity.toFixed(3) : '0') %></td>
+              <td><%= detail.rate || '--' %></td>
+              <td><%= (detail.amount ? detail.amount.toFixed(2) : '0') %></td>
+            </tr>
+          <% }) %>
+          
+          <tr style="height: 50px;">
+            <th colspan="4" >TOTAL</th>
+            <th><%= (order.total_qty ? order.total_qty.toFixed(3) : '0') %></th>
+            <th></th>
+            <th><%= (order.amt ? order.amt.toFixed(3) : '0') %></th>
+          </tr>
+          <tr>
+            <td colspan="7"  class="header">
+                <div style="text-align:left">
+                    <p><span>*Terms And Condition</span></p>
+                    <p><span><strong>Address: </strong> <%= order.party_full_address || '--' %></span></p>
+                    <p><span><strong>GST No. : </strong> <%= order.party_gstNumber || '--' %></span></p>
+                    <p><span><strong>Email : </strong> <%= order.party_email || '--' %></span></p>
+                    <p><span><strong>Mobile No. : </strong> <%= order.party_phone || '--' %></span></p>
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1"></td>
+            <td colspan="1" class="header">RECEIVED BY</td>
+            <td colspan="5" class="header">AUTHORIZE BY</td>
+          </tr>
+          <tr style="height: 100px;">
+            <td colspan="1" class="header">SIGN</td>
+            <td colspan="1"></td>
+            <td colspan="5"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  <% }); %>
+</html>

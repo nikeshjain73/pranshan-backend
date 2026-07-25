@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Dimension</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+      .header1 {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+      <% const projectColspan = (order.actual_dimension || order.accept) ? 1 : 2; %>
+    <div>
+      <table>
+        <thead>
+         
+            <tr>
+                <td colspan="18" class="header1">
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <img
+                        src="<%= logoUrl1 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 20px;"
+                    />
+                    <div style="flex: 1; text-align: center;  font-size: 24px;">
+                        <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                        GROUP OF COMPANIES<br />
+                    </div>
+                    <img
+                        src="<%= logoUrl2 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 0px;"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tr>
+            <td colspan="15" class="header">
+              <% if (order.actual_dimension || order.accept) { %>
+                FINAL DIMENSIONAL INSPECTION REPORT (STRUCTURE)
+              <% } else { %>
+                FINAL DIMENSIONAL INSPECTION OFFER LIST
+              <% } %>
+            </td>
+          </tr> 
+          <tr>
+            <td colspan="1" class="header">CLIENT</td>
+            <td colspan="3"><%= order.client || '--' %></td>
+            <td colspan="1" class="header">REPORT NO.</td>
+            <td colspan="3"><%= order.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="1" class="header">PROJECT</td>
+            <td colspan="3"><%= order.project_name || '--' %></td>
+            <td colspan="1" class="header">WO NO./PO NO.</td>
+            <td colspan="3"><%= order.wo_no || '--' %></td>
+          </tr>
+          <tr>
+            <!-- <td colspan="1" class="header">PROJECT PO NO.</td>
+            <td colspan="3"><%= order.project_po_no || '--' %></td> -->
+            <td colspan="1" class="header">Date :</td>
+            <td colspan="7">
+              <!-- <%= order.date ? new
+              Date(order.date).toLocaleDateString() : '--' %> -->
+              <%= order.date 
+              ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr class="header">
+            <th>SR No.</th>
+            <th colspan=<%= projectColspan %>>FAB.DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th colspan=<%= projectColspan %>>REQUIRED DIMENSION</th>
+            <% if (order.actual_dimension || order.accept) { %>
+              <th>ACTUAL DIMENSION</th>
+              <th>ACC/REJ</th>
+            <% } %>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td colspan=<%= projectColspan %>><%= order.drawing_no || '--' %></td>
+            <td><%= order.rev || '--' %></td>
+            <td><%= order.assembly_no || '--' %></td>
+            <td colspan=<%= projectColspan %>><%= order.required_dimension || '--' %></td>
+            <% if (order.actual_dimension || order.accept) { %>
+              <td><%= order.actual_dimension || '--' %></td>
+              <td><%= order.accept || '--' %></td>
+            <% } %>
+            <td><%= order.remarks || '--' %></td>
+          </tr>
+        </tbody>
+          <tr>
+            <td colspan="1" class="header">NOTE</td>
+            <td colspan="8"></td>
+          </tr>
+          <tr>
+            <td colspan="1"></td>
+            <td colspan="3" class="header" style="width: 300px;">VE QC</td>
+            <td colspan="4" class="header">CLIENT QC/TPI</td>
+          </tr>
+          <tr>
+            <td colspan="1">SIGNATURE</td>
+            <td colspan="3"></td>
+            <td colspan="4"></td>
+          </tr>
+          <tr>
+            <td colspan="1">NAME</td>
+            <% if (order.actual_dimension || order.accept) { %>
+              <td colspan="3"><%= order.qc_name || '--' %></td>
+            <% } else { %>
+              <td colspan="3"><%= order.offer_name || '--' %></td>
+            <% } %>
+            <td colspan="4"></td>
+          </tr>
+          <tr>
+            <td colspan="1">DATE</td>
+            <% if (order.actual_dimension || order.accept) { %>
+              <td colspan="3">
+                <!-- <%= order.date ? new Date(order.date).toLocaleDateString() : '--' %> -->
+                <%= order.date 
+                ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                : '--' %>  
+              </td>
+            <% } else { %>
+              <td colspan="3">
+                <!-- <%= order.date ? new Date(order.date).toLocaleDateString() : '--' %> -->
+                <%= order.date 
+                ? new Date(order.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                : '--' %>  
+              </td>
+            <% } %>
+            <td colspan="4"></td>
+          </tr>
+          <tr>
+            <% if (order.actual_dimension || order.accept) { %>
+              <td colspan="8" style="text-align: left;">VE/QA/FORMAT/20A</td>
+            <% } else { %>
+              <td colspan="8" style="text-align: left;">VE/QA/FORMAT/20B</td>
+            <% } %>
+          </tr>
+      </table> 
+    </div>
+    <% }) %>
+  </body>
+</html>

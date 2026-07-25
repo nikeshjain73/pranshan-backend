@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Material Inspection Report</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 60px;
+      }
+
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 10px;
+      }
+
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+
+
+      .status-type {
+        font-size: 9px;
+        font-weight: bold;
+        text-align: left;
+        display: block;
+      }
+      .big-star {
+        font-size: 16px;   /* increase size */
+        font-weight: bold;
+        vertical-align: middle;
+      }
+
+      @media print {
+        thead {
+          display: table-header-group;
+        }
+
+        tr.page-break {
+          page-break-after: always;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <%
+    // First, organize data into complete item groups
+    let itemGroups = [];
+    let srNo = 0;
+    let invoice_no = headerInfo.invoice_no;
+    
+    items.forEach(item => {
+        srNo++;
+        let group = {
+            id: srNo,
+            rows: [],
+            size: item.heat_no_data?.length || 1
+        };
+        
+        // Add main item row
+        group.rows.push({
+            isMain: true,
+            srNo: srNo,
+            material_po_no: item.material_po_no,
+            main_supplier_name: item.main_supplier_name,
+            item_name: item.item_name,
+            selected: item.selected,
+            material_grade: item.material_grade,
+            manufacture: item.manufacture,
+            acceptedQty: item.acceptedQty,
+            heat_lot_no: item.heat_no_data?.[0]?.heat_no || item.accepted_lot_no || '--',
+            inspected_nos: item.heat_no_data?.[0]?.inspected_nos || item.acceptedNos || '--',
+            inspected_length: item.heat_no_data?.[0]?.inspected_length || item.acceptedLength || '--',
+            inspected_width: item.heat_no_data?.[0]?.inspected_width || item.acceptedWidth || '--',
+            tc_no: item.heat_no_data?.[0]?.tc_no || item.tcNo || '--',
+            invoice_no: invoice_no,
+            acc_rej: item.acc_rej,
+            remarks: item.remarks,
+            groupPosition: 1
+        });
+
+        // Add additional heat_no_data rows
+        if(item.heat_no_data && item.heat_no_data.length > 1) {
+            for(let i = 1; i < item.heat_no_data.length; i++) {
+                group.rows.push({
+                    isMain: false,
+                    heat_lot_no: item.heat_no_data[i].heat_no,
+                    inspected_nos: item.heat_no_data[i].inspected_nos,
+                    inspected_length: item.heat_no_data[i].inspected_length,
+                    inspected_width: item.heat_no_data[i].inspected_width,
+                    tc_no: item.heat_no_data[i].tc_no,
+                    groupPosition: i + 1
+                });
+            }
+        }
+        
+        itemGroups.push(group);
+    });
+
+    // Now paginate the groups intelligently
+    let itemsPerPage = 10; // Target rows per page
+    let pages = [];
+    let currentPage = [];
+    let currentPageRowCount = 0;
+
+    itemGroups.forEach(group => {
+        // If adding this group would exceed the page limit (and it's not the first group on the page)
+        if (currentPageRowCount + group.size > itemsPerPage && currentPage.length > 0) {
+            pages.push(currentPage);
+            currentPage = [];
+            currentPageRowCount = 0;
+        }
+        
+        currentPage.push(group);
+        currentPageRowCount += group.size;
+    });
+
+    // Add the last page if it has content
+    if (currentPage.length > 0) {
+        pages.push(currentPage);
+    }
+
+    // Render each page
+    pages.forEach((pageGroups, pageIndex) => {
+        // Flatten the groups into rows for this page
+        let currentRows = [];
+        pageGroups.forEach(group => {
+            currentRows = currentRows.concat(group.rows.map(row => ({
+                ...row,
+                groupId: group.id,
+                groupSize: group.size
+            })));
+        });
+    %>
+    <table>
+      <thead>
+        <tr>
+          <td colspan="15" class="header">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <img
+                src="<%= logoUrl1 %>"
+                alt="Company Logo"
+                style="max-width: 100px; max-height: 80px; margin-right: 20px"
+              />
+              <div style=" text-align: center; flex: 1; font-size: 18px; line-height: 1.5;">
+                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                   GROUP OF COMPANIES<br />
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="15" class="header"> INWARD MATERIAL INSPECTION REPORT (IMIR) - STRUCTURAL </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="header">CLIENT</td>
+          <td colspan="3"><%= headerInfo.client || '--' %></td>
+          <td colspan="2" class="header">PROJECT</td>
+          <td colspan="3"><%= headerInfo.project_name || '--' %></td>
+          <td colspan="2" class="header">IMIR NO</td>
+          <td colspan="3"><%= headerInfo.imir_no || '--' %></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="header">PO / WO NO.</td>
+          <td colspan="3"><%= headerInfo.wo_no || '--' %></td>
+          <td colspan="2" class="header">DATE</td>
+          <td colspan="3">
+            <%= headerInfo.send_qc_time ? new
+            Date(headerInfo.send_qc_time).toISOString().slice(0,
+            10).split('-').reverse().join('/') : '--' %>
+          </td>
+          <td colspan="5"></td>
+        </tr>
+        <tr>
+          <th>SR No.</th>
+          <th>MATERIAL PO NO.</th>
+          <th>SUPPLIER</th>
+          <th>SECTION DETAILS</th>
+          <th>MATERIAL GRADE</th>
+          <th>MANUFACTURE</th>
+          <th>INSPECTED QTY(KG)</th>
+          <th>HEAT/LOT NO</th>
+          <th>INSPECTED NOS</th>
+          <th>INSPECTED SIZE LENGTH(MM)</th>
+          <th>INSPECTED SIZE WIDTH(MM)</th>
+          <th>TC NO.</th>
+          <th>INVOICE NO.</th>
+          <th>ACC/REJ</th>
+          <th>REMARKS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% 
+        let currentGroup = null;
+        let groupStartIndex = 0;
+        
+        currentRows.forEach((row, index) => { 
+            if (currentGroup !== row.groupId) {
+                currentGroup = row.groupId;
+                groupStartIndex = index;
+            }
+        %>
+        <tr>
+            <% if(row.isMain) { %>
+                <% if(row.groupPosition === 1) { %>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.srNo || "--" %><%- headerInfo.status_type === 'RANDOM WITNESSED' && row.selected === true
+                          ? '<span class="big-star">*</span>'
+                          : ''
+                      %>
+                      </td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.material_po_no || "--" %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.main_supplier_name || "--" %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.item_name || "--" %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.material_grade || "--"  %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.manufacture || "--" %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.acceptedQty || "--" %></td>
+                <% } %>
+                <td class="truncate-cell"><%= row.heat_lot_no || "--" %></td>
+                <td class="truncate-cell"><%= row.inspected_nos || "--" %></td>
+                <td class="truncate-cell"><%= row.inspected_length || "--" %></td>
+                <td class="truncate-cell"><%= row.inspected_width || "--" %></td>
+                <td class="truncate-cell"><%= row.tc_no || "--" %></td>
+                <% if(row.groupPosition === 1) { %>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.invoice_no || "--" %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.acc_rej || "--" %></td>
+                    <td class="truncate-cell" rowspan="<%= row.groupSize %>"><%= row.remarks || "--" %></td>
+                <% } %>
+            <% } else { %>
+                <td class="truncate-cell"><%= row.heat_lot_no || "--" %></td>
+                <td class="truncate-cell"><%= row.inspected_nos || "--" %></td>
+                <td class="truncate-cell"><%= row.inspected_length || "--" %></td>
+                <td class="truncate-cell"><%= row.inspected_width || "--" %></td>
+                <td class="truncate-cell"><%= row.tc_no || "--" %></td>
+            <% } %>
+        </tr>
+        <% }) %>
+      </tbody>
+
+      <tr>
+        <td class="header" colspan="2">REMARKS</td>
+        <td colspan="16"></td>
+      </tr>
+      <tr>
+        <td colspan="2"></td>
+        <td colspan="6" class="header">VE-QC</td>
+        <td colspan="7" class="header">
+        <span class="status-type">
+            <% if (headerInfo.qc_date && headerInfo.client_status == 1) { %>
+                <%= headerInfo.status_type.toUpperCase() || '' %>
+            <% } %>
+        </span>
+        CLIENT-QC / TPI
+      </td>
+
+      </tr>
+      <tr>
+        <td colspan="2">SIGNATURE</td>
+        <td colspan="6">
+            <% if (headerInfo.qc_date && headerInfo.client_status == 1) { %>
+              <img src="<%= headerInfo.accept_signature %>" alt="Prepared By Signature" style="max-height: 50px; display: block; margin: auto;" />
+            <% } %>
+        </td>
+        <td colspan="7">
+          <% if (headerInfo.qc_date && headerInfo.client_status == 1) { %>
+              <img src="<%= headerInfo.client_signature %>" alt="Prepared By Signature" style="max-height: 50px; display: block; margin: auto;" />
+            <% } %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">NAME</td>
+        <td colspan="6"><%= headerInfo.accept_name || '--' %></td>
+        <td colspan="7">
+           <% if (headerInfo.qc_date && headerInfo.client_status == 1) { %>
+              <%= headerInfo.client_user || '--' %>
+           <% } %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">DATE</td>
+        <td colspan="6">
+          <%= headerInfo.qc_date ? new
+          Date(headerInfo.qc_date).toISOString().slice(0,
+          10).split('-').reverse().join('/') : "--" %>
+        </td>
+        <td colspan="7"></td>
+      </tr>
+      <tr>
+        <td colspan="15" style="text-align: left">VE-DOC-03 REV.00</td>
+      </tr>
+    </table>
+
+    <% if (pageIndex !== pages.length - 1) { %>
+    <div class="page-break"></div>
+    <% } %>
+    <% }); %>
+  </body>
+</html>

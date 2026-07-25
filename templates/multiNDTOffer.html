@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <%= headerInfo.NDTType === "UT" ? "Ultrasonic Test Offer" 
+        : headerInfo.NDTType === "RT" ? "Radiography Test Offer" 
+        : headerInfo.NDTType === "MPT" ? "Magnetic Particle Test Offer" 
+        : headerInfo.NDTType === "LPT" ? "Liquid Penetrant Test Offer" 
+        : "" %>
+    </title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 14px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 9px;
+        }
+        .header {
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .header1, .header4 { font-weight: bold; font-size: 11px; }
+        .header2 { font-weight: bold; font-size: 11px; }
+        .footer { font-weight: bold; text-align: left; font-size: 10px; margin-top: 20px; }
+        .truncate-cell {
+            height: 10px;
+            max-height: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        @media print {
+            thead { display: table-header-group; }
+            tfoot { display: table-footer-group; }
+            tr.page-break { page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <% 
+            let itemsPerPage = 8; 
+            let totalPages = Math.ceil(items.length / itemsPerPage);
+            for (let page = 0; page < totalPages; page++) { 
+                let start = page * itemsPerPage;
+                let end = start + itemsPerPage;
+                let currentItems = items.slice(start, end);
+        %>
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="16" class="header">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <img src="<%= logoUrl1 %>" alt="Company Logo" style="max-width: 200px; height: 80px; margin-right: 20px;" />
+                            <div style="flex: 1; text-align: center; font-size: 17px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="15" class="header2">
+                        <%= headerInfo.NDTType === "UT" ? "ULTRASONIC TEST OFFER (STRUCTURE)"
+                        : headerInfo.NDTType === "RT" ? "RADIOGRAPHY TEST OFFER (STRUCTURE)"
+                        : headerInfo.NDTType === "MPT" ? "MAGNETIC PARTICLE TEST OFFER (STRUCTURE)"
+                        : headerInfo.NDTType === "LPT" ? "LIQUID PENETRANT TEST OFFER (STRUCTURE)"
+                        : "" %>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header">CLIENT</td>
+                    <td colspan="5"><%= headerInfo.client || '--' %></td>
+                    <td colspan="2" class="header">OFFER NO.</td>
+                    <td colspan="4"><%= headerInfo.report_no || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header">PROJECT</td>
+                    <td colspan="5"><%= headerInfo.project_name || '--' %></td>
+                    <td colspan="2" class="header">OFFER DATE</td>
+                    <td colspan="4"><%= headerInfo.offer_date 
+                        ? new Date(headerInfo.offer_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                        : '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header">WO NO./PO NO.</td>
+                    <td colspan="11"><%= headerInfo.wo_no || '--' %></td>
+                </tr>
+                <tr>
+                    <th>SR No.</th>
+                    <th>DRAWING NO.</th>
+                    <th>REV</th>
+                    <th>ASSEMBLY NUMBER</th>
+                    <th>GRID NUMBER</th>
+                    <th>GRID QTY</th>
+                    <th>PROFILE</th>
+                    <th>TYPE OF WELD</th>
+                    <th>WELDING PROCESS</th>
+                    <th>WELDER NO.</th>
+                    <th>THICKNESS (mm)</th>
+                    <th>OFFER DATA</th>
+                    <th>REMARKS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% currentItems.forEach((detail, index) => { %>
+                <tr>
+                    <td><%= start + index + 1 %></td> 
+                    <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.rev  %></td>
+                    <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.used_grid_qty || '--' %></td>
+                    <td class="truncate-cell"><%= detail.profile || '--' %></td>
+                    <td class="truncate-cell"><%= detail.joint_type || '--' %></td>
+                    <td class="truncate-cell"><%= detail.weldingProcess || '--' %></td>
+                    <td class="truncate-cell"><%= detail.welder_no || '--' %></td>
+                    <td class="truncate-cell"><%= detail.thickness || '--' %></td>
+                    <td class="truncate-cell"><%= detail.is_cover ? 'Yes' : 'No' %></td>
+                    <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+                </tr>
+                <% }) %>
+            </tbody>
+            <tr>
+                <td colspan="2" class="header">NOTE</td>
+                <td colspan="11"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="11" class="header">OFFERED BY</td>
+            </tr>
+            <tr>
+                <td colspan="2">SIGNATURE</td>
+                <td colspan="11"></td>
+            </tr>
+            <tr>
+                <td colspan="2">NAME</td>
+                <td colspan="11"><%= headerInfo.offer_name || '--' %></td>
+            </tr>
+            <tr>
+                <td colspan="2">DATE</td>
+                <td colspan="11"><%= headerInfo.offer_date 
+                    ? new Date(headerInfo.offer_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                    : '--' %></td>
+            </tr>
+            <tr>
+                <td colspan="13" style="text-align: left;">
+                    <%= headerInfo.NDTType === "UT" ? "VE-DOC-14 REV.00"
+                    : headerInfo.NDTType === "RT" ? "VE-DOC-15 REV.00"
+                    : headerInfo.NDTType === "MPT" ? "VE-DOC-17 REV.00"
+                    : headerInfo.NDTType === "LPT" ? "VE-DOC-19 REV.00"
+                    : "" %>
+                </td>
+            </tr>
+        </table>
+        <% if (page !== totalPages - 1) { %> 
+            <div class="page-break"></div> 
+        <% } } %>
+    </div>
+</body>
+</html>

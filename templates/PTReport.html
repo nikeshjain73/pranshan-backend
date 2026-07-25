@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PT Report</title>
+  <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+      .footer {
+        font-weight: bold;
+        text-align: left;
+        font-size: 10px;
+        margin-top: 20px;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      @media print {
+        thead {
+          display: table-header-group; /* Repeat headers on each page */
+        }
+        tfoot {
+          display: table-footer-group; /* Ensure footer is on the last page */
+        }
+        tr.page-break {
+          page-break-after: always; /* Force page break after each table */
+        }
+      }
+    </style>
+</head>
+
+<body>
+    <% 
+    let itemsPerPage = 30; 
+    let totalPages = Math.ceil(items.length / itemsPerPage);
+    for (let page = 0; page < totalPages; page++) { 
+        let start = page * itemsPerPage;
+        let end = start + itemsPerPage;
+        let currentItems = items.slice(start, end);
+    %>
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="7" class="header">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <img
+                                src="<%= logoUrl1 %>"
+                                alt="Company Logo"
+                                style="max-width: 180px; height: 60px; margin-right: 20px;"
+                            />
+                            <div style="flex: 1; text-align: center; font-size: 17px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                    </td>
+                </tr> 
+                <tr>
+                    <td colspan="4" class="header"> PT REPORT</td>
+                    <td colspan="3" class="header"><%= headerInfo.month || '--' %>  <%= headerInfo.year || '--' %></td>
+                </tr>
+                <tr>
+                    <th>SR NO.</th>
+                    <th>EMPLOYEE NAME</th>
+                    <th>CARD NO.</th>
+                    <th>DEPARTMENT</th>
+                    <th>WORKING DAYS</th>
+                    <th>GROSS SALARY</th>
+                    <th>PT AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% currentItems.forEach((detail, index) => { %>
+                    <tr>
+                        <td class="truncate-cell"><%= start + index + 1 %></td> 
+                        <td class="truncate-cell"><%= detail.employeeName || '--' %></td>
+                        <td class="truncate-cell"><%= detail.card_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.department || '--' %></td>
+                        <td class="truncate-cell"><%= detail.work_day || '--' %></td>
+                        <td class="truncate-cell"><%= (detail.gross_wages || 0).toFixed(2) %></td>
+                        <td class="truncate-cell"><%= (detail.ptAmount || 0).toFixed(2) %></td>
+                    </tr>
+                <% }) %>
+                <% if (page === totalPages - 1) { %> 
+                    <tr>
+                        <td colspan="4" class="right-alignment"><strong>Total</strong></td>
+                        <td class="truncate-cell"><strong><%= headerInfo.totalWorkDaySum %></strong></td>
+                        <td class="truncate-cell"><strong><%= headerInfo.totalSalarySum.toFixed(2) %></strong></td>
+                        <td class="truncate-cell"><strong><%= headerInfo.totalPtAmountSum.toFixed(2) %></strong></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    
+        <% if (page !== totalPages - 1) { %> 
+            <div class="page-break"></div> 
+        <% } } %>
+</body>
+</html>

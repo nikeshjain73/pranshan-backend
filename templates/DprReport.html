@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Progress Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background-color: #FFD700;
+            color: black;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .header img {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            top: 10px;
+        }
+
+        .header img.left {
+            left: 10px;
+        }
+
+        .header img.right {
+            right: 10px;
+        }
+
+        .header .company-info {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .header .client-info {
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #F5DEB3;
+        }
+
+        .total-row {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="<%= logoUrl1 %>" alt="Company Logo" class="left">
+        <img src="<%= logoUrl2 %>" alt="Right Logo" class="right">
+        <div class="company-info">VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED GROUP OF COMPANIES</div>
+        <div class="client-info">Client: PI Industries Limited <br> Daily Progress Report</div>
+    </div>
+
+    <table>
+        <tr>
+            <td colspan="15" style="text-align: left;">
+                <strong>Progress Date:</strong> 2-Oct-24 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <strong>Report Date:</strong> 3-Oct-24
+            </td>
+        </tr>
+        <tr>
+            <th>S. No.</th>
+            <th>Assembly No.</th>
+            <th>Grid No.</th>
+            <th>Quantity</th>
+            <th>Assembly Weight</th>
+            <th>Total Weight</th>
+            <th>Material Issue Date</th>
+            <th>Material Accepted Date</th>
+            <th>Material Issue Rejected Date</th>
+            <th>Fitup Issue Date</th>
+            <th>Fitup Accepted Date</th>
+            <th>Weld Visual Issue Date</th>
+            <th>Weld Visual Accepted Date</th>
+            <th>Weld Visual Rejected Date</th>
+            <th>Painting Offer Date</th>
+            <th>Painting Accepted Date</th>
+            <th>Painting Rejected Date</th>
+            <th>Dispatch Date</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="18">TOTAL</td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

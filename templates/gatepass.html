@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee GatePass</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        p,
+        label {
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+
+        div {
+            font-size: 11px !important;
+            font-weight: 600;
+        }
+
+        p {
+            border-bottom: 1px dotted;
+        }
+
+        b,
+        strong {
+            color: rgb(228, 124, 5);
+            font-size: 10px;
+        }
+
+        .card-header {
+            padding: 10px;
+            background-color:rgb(228,124,5);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+       
+        .logo {
+            width: 60px;
+            height: 60px;
+        }
+    
+        .center-text {
+          text-align: center;
+          flex-grow: 1;
+          color: white;
+        }
+    
+        .center-text strong {
+          font-size: 16px;
+          display: block;
+        }
+    
+        .group-text {
+          font-size: 12px;
+          margin-top: 5px;
+          font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-5 col-xl-6 col-lg-7 col-md-10 col-ms-12">
+                <div class="card">
+                    <div class="card-header">
+                        <img
+                            src="<%= logoUrl1 %>"
+                            alt="Company Logo Left"
+                            class="logo"
+                        />
+
+                        <div class="center-text">
+                            <span class="group-text">VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</span></br>
+                            <span class="group-text">GROUP OF COMPANIES</span>
+                        </div>
+                    
+                        <img
+                            src="<%= logoUrl2 %>"
+                            alt="Company Logo Right"
+                            class="logo"
+                        />
+                    </div>
+                    <div class="card-body mt-0 p-1">
+                        <div class="row">
+                            <div class="col-4 overflow-hidden p-0">
+                                <div class="d-flex align-items-center "
+                                    style="padding: 2px; height: 200px; width: 150px;margin: 0 auto;overflow: hidden; padding-top: 10px;">
+                                    <img src=<%=emp?.image %>
+                                    alt="profile-img" style="height: 100%; width: 100%; object-fit: cover; "/>
+                                </div>
+                            </div>
+                            <div class="col-8 ">
+                                <div class="d-flex w-100">
+                                    <label style="width: 25%;">Gate Pass No.:</label>
+                                    <p style="width: 75%; border-bottom: 1px dotted; ">
+                                        <%= emp.card_no %>
+                                    </p>
+                                </div>
+                                <div class="d-flex w-100">
+                                    <label style="width: 55%;">Name of Contractor:</label>
+                                    <p class="w-100 mx-1">Vishal Enterprise</p>
+                                </div>
+                                <div class="d-flex w-100">
+                                    <label class="w-auto">Name:</label>
+                                    <p class="w-100 mx-2">
+                                        <%= emp?.full_name %>
+                                    </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="d-flex w-100">
+                                            <label class="w-auto">Category:</label>
+                                            <p class="w-75 mx-2">
+                                                <%= emp?.designation?.name %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex w-100">
+                                            <label class="w-auto">DOI:</label>
+                                            <p class="w-100 mx-2">
+                                                <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric' , month: 'long' ,
+                                                    day: '2-digit' }).format(emp?.joining_date) %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="d-flex w-100">
+                                            <label class="w-auto">DOB:</label>
+                                            <p class="w-100 mx-2">
+                                                <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric' , month: 'long' ,
+                                                    day: '2-digit' }).format(emp?.dob) %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex w-100">
+                                            <label class="w-auto">DOJ:</label>
+                                            <p class="w-100 mx-2">
+                                                <%= new Intl.DateTimeFormat('en-GB', { year: 'numeric' , month: 'long' ,
+                                                    day: '2-digit' }).format(emp?.joining_date) %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex w-100">
+                                    <label style="width: 20%;">Mobile No.:</label>
+                                    <p style="width: 80%; border-bottom: 1px dotted;">
+                                        <%= emp?.mobile_number %>
+                                    </p>
+                                </div>
+                                <div class="d-flex w-100">
+                                    <label style="width: 40%;">Present Address:</label>
+                                    <p class="w-100">
+                                        <%= emp?.address %>,
+                                    </p>
+                                </div>
+                                <div class="mb-0">
+                                    <p class="w-100">
+                                        <%= emp?.city %>, <%= emp?.state %>-<%= emp?.pincode %>
+                                    </p>
+                                    <strong class="w-100">Plot No. D2E 345/397/398, Opp.Thirumalay Chemical
+                                        Ltd.</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <b>Jolwa, Dahej-392130</b>
+                                    <b>
+                                        <span>
+                                            <svg width="15" height="20" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M18.7362 14.8552C19.5649 13.3703 20 11.6981 20 9.99768C20 8.29721 19.5649 6.62502 18.7362 5.14019C18.7318 5.0919 18.7171 5.04513 18.6929 5.00311C18.6688 4.96108 18.6358 4.92481 18.5962 4.89679C17.4785 3.01267 15.7729 1.54782 13.7415 0.727458C11.7102 -0.0929049 9.4657 -0.223365 7.35303 0.356135C5.24035 0.935636 3.3765 2.19301 2.04803 3.93496C0.719551 5.6769 0 7.80697 0 9.99768C0 12.1884 0.719551 14.3185 2.04803 16.0604C3.3765 17.8023 5.24035 19.0597 7.35303 19.6392C9.4657 20.2187 11.7102 20.0883 13.7415 19.2679C15.7729 18.4475 17.4785 16.9827 18.5962 15.0986C18.6358 15.0705 18.6688 15.0343 18.6929 14.9922C18.7171 14.9502 18.7318 14.9035 18.7362 14.8552ZM4.27263 15.1689H5.85123C6.18175 16.4699 6.78598 17.6854 7.62357 18.7343C6.15039 17.9395 4.97462 16.6885 4.27263 15.1689ZM0.702767 10.3424H2.42444C2.45588 11.7568 2.72678 13.1556 3.22563 14.4794H1.84664C1.14597 13.2093 0.754107 11.7921 0.702767 10.3424ZM1.84733 5.51596H3.22632C2.72747 6.83979 2.45657 8.23858 2.42513 9.65293H0.702767C0.754319 8.20322 1.14641 6.78601 1.84733 5.51596ZM15.732 4.82647H14.1534C13.8229 3.5255 13.2187 2.30999 12.3811 1.26109C13.8543 2.05587 15.03 3.30688 15.732 4.82647ZM19.3019 9.65293H17.5802C17.5488 8.23858 17.2779 6.83979 16.779 5.51596H18.158C18.8587 6.78607 19.2505 8.20328 19.3019 9.65293ZM16.8907 9.65293H14.8247C14.8098 8.26027 14.6448 6.87328 14.3327 5.51596H16.043C16.5718 6.83282 16.859 8.23421 16.8907 9.65293ZM9.65758 5.51596V9.65293H5.8695C5.88796 8.25849 6.06444 6.87064 6.39558 5.51596H9.65758ZM6.58588 4.82647C7.27538 2.55596 8.3965 0.973225 9.65758 0.726041V4.82647H6.58588ZM9.65758 10.3424V14.4794H6.39558C6.06444 13.1247 5.88796 11.7369 5.8695 10.3424H9.65758ZM9.65758 15.1689V19.2693C8.3965 19.0221 7.27572 17.4394 6.58588 15.1689H9.65758ZM10.3471 14.4794V10.3424H14.1352C14.1167 11.7369 13.9402 13.1247 13.6091 14.4794H10.3471ZM13.4188 15.1689C12.7293 17.4394 11.6078 19.0221 10.3471 19.2693V15.1689H13.4188ZM10.3471 9.65293V5.51596H13.6091C13.9402 6.87064 14.1167 8.25849 14.1352 9.65293H10.3471ZM10.3471 4.82647V0.726041C11.6078 0.973225 12.7286 2.55596 13.4188 4.82647H10.3471ZM7.62357 1.26109C6.78598 2.30999 6.18175 3.5255 5.85123 4.82647H4.27263C4.97462 3.30688 6.15039 2.05587 7.62357 1.26109ZM5.67161 5.51596C5.35962 6.87329 5.1948 8.26028 5.18 9.65293H3.11393C3.14554 8.23423 3.43259 6.83284 3.96132 5.51596H5.67161ZM3.11393 10.3424H5.18C5.1948 11.7351 5.35962 13.1221 5.67161 14.4794H3.96132C3.43259 13.1625 3.14554 11.7611 3.11393 10.3424ZM12.3811 18.7343C13.2187 17.6854 13.8229 16.4699 14.1534 15.1689H15.732C15.03 16.6885 13.8543 17.9395 12.3811 18.7343ZM14.3327 14.4794C14.6448 13.1221 14.8098 11.7351 14.8247 10.3424H16.8907C16.859 11.7611 16.5718 13.1625 16.043 14.4794H14.3327ZM17.5802 10.3424H19.3019C19.2503 11.7921 18.8582 13.2093 18.1573 14.4794H16.7783C17.2774 13.1556 17.5486 11.7568 17.5802 10.3424ZM17.7374 4.82647H16.4912C15.9639 3.64886 15.2013 2.59157 14.2503 1.7196C15.6562 2.44439 16.8558 3.51319 17.7374 4.82647ZM5.75401 1.7196C4.80321 2.59168 4.04075 3.64895 3.51349 4.82647H2.26723C3.14869 3.5132 4.3482 2.4444 5.75401 1.7196ZM2.26723 15.1689H3.51349C4.04086 16.3464 4.80343 17.4037 5.75435 18.2758C4.34841 17.551 3.14879 16.4822 2.26723 15.1689ZM14.2503 18.2758C15.2013 17.4038 15.9639 16.3465 16.4912 15.1689H17.7374C16.8558 16.4822 15.6562 17.551 14.2503 18.2758Z"
+                                                    fill="#FF7D29" />
+                                            </svg>
+                                        </span>
+                                        www.vrishal.com
+                                    </b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html

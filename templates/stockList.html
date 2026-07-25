@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock List</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+     
+     
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="38" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 200px; height: 100px; margin-right: 10px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+               
+              </div>
+            </td>
+            <tr>
+              <th colspan="38"class="header">MATERIAL STOCK LIST</th>  
+            </tr>
+          </tr>      
+            <td colspan="4" class="header">CLIENT</td>
+            <td colspan="15"><%= requestData[0].party_name || '--' %></td>
+            <td colspan="4" class="header">PROJECT</td>
+            <td colspan="15"><%= requestData[0].project_name || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="4" class="header">PO / WO NO.</td>
+            <td colspan="34"><%= requestData[0].po_wo_no || '--' %></td>
+          </tr>
+          <tr class="">
+            <th>SR NO.</th>
+            <th>MATERIAL PO NO.</th>
+            <th>Supplier</th>
+            <th>Manufacture</th>
+            <!-- <th>REQ. NO.</th> -->
+            <th>SECTION DETAILS</th>
+            <th>MATERIAL GRADE</th>
+            <th>UNIT</th>
+            <th>REQ. QTY.</th>
+            <th>OFF. QTY.</th>
+            <th>OFF. DATE</th>
+            <th>OFF. LENGTH</th>
+            <th>OFF. WIDTH</th>
+            <th>OFF. NOS</th>
+            <th>OFF. UOM</th>
+            <th>OFF. THICKNESS(T/B)</th>
+            <th>OFF. THICKNESS(W)</th>
+            <th>OFF. THICKNESS(N)</th>
+            <th>OFF. LOT NO.</th>
+            <th>INSPECTED QTY.</th>
+            <th>INSPECTED LENGTH</th>
+            <th>INSPECTED WIDTH</th>
+            <th>INSPECTED NOS</th>
+            <th>INSPECTED THICKNESS(T/B)</th>
+            <th>INSPECTED THICKNESS(W)</th>
+            <th>INSPECTED THICKNESS(N)</th>
+            <th>INSPECTED LOT NO.</th>
+            <th>INSPECTED DATE</th>
+            <th>REJ. QTY.</th>
+            <th>REJ. LENGTH</th>
+            <th>REJ. NOS</th> <!-- NAME CHANGE WIDTH => NOS  -->
+            <th>IMIR NO.</th>
+            <th>INVOICE NO.</th>
+            <th>ACTUAL QTY</th>
+            <th>ISSUED QTY</th>
+            <th>TC NO.</th>
+            <th>BALANCE QTY</th>
+            <th>USABLE QTY</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% requestData.forEach(function(detail, index) { %>
+          <tr>
+            <td class="truncate-cell"><%= index + 1 %></td>
+            <td class="truncate-cell"><%= detail.material_po_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.mainSupplierName || '--' %></td>
+            <td class="truncate-cell"><%= detail.manufacture || '--' %></td>
+            <td class="truncate-cell"><%= detail.name || '--' %></td>
+            <td class="truncate-cell"><%= detail.material_grade || '--' %></td>
+            <td class="truncate-cell"><%= detail.unit || '--' %></td>
+            <td class="truncate-cell"><%= Number(detail.po_qty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= Number(detail.offeredQty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= detail.offer_date ? new Date(detail.offer_date).toLocaleDateString() : '--' %></td>
+            <td class="truncate-cell"><%= detail.offerLength || '--' %></td>
+            <td class="truncate-cell"><%= detail.offerWidth || '--' %></td>
+            <td class="truncate-cell"><%= detail.offerNos || '--' %></td>
+            <td class="truncate-cell"><%= detail.offer_uom || '--' %></td>
+            <td class="truncate-cell"><%= detail.offer_topBottom_thickness || '--' %></td>
+            <td class="truncate-cell"><%= detail.offer_width_thickness || '--' %></td>
+            <td class="truncate-cell"><%= detail.offer_normal_thickness || '--' %></td>
+            <td class="truncate-cell"><%= detail.lot_no || '--' %></td>
+            <td class="truncate-cell"><%= Number(detail.acceptedQty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= detail.acceptedLength || '--' %></td>
+            <td class="truncate-cell"><%= detail.acceptedWidth || '--' %></td>
+            <td class="truncate-cell"><%= detail.acceptedNos || '--' %></td>
+            <td class="truncate-cell"><%= detail.accepted_topBottom_thickness || '--' %></td>
+            <td class="truncate-cell"><%= detail.accepted_width_thickness || '--' %></td>
+            <td class="truncate-cell"><%= detail.accepted_normal_thickness || '--' %></td>
+            <td class="truncate-cell"><%= detail.accepted_lot_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.inspection_date ? new Date(detail.inspection_date).toLocaleDateString() : '--' %></td>
+            <td class="truncate-cell"><%= Number(detail.rejectedQty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= detail.rejected_length || '--' %></td>
+            <td class="truncate-cell"><%= detail.rejected_width || '--' %></td>
+            <td class="truncate-cell"><%= detail.imir_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.invoice_no || '--' %></td>
+            <td class="truncate-cell"><%= Number(detail.acceptedQty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= Number(detail.issued_qty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= detail.tcNo || '--' %></td>
+            <td class="truncate-cell"><%= Number(detail.balance_qty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= Number(detail.usableQty || 0).toFixed(2) %></td>
+            <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        <tr>
+          <td colspan="8" class="header">REMARKS</td>
+          <td colspan="30"></td>
+        </tr>
+        <tr>
+          <td colspan="38" style="text-align: left;">VE-STR-04</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

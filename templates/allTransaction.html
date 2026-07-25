@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <% if (requestData.tag_number=="11" ) { %>
+      Purchase Report
+      <% } else if(requestData.tag_number=="12" ) { %>
+        Purchase Return Report
+        <% } else if(requestData.tag_number=="9" ) { %>
+          Purchase Request Report
+          <% } else if(requestData.tag_number=="10" ) { %>
+            Purchase Order Report
+            <% } else if(requestData.tag_number=="13" ) { %>
+              Issue Report
+              <% } else if(requestData.tag_number=="14" ) { %>
+                Issue Return Report
+                <% } else if(requestData.tag_number=="15" ) { %>
+                  Purchase Order Report
+                  <% } %>
+  </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .header {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .header1 {
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .signature-section td {
+      height: 50px;
+    }
+
+    .remarks {
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+
+    <table>
+      <thead>
+        <tr>
+          <td colspan="31" class="header">
+            <div style="display: flex; align-items: center; justify-content: center;">
+              <img src="<%= logoUrl1 %>" alt="Company Logo"
+                style="max-width: 100px; height: 100px; margin-right: 10px;" />
+              <div style="flex: 1; text-align: center; font-size: 24px;">
+                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                GROUP OF COMPANIES<br />
+              </div>
+              <img src="<%= logoUrl2 %>" alt="Company Logo"
+                style="max-width: 100px; height: 100px; margin-right: 0px;" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th colspan="31" class="header">
+            <% if (requestData.tag_number=="11" ) { %>
+              PURCHASE REPORT
+              <% } else if(requestData.tag_number=="9" ) { %>
+                Purchase Request Report
+                <% } else if(requestData.tag_number=="10" ) { %>
+                  Purchase Order Report
+                  <% } else if(requestData.tag_number=="12" ) { %>
+                    PURCHASE RETURN REPORT
+                    <% } else if(requestData.tag_number=="13" ) { %>
+                      ISSUE REPORT
+                      <% } else if(requestData.tag_number=="14" ) { %>
+                        ISSUE RETURN REPORT
+                        <% } else if(requestData.tag_number=="15" ) { %>
+                          PURCHASE ORDER REPORT
+                          <% } %>
+          </th>
+        </tr>
+        <% if (requestData.tag_number==13 || requestData.tag_number==14) { %>
+          <% if (requestData.sdate && requestData.edate) { %>
+            <tr>
+              <td colspan="13" class="header1">Date &nbsp;&nbsp; : &nbsp;&nbsp; <%= new
+                  Date(requestData.sdate).toLocaleDateString()%>&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;<%= new
+                    Date(requestData.edate).toLocaleDateString()%>
+              </td>
+            </tr>
+            <% } %>
+              <tr>
+                <th>SR NO.</th>
+                <th>VOUCHER NO.</th>
+                <th>PROJECT NAME</th>
+                <th>DATE</th>
+                <th>PARTY NAME</th>
+                <th>MACHINE CODE</th>
+                <th>BILL NO.</th>
+                <th>GET PASS NO.</th>
+                <th>TRANSPORT NAME</th>
+                <th>TRANSPORT DATE</th>
+                <th>VEHICLE NO.</th>
+                <th>CHALLAN NO.</th>
+                <th>LR NO.</th>
+                <th>LR DATE</th>
+                <th>RECEIVED BY</th>
+                <th style="width:100px">ITEM NAME</th>
+                <th style="width:70px">UNIT</th>
+                <th style="width:70px">QTY</th>
+                <th style="width:70px">UNIT PRICE</th>
+                <th style="width:70px">AMOUNT</th>
+              </tr>
+      </thead>
+      <tbody>
+        <% requestData.trans_data.forEach(function(transaction, transIndex) { %>
+          <% transaction.items.forEach(function(item, itemIndex) { %>
+            <tr>
+              <% if (itemIndex===0) { %>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transIndex + 1 %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.voucher_no || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.project_name || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.trans_date ? new Date(transaction.trans_date).toLocaleDateString('en-GB') : '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.party_name || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.machine_code || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.bill_no || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.gate_pass_no || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.transport_name || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.transport_date ? new Date(transaction.transport_date).toLocaleDateString('en-GB') : '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.vehical_no || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.challan_no || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.lr_no || '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.lr_date ? new Date(transaction.lr_date).toLocaleDateString('en-GB') : '--' %>
+                </td>
+                <td rowspan="<%= transaction.items.length %>">
+                  <%= transaction.received_by || '--' %>
+                </td>
+                <% } %>
+                  <td>
+                    <%= item.item_name || '--' %>
+                  </td>
+                  <td>
+                    <%= item.unit || '--' %>
+                  </td>
+                  <td>
+                    <%= (item.quantity ? item.quantity.toFixed(3) : '0' ) %>
+                  </td>
+                  <td>
+                    <%= item.rate || 0 %>
+                  </td>
+                  <td>
+                    <%= (item.amount ? item.amount.toFixed(2) : '0' ) %>
+                  </td>
+            </tr>
+            <% }) %>
+              <tr style="height:50px">
+                <td colspan="14"></td>
+                <td colspan="3" class="header">Total</td>
+                <td class="header">
+                  <%= (transaction.total_qty ? transaction.total_qty.toFixed(3) : '0' ) %>
+                </td>
+                <td></td>
+                <td class="header">
+                  <%= (transaction.amt ? transaction.amt.toFixed(2) : '0' ) %>
+                </td>
+              </tr>
+              <!-- <tr style="height:30px">
+                    <td colspan="19"></td>
+                  </tr> -->
+              <% }) %>
+                <tr style="height:50px">
+                  <td colspan="13"></td>
+                  <td colspan="3" class="header">Total Bill</td>
+                  <td class="header">
+                    <%= (requestData.total_quantity ? requestData.total_quantity.toFixed(3) : '0' ) %>
+                  </td>
+                  <td></td>
+                  <td class="header">
+                    <%= (requestData.amount ? requestData.amount.toFixed(2) : '0' ) %>
+                  </td>
+                </tr>
+      </tbody>
+      <% } else if(requestData.tag_number==11) { %>
+        <% if (requestData.sdate && requestData.edate) { %>
+          <tr>
+            <td colspan="31" class="header1">Date &nbsp;&nbsp; : &nbsp;&nbsp; <%= new
+                Date(requestData.sdate).toLocaleDateString()%>&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;<%= new
+                  Date(requestData.edate).toLocaleDateString()%>
+            </td>
+          </tr>
+          <% } %>
+            <tr>
+              <th>SR NO.</th>
+              <th>VOUCHER NO.</th>
+              <th>PROJECT NAME</th>
+              <th>DATE</th>
+              <th>PARTY NAME</th>
+              <th>BILL NO.</th>
+              <th>TRANSPORT NAME</th>
+              <th>TRANSPORT DATE</th>
+              <th>VEHICLE NO.</th>
+              <th>PO NO.</th>
+              <th>CHALLAN NO.</th>
+              <th>LR NO.</th>
+              <th>LR DATE</th>
+              <th>PAYMENT DAY</th>
+              <th>PAYMENT DATE</th>
+              <th>RECEIVED BY</th>
+              <th>ITEM NAME</th>
+              <th>UNIT</th>
+              <th>QTY</th>
+              <th>UNIT PRICE</th>
+              <th>AMOUNT</th>
+              <th>DISCOUNT %</th>
+              <th>DISCOUNT AMOUNT</th>
+              <th>SP. DISCOUNT %</th>
+              <th>SP. DISCOUNT AMOUNT</th>
+              <th>TAXABLE AMOUNT</th>
+              <th>GST %</th>
+              <th>GST AMOUNT</th>
+              <th>TOTAL AMOUNT</th>
+              <th>+ / - AMOUNT</th>
+              <th>NET AMOUNT</th>
+            </tr>
+            </thead>
+            <tbody>
+              <% requestData.trans_data.forEach(function(transaction, transIndex) { %>
+                <% transaction.items.forEach(function(item, itemIndex) { %>
+                  <tr>
+                    <% if (itemIndex===0) { %>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transIndex + 1 %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.voucher_no || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.project_name || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.trans_date ? new Date(transaction.trans_date).toLocaleDateString('en-GB') : '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.party_name || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.bill_no || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.transport_name || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.transport_date ? new Date(transaction.transport_date).toLocaleDateString('en-GB')
+                          : '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.vehical_no || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.po_no || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.challan_no || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.lr_no || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.lr_date ? new Date(transaction.lr_date).toLocaleDateString('en-GB') : '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.payment_days || '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.payment_date ? new Date(transaction.payment_date).toLocaleDateString('en-GB') : '--' %>
+                      </td>
+                      <td rowspan="<%= transaction.items.length %>">
+                        <%= transaction.received_by || '--' %>
+                      </td>
+                      <% } %>
+                        <td>
+                          <%= item.item_name || '--' %>
+                        </td>
+                        <td>
+                          <%= item.unit || '--' %>
+                        </td>
+                        <td>
+                          <%= (item.quantity ? item.quantity.toFixed(3) : '0' ) %>
+                        </td>
+                        <td>
+                          <%= item.rate || 0 %>
+                        </td>
+                        <td>
+                          <%= (item.amount ? item.amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td>
+                          <%= item.discount || 0 %>
+                        </td>
+                        <td>
+                          <%= (item.discount_amount ? item.discount_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td>
+                          <%= item.sp_discount || 0 %>
+                        </td>
+                        <td>
+                          <%= (item.sp_discount_amount ? item.sp_discount_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td>
+                          <%= (item.taxable_amount ? item.taxable_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td>
+                          <%= item.gst || 0 %>
+                        </td>
+                        <td>
+                          <%= (item.gst_amount ? item.gst_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td>
+                          <%= (item.total_amount ? item.total_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td></td>
+                        <td></td>
+                  </tr>
+                  <% }) %>
+                    <tr style="height:50px">
+                      <td colspan="14"></td>
+                      <td colspan="4" class="header">Total</td>
+                      <td class="header">
+                        <%= (transaction.total_qty ? transaction.total_qty.toFixed(3) : '0' ) %>
+                      </td>
+                      <td></td>
+                      <td class="header">
+                        <%= (transaction.amt ? transaction.amt.toFixed(2) : '0' ) %>
+                      </td>
+                      <td></td>
+                      <td class="header">
+                        <%= (transaction.dis_amt ? transaction.dis_amt.toFixed(2) : '0' ) %>
+                      </td>
+                      <td></td>
+                      <td class="header">
+                        <%= (transaction.sp_dis_amt ? transaction.sp_dis_amt.toFixed(2) : '0' ) %>
+                      </td>
+                      <td class="header">
+                        <%= (transaction.tax_amt ? transaction.tax_amt.toFixed(2) : '0' ) %>
+                      </td>
+                      <td></td>
+                      <td class="header">
+                        <%= (transaction.gst_amt ? transaction.gst_amt.toFixed(2) : '0' ) %>
+                      </td>
+                      <td class="header">
+                        <%= (transaction.total_amt ? transaction.total_amt.toFixed(2) : '0' ) %>
+                      </td>
+                      <td class="header">
+                        <%= (transaction.round_amount ? transaction.round_amount.toFixed(2) : '0' ) %>
+                      </td>
+                      <td class="header">
+                        <%= (transaction.net_amt ? transaction.net_amt.toFixed(2) : '0' ) %>
+                      </td>
+                    </tr>
+                    <tr style="height:30px">
+                      <td colspan="31"></td>
+                    </tr>
+                    <% }) %>
+                      <tr style="height:50px">
+                        <td colspan="14"></td>
+                        <td colspan="4" class="header">Total Bill</td>
+                        <td class="header">
+                          <%= (requestData.total_quantity ? requestData.total_quantity.toFixed(3) : '0' ) %>
+                        </td>
+                        <td></td>
+                        <td class="header">
+                          <%= (requestData.amount ? requestData.amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td></td>
+                        <td class="header">
+                          <%= (requestData.dis_amount ? requestData.dis_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td></td>
+                        <td class="header">
+                          <%= (requestData.sp_dis_amount ? requestData.sp_dis_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td class="header">
+                          <%= (requestData.tax_amount ? requestData.tax_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td></td>
+                        <td class="header">
+                          <%= (requestData.gst_amount ? requestData.gst_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td class="header">
+                          <%= (requestData.total_amount ? requestData.total_amount.toFixed(2) : '0' ) %>
+                        </td>
+                        <td class="header">
+                          <%= (requestData.round_amt ? requestData.round_amt.toFixed(2) : '0' ) %>
+                        </td>
+                        <td class="header">
+                          <%= (requestData.net_amount ? requestData.net_amount.toFixed(2) : '0' ) %>
+                        </td>
+                      </tr>
+            </tbody>
+            <% } else if(requestData.tag_number==12) { %>
+              <% if (requestData.sdate && requestData.edate) { %>
+                <tr>
+                  <td colspan="29" class="header1">Date &nbsp;&nbsp; : &nbsp;&nbsp; <%= new
+                      Date(requestData.sdate).toLocaleDateString()%>&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;<%= new
+                        Date(requestData.edate).toLocaleDateString()%>
+                  </td>
+                </tr>
+                <% } %>
+                  <tr>
+                    <th>SR NO.</th>
+                    <th>VOUCHER NO.</th>
+                    <th>PROJECT NAME</th>
+                    <th>DATE</th>
+                    <th>PARTY NAME</th>
+                    <th>BILL NO.</th>
+                    <th>TRANSPORT NAME</th>
+                    <th>TRANSPORT DATE</th>
+                    <th>VEHICLE NO.</th>
+                    <th>PO NO.</th>
+                    <th>CHALLAN NO.</th>
+                    <th>LR NO.</th>
+                    <th>LR DATE</th>
+                    <th>RECEIVED BY</th>
+                    <th>ITEM NAME</th>
+                    <th>UNIT</th>
+                    <th>QTY</th>
+                    <th>UNIT PRICE</th>
+                    <th>AMOUNT</th>
+                    <th>DISCOUNT %</th>
+                    <th>DISCOUNT AMOUNT</th>
+                    <th>SP. DISCOUNT %</th>
+                    <th>SP. DISCOUNT AMOUNT</th>
+                    <th>TAXABLE AMOUNT</th>
+                    <th>GST %</th>
+                    <th>GST AMOUNT</th>
+                    <th>TOTAL AMOUNT</th>
+                    <th>+ / - AMOUNT</th>
+                    <th>NET AMOUNT</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <% requestData.trans_data.forEach(function(transaction, transIndex) { %>
+                      <% transaction.items.forEach(function(item, itemIndex) { %>
+                        <tr>
+                          <% if (itemIndex===0) { %>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transIndex + 1 %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.voucher_no || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.project_name || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.trans_date ? new Date(transaction.trans_date).toLocaleDateString() : '--'
+                                %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.party_name || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.bill_no || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.transport_name || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.transport_date ? new Date(transaction.transport_date).toLocaleDateString()
+                                : '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.vehical_no || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.po_no || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.challan_no || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.lr_no || '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.lr_date ? new Date(transaction.lr_date).toLocaleDateString() : '--' %>
+                            </td>
+                            <td rowspan="<%= transaction.items.length %>">
+                              <%= transaction.received_by || '--' %>
+                            </td>
+                            <% } %>
+                              <td>
+                                <%= item.item_name || '--' %>
+                              </td>
+                              <td>
+                                <%= item.unit || '--' %>
+                              </td>
+                              <td>
+                                <%= (item.quantity ? item.quantity.toFixed(3) : '0' ) %>
+                              </td>
+                              <td>
+                                <%= item.rate || 0 %>
+                              </td>
+                              <td>
+                                <%= (item.amount ? item.amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td>
+                                <%= item.discount || 0 %>
+                              </td>
+                              <td>
+                                <%= (item.discount_amount ? item.discount_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td>
+                                <%= item.sp_discount || 0 %>
+                              </td>
+                              <td>
+                                <%= (item.sp_discount_amount ? item.sp_discount_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td>
+                                <%= (item.taxable_amount ? item.taxable_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td>
+                                <%= item.gst || 0 %>
+                              </td>
+                              <td>
+                                <%= (item.gst_amount ? item.gst_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td>
+                                <%= (item.total_amount ? item.total_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td></td>
+                              <td></td>
+                        </tr>
+                        <% }) %>
+                          <tr style="height:50px">
+                            <td colspan="12"></td>
+                            <td colspan="4" class="header">Total</td>
+                            <td class="header">
+                              <%= (transaction.total_qty ? transaction.total_qty.toFixed(3) : '0' ) %>
+                            </td>
+                            <td></td>
+                            <td class="header">
+                              <%= (transaction.amt ? transaction.amt.toFixed(2) : '0' ) %>
+                            </td>
+                            <td></td>
+                            <td class="header">
+                              <%= (transaction.dis_amt ? transaction.dis_amt.toFixed(2) : '0' ) %>
+                            </td>
+                            <td></td>
+                            <td class="header">
+                              <%= (transaction.sp_dis_amt ? transaction.sp_dis_amt.toFixed(2) : '0' ) %>
+                            </td>
+                            <td class="header">
+                              <%= (transaction.tax_amt ? transaction.tax_amt.toFixed(2) : '0' ) %>
+                            </td>
+                            <td></td>
+                            <td class="header">
+                              <%= (transaction.gst_amt ? transaction.gst_amt.toFixed(2) : '0' ) %>
+                            </td>
+                            <td class="header">
+                              <%= (transaction.total_amt ? transaction.total_amt.toFixed(2) : '0' ) %>
+                            </td>
+                            <td class="header">
+                              <%= (transaction.round_amount ? transaction.round_amount.toFixed(2) : '0' ) %>
+                            </td>
+                            <td class="header">
+                              <%= (transaction.net_amt ? transaction.net_amt.toFixed(2) : '0' ) %>
+                            </td>
+                          </tr>
+                          <tr style="height:30px">
+                            <td colspan="30"></td>
+                          </tr>
+                          <% }) %>
+                            <tr style="height:50px">
+                              <td colspan="12"></td>
+                              <td colspan="4" class="header">Total Bill</td>
+                              <td class="header">
+                                <%= (requestData.total_quantity ? requestData.total_quantity.toFixed(3) : '0' ) %>
+                              </td>
+                              <td></td>
+                              <td class="header">
+                                <%= (requestData.amount ? requestData.amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td></td>
+                              <td class="header">
+                                <%= (requestData.dis_amount ? requestData.dis_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td></td>
+                              <td class="header">
+                                <%= (requestData.sp_dis_amount ? requestData.sp_dis_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td class="header">
+                                <%= (requestData.tax_amount ? requestData.tax_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td></td>
+                              <td class="header">
+                                <%= (requestData.gst_amount ? requestData.gst_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td class="header">
+                                <%= (requestData.total_amount ? requestData.total_amount.toFixed(2) : '0' ) %>
+                              </td>
+                              <td class="header">
+                                <%= (requestData.round_amt ? requestData.round_amt.toFixed(2) : '0' ) %>
+                              </td>
+                              <td class="header">
+                                <%= (requestData.net_amount ? requestData.net_amount.toFixed(2) : '0' ) %>
+                              </td>
+                            </tr>
+                  </tbody>
+                  <% } else if (requestData.tag_number==15 || requestData.tag_number==9 || requestData.tag_number==10 )
+                    { %>
+                    <% if (requestData.sdate && requestData.edate) { %>
+                      <tr>
+                        <td colspan="13" class="header1">Date &nbsp;&nbsp; : &nbsp;&nbsp; <%= new
+                            Date(requestData.sdate).toLocaleDateString()%>&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;<%=
+                              new Date(requestData.edate).toLocaleDateString()%>
+                        </td>
+                      </tr>
+                      <% } %>
+                        <tr>
+                          <th>SR NO.</th>
+                          <th>VOUCHER NO.</th>
+                          <th>PROJECT NAME</th>
+                          <th>DATE</th>
+                          <th>PARTY NAME</th>
+                          <th>BILL NO.</th>
+                          <th>RECEIVED BY</th>
+                          <th style="width:100px">ITEM NAME</th>
+                          <th style="width:70px">UNIT</th>
+                          <th style="width:70px">QTY</th>
+                          <th style="width:70px">UNIT PRICE</th>
+                          <th style="width:50px">GST</th>
+                          <th style="width:70px">AMOUNT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <% requestData.trans_data.forEach(function(transaction, transIndex) { %>
+                            <% transaction.items.forEach(function(item, itemIndex) { %>
+                              <tr>
+                                <% if (itemIndex===0) { %>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transIndex + 1 %>
+                                  </td>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transaction.voucher_no || '--' %>
+                                  </td>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transaction.project_name || '--' %>
+                                  </td>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transaction.trans_date ? new Date(transaction.trans_date).toLocaleDateString()
+                                      : '--' %>
+                                  </td>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transaction.party_name || '--' %>
+                                  </td>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transaction.bill_no || '--' %>
+                                  </td>
+                                  <td rowspan="<%= transaction.items.length %>">
+                                    <%= transaction.received_by || '--' %>
+                                  </td>
+                                  <% } %>
+                                    <td>
+                                      <%= item.item_name || '--' %>
+                                    </td>
+                                    <td>
+                                      <%= item.unit || '--' %>
+                                    </td>
+                                    <td>
+                                      <%= (item.quantity ? item.quantity.toFixed(3) : '0' ) %>
+                                    </td>
+                                    <td>
+                                      <%= item.rate || 0 %>
+                                    </td>
+                                    <td>
+                                      <%= item.gst || 0 %>
+                                    </td>
+                                    <td>
+                                      <%= (item.amount ? item.amount.toFixed(2) : '0' ) %>
+                                    </td>
+                              </tr>
+                              <% }) %>
+                                <tr style="height:50px">
+                                  <td colspan="7"></td>
+                                  <td colspan="3" class="header">Total</td>
+                                  <td class="header">
+                                    <%= (transaction.total_qty ? transaction.total_qty.toFixed(3) : '0' ) %>
+                                  </td>
+                                  <td></td>
+                                  <td class="header">
+                                    <%= (transaction.amt ? transaction.amt.toFixed(2) : '0' ) %>
+                                  </td>
+                                </tr>
+                                <tr style="height:30px">
+                                  <td colspan="15"></td>
+                                </tr>
+                                <% }) %>
+                                  <tr style="height:50px">
+                                    <td colspan="7"></td>
+                                    <td colspan="3" class="header">Total Bill</td>
+                                    <td class="header">
+                                      <%= (requestData.total_quantity ? requestData.total_quantity.toFixed(3) : '0' ) %>
+                                    </td>
+                                    <td></td>
+                                    <td class="header">
+                                      <%= (requestData.amount ? requestData.amount.toFixed(2) : '0' ) %>
+                                    </td>
+                                  </tr>
+                        </tbody>
+                        <% } %>
+    </table>
+  </div>
+</body>
+
+</html>

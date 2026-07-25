@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <% requestData.forEach(function(order, index) { %> 
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      <% if (order.tag_number == "11") { %>
+        Purchase Report
+      <% } else if(order.tag_number == "12") { %>
+        Purchase Return Report
+      <% } else if(order.tag_number == "13") { %>
+        Issue Report
+      <% } else if(order.tag_number == "14") { %>
+        Issue Return Report
+      <% } %>
+    </title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+        font-size: 12px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 14px;
+        text-align: left;
+
+      } 
+      .header1 {
+        font-weight: bold;
+        font-size: 14px;
+      } 
+      .signature-section td {
+        height: 50px;
+      }
+      .remarks {
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="16" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 10px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <img
+                    src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 0px;"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="16"class="header1">
+              <% if (order.tag_number == "11") { %>
+                PURCHASE REPORT
+              <% } else if(order.tag_number == "12") { %>
+                PURCHASE RETURN REPORT
+              <% } else if(order.tag_number == "13") { %>
+                ISSUE REPORT
+              <% } else if(order.tag_number == "14") { %>
+                ISSUE RETURN REPORT
+              <% } %>
+            </th>
+            
+          </tr>
+          <% if (order.tag_number == 13 || order.tag_number == 14) { %>
+          <tr>
+            <td colspan="2" class="header">BILL NO.</td>
+            <td colspan="2"><%= order.bill_no || '--' %></td>
+            <td colspan="2" class="header">VOUCHER NO.</td>
+            <td colspan="3"><%= order.voucher_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">PROJECT</td>
+            <td colspan="2"><%= order.project_name || '--' %></td>
+            <td colspan="2" class="header">ORDER DATE</td>
+            <td colspan="2">
+              <%= order.order_date ? new Date(order.order_date).toLocaleDateString() : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">TRANSPORT NAME</td>
+            <td colspan="2"><%= order.transport_name || '--' %></td>
+            <td colspan="2" class="header">TRANSPORT DATE</td>
+            <td colspan="2">
+              <%= order.transport_date ? new Date(order.transport_date).toLocaleDateString() : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">VEHICLE NO.</td>
+            <td colspan="2"><%= order.vehical_no || '--' %></td>
+            <td colspan="2" class="header">CHALLAN NO.</td>
+            <td colspan="2"><%= order.challan_no || '--' %></td>
+          </tr>
+          <tr> 
+            <td colspan="2" class="header">LR NO.</td>
+            <td colspan="2"><%= order.lr_no || '--' %></td>
+            <td colspan="2" class="header">LR DATE</td>
+            <td colspan="2"><%= order.lr_date ? new Date(order.lr_date).toLocaleDateString() : '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">PARTY NAME</td>
+            <% if (order.machine_code) { %>
+              <td colspan="2"><%= order.party_name || '--' %></td>
+              <td colspan="2" class="header">MACHINE CODE</td>
+              <td colspan="2"><%= order.machine_code || '--' %></td>     
+            <% } else { %>
+              <td colspan="6"><%= order.party_name || '--' %></td>
+            <% } %> 
+          </tr>   
+            <tr>
+              <th>SR No.</th>
+              <th style="width:130px">ITEM NAME</th>
+              <th>UOM</th>
+              <th>M. CODE</th>
+              <th>QTY</th>
+              <th>UNIT PRICE</th>
+              <th>AMOUNT</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% order.items.forEach(function(detail, index) { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= detail.item_name || '--' %></td>
+                <td><%= detail.unit || '--' %></td>
+                <td><%= detail.m_code || '--' %></td>
+                <td><%= (detail.quantity ? detail.quantity.toFixed(3) : '0') %></td>
+                <td><%= detail.rate || 0 %></td>
+                <td><%= detail.amount || 0 %></td>
+                <td><%= detail.remarks || '--' %></td>
+              </tr>
+            <% }) %>
+            <tr style="height: 50px;">
+              <th colspan="4" >TOTAL</th>
+              <th><%= (order.total_qty ? order.total_qty.toFixed(3) : '0') %></th>
+              <th></th>
+              <th><%= (order.amt ? order.amt.toFixed(2) : '0') %></th>
+              <th></th>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
+              <td colspan="6" class="header1">RECEIVED BY</td>
+            </tr>
+            <tr>
+              <td colspan="2">SIGNATURE</td>
+              <td colspan="6"></td>
+            </tr>
+            <tr>
+              <td colspan="2">NAME</td>
+              <td colspan="6"><%= order.received_by || '--' %></td>
+            </tr>
+            <tr>
+              <td colspan="2">DATE</td>
+              <td colspan="6"><%= order.receive_date ? new Date(order.receive_date).toLocaleDateString() : '--' %></td>
+            </tr>
+          <% }else if(order.tag_number == "11" || order.tag_number == 12) { %>
+            <tr>
+              <td colspan="3" class="header">BILL NO.</td>
+              <td colspan="5"><%= order.bill_no || '--' %></td>
+              <td colspan="3" class="header">VOUCHER NO.</td>
+              <td colspan="5"><%= order.voucher_no || '--' %></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="header">PROJECT</td>
+              <td colspan="5"><%= order.project_name || '--' %></td>
+              <td colspan="3" class="header">ORDER DATE</td>
+              <td colspan="5">
+                <%= order.order_date ? new Date(order.order_date).toLocaleDateString() : '--' %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="header">TRANSPORT NAME</td>
+              <td colspan="5"><%= order.transport_name || '--' %></td>
+              <td colspan="3" class="header">TRANSPORT DATE</td>
+              <td colspan="5">
+                <%= order.transport_date ? new Date(order.transport_date).toLocaleDateString() : '--' %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="header">VEHICLE NO.</td>
+              <td colspan="5"><%= order.vehical_no || '--' %></td>
+              <td colspan="3" class="header">PO NO.</td>
+              <td colspan="5"><%= order.po_no || '--' %></td>
+            </tr>
+            <tr> 
+                <td colspan="3" class="header">PARTY NAME</td>
+                <td colspan="5"><%= order.party_name || '--' %></td>
+                <td colspan="3" class="header">CHALLAN NO.</td>
+                <td colspan="5"><%= order.challan_no || '--' %></td>
+            </tr>
+            <tr> 
+              <td colspan="3" class="header">LR NO.</td>
+              <td colspan="5"><%= order.lr_no || '--' %></td>
+              <td colspan="3" class="header">LR DATE</td>
+              <td colspan="5"><%= order.lr_date ? new Date(order.lr_date).toLocaleDateString() : '--' %></td>
+            </tr>
+            <% if (order.tag_number == 11) { %>
+              <tr> 
+                <td colspan="3" class="header">PAYMENT DAY</td>
+                <td colspan="5"><%= order.payment_days || '--' %></td>
+                <td colspan="3" class="header">PAYMENT DATE</td>
+                <td colspan="5"><%= order.payment_date || '--' %></td>
+              </tr>
+            <% } %>
+            <tr>
+              <th>SR No.</th>
+              <th style="width:130px">ITEM NAME</th>
+              <th>UOM</th>
+              <th>M. CODE</th>
+              <th>QTY</th>
+              <th>UNIT PRICE</th>
+              <th>AMOUNT</th>
+              <th>DISCOUNT %</th>
+              <th>DISCOUNT AMOUNT</th>
+              <th>SP. DISCOUNT %</th>
+              <th>SP. DISCOUNT AMOUNT</th>
+              <th>TAXABLE AMOUNT</th>
+              <th>GST %</th>
+              <th>GST AMOUNT</th>
+              <th>TOTAL AMOUNT</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% order.items.forEach(function(detail, index) { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= detail.item_name || '--' %></td>
+                <td><%= detail.unit || '--' %></td>
+                <td><%= detail.m_code || '--' %></td>
+                <td><%= (detail.quantity ? detail.quantity.toFixed(3) : '0') %></td>
+                <td><%= detail.rate || 0 %></td>
+                <td><%= detail.amount || 0 %></td>
+                <td><%= detail.discount || 0 %></td>
+                <td><%= detail.discount_amount || 0 %></td>
+                <td><%= detail.sp_discount || 0 %></td>
+                <td><%= detail.sp_discount_amount || 0 %></td>
+                <td><%= detail.taxable_amount || 0 %></td>
+                <td><%= detail.gst || 0 %></td>
+                <td><%= detail.gst_amount || 0 %></td>
+                <td><%= detail.total_amount || 0 %></td>
+                <td><%= detail.remarks || '--' %></td>
+              </tr>
+            <% }) %>
+            <tr style="height: 50px;">
+              <th colspan="4" >TOTAL</th>
+              <th><%= (order.total_qty ? order.total_qty.toFixed(3) : '0') %></th>
+              <th></th>
+              <th><%= (order.amt ? order.amt.toFixed(2) : '0') %></th>
+              <th></th>
+              <th><%= (order.dis_amt ? order.dis_amt.toFixed(2) : '0') %></th>
+              <th></th>
+              <th><%= (order.sp_dis_amt ? order.sp_dis_amt.toFixed(2) : '0') %></th>
+              <th><%= (order.tax_amt ? order.tax_amt.toFixed(2) : '0') %></th>
+              <th></th>
+              <th><%= (order.gst_amt ? order.gst_amt.toFixed(2) : '0') %></th>
+              <th><%= (order.total_amt ? order.total_amt.toFixed(2) : '0') %></th>
+              <th></th>
+            </tr>
+            <tr style="height: 50px;">
+              <th colspan="7" ></th>
+              <th colspan="2" >+ / - AMOUNT</th>
+              <th colspan="2"><%= order.round_amount || '0' %></th>
+              <th colspan="3" >NET AMOUNT</th>
+              <th colspan="2"><%= order.net_amt || '0' %></th>
+            </tr>
+            <tr>
+              <td colspan="4"></td>
+              <td colspan="12" class="header1">RECEIVED BY</td>
+            </tr>
+            <tr>
+              <td colspan="4">SIGNATURE</td>
+              <td colspan="12"></td>
+            </tr>
+            <tr>
+              <td colspan="4">NAME</td>
+              <td colspan="12"><%= order.received_by || '--' %></td>
+            </tr>
+            <tr>
+              <td colspan="4">DATE</td>
+              <td colspan="12"><%= order.receive_date ? new Date(order.receive_date).toLocaleDateString() : '--' %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+  <% }); %>
+</html>

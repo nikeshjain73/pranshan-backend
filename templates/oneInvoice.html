@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0; /* Remove body margin */
+        padding: 0; /* Remove body padding */
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse; /* Collapse borders */
+        border: 1px solid black; /* Add outer border */
+        margin: 0; /* Remove margin around the table */
+        padding: 0; /* Remove padding around the table */
+      }
+      th, td {
+        border: 1px solid black; /* Keep internal borders */
+        padding: 8px;
+        text-align: center;
+        font-size: 12px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 14px;
+      } 
+      .header1 {
+        font-weight: bold;
+        font-size: 12px;
+      } 
+      .signature-section td {
+        height: 50px;
+      }
+      .remarks {
+        height: 100px;
+      }
+      .nested-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .nested-table td, .nested-table th {
+        padding: 4px;
+        text-align: left;   
+      }
+      .nested-table tbody tr >td{
+        border: 1px solid black;
+        border-collapse: collapse;
+        border:0;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="10" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 80px; height: 80px; margin-right: 0px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 16px; transform: scaleY(1.2);">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <img
+                    src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 80px; height: 80px; margin-right: 0px;"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="10" class="header">INVOICE</th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div style="text-align:left; line-height: 1; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 13px; color:  #3F00FF;">
+                    <span><strong><%= requestData.firm_name || '--' %></strong></span>
+                </p>
+                <p style="margin: 0;"><span><%= requestData.firm_full_address || '--' %></span></p>
+                <p style="margin: 0;"><span>GSTIN/UIN : <%= requestData.firm_gstNumber || '--' %></span></p>
+                <p style="margin: 0;">State : <%= requestData.firm_state || '--' %></p>
+                <p style="margin: 0;"><span>Email : <%= requestData.firm_email || '--' %></span></p>
+                <p style="margin: 0;"><span>Mobile No. : <%= requestData.firm_phone || '--' %></span></p>
+              </div>
+            </td>
+            <td colspan="5">
+              <table class="nested-table" style="border:0;">
+                <tbody>
+                  <tr>
+                    <td style="width: 100px;"><strong>Invoice No. :</strong></td>
+                    <td><%= requestData.invoice_no || '--' %></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Invoice Date :</strong></td>
+                    <td><%= requestData.invoice_date ? new Date(requestData.invoice_date).toLocaleDateString() : '--' %></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 100px;"><strong>Order No. :</strong></td>
+                    <td><%= requestData.project_order_no || '--' %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div style="text-align:left; line-height: 1; margin-top: 0; padding: 0;">
+                <p style="margin: 0;"><span>Consignee (Ship to)</span></p>
+                <p style="margin: 0; font-size: 13px; color:  #3F00FF;">
+                    <span><strong><%= requestData.party_name || '--' %></strong></span>
+                </p>
+                <p style="margin: 0;"><span><%= requestData.party_full_address || '--' %></span></p>
+                <p style="margin: 0;"><span>GSTIN/UIN : <%= requestData.party_gstNumber || '--' %></span></p>
+                <p style="margin: 0;">State : <%= requestData.party_state || '--' %></p>
+                <p style="margin: 0;"><span>Mobile No. : <%= requestData.party_phone || '--' %></span></p>
+              </div>
+            </td>
+            <td colspan="5">
+                <table class="nested-table" style="border:0;">
+                    <tbody>
+                      <tr>
+                        <td style="width: 100px;"><strong>LR No. :</strong></td>
+                        <td><%= requestData.lr_no || '--' %></td>
+                      </tr>
+                      <tr>
+                        <td><strong>LR Date :</strong></td>
+                        <td><%= requestData.lr_date ? new Date(requestData.lr_date).toLocaleDateString() : '--' %></td>
+                      </tr>
+                      <tr>
+                        <td style="width: 100px;"><strong>Transport Name :</strong></td>
+                        <td><%= requestData.transport_name || '--' %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div style="text-align:left; line-height: 1; margin-top: 0; padding: 0;">
+                <p style="margin: 0;"><span>Buyer (Bill to)</span></p>
+                <p style="margin: 0; font-size: 13px; color:  #3F00FF;">
+                    <span><strong><%= requestData.party_name || '--' %></strong></span>
+                </p>
+                <p style="margin: 0;"><span><%= requestData.party_full_address || '--' %></span></p>
+                <p style="margin: 0;"><span>GSTIN/UIN : <%= requestData.party_gstNumber || '--' %></span></p>
+                <p style="margin: 0;">State : <%= requestData.party_state || '--' %></p>
+                <p style="margin: 0;"><span>Mobile No. : <%= requestData.party_phone || '--' %></span></p>
+              </div>
+            </td>
+            <td colspan="5">
+                <table class="nested-table" style="border:0;">
+                    <tbody>
+                      <tr>
+                        <td style="width: 100px;"><strong>Vehicle No. :</strong></td>
+                        <td><%= requestData.vehicle_no || '--' %></td>
+                      </tr>
+                      <tr>
+                        <td><strong>Driver Name :</strong></td>
+                        <td><%= requestData.driver_name || '--' %></td>
+                      </tr>
+                      <tr>
+                        <td style="width: 100px;"><strong>Project Name :</strong></td>
+                        <td><%= requestData.project_name || '--' %></td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </td>
+          </tr>
+          <tr>
+            <th style="width: 20px;">SR No.</th>
+            <th style="width: 290px;">ITEM DESCRIPTION</th>
+            <th style="width: 50px;">HSN</th>
+            <th style="width: 40px;">GST(%)</th>
+            <th style="width: 40px;">QTY</th>
+            <th style="width: 65px;">RATE</th>
+            <th style="width: 65px;">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% requestData.items.forEach(function(detail, index) { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td style="text-align: left;"><%= detail.item_name || '--' %></td>
+              <td style="text-align: right;"><%= detail.hsn_code || '--' %></td>
+              <td style="text-align: right;"><%= detail.gst || '--' %></td>
+              <td style="text-align: right;"><%= (detail.quantity ? detail.quantity.toFixed(3) : '0.000') %></td>
+              <td style="text-align: right;"><%= (detail.rate ? detail.rate.toFixed(2) : '0.00') %></td>
+              <td style="text-align: right;"><%= (detail.amount ? detail.amount.toFixed(2) : '0.00') %></td>
+            </tr>
+          <% }) %>
+          <% if (requestData.party_state.toLowerCase() === "gujarat") { %>
+            <tr>
+                <th colspan="2" style="text-align: right;">CGST</th>
+                <th colspan="5" style="text-align: right;"><%= (requestData.gst_amt ? (requestData.gst_amt / 2).toFixed(2) : '0.00') %></th>
+            </tr>
+            <tr>
+                <th colspan="2" style="text-align: right;">SGST</th>
+                <th colspan="5" style="text-align: right;"><%= (requestData.gst_amt ? (requestData.gst_amt / 2).toFixed(2) : '0.00') %></th>
+            </tr>
+          <% } else { %>
+            <tr>
+                <th colspan="2" style="text-align: right;">IGST</th>
+                <th colspan="5" style="text-align: right;"><%= (requestData.gst_amt ? requestData.gst_amt.toFixed(2) : '0.00') %></th>
+            </tr>
+          <% } %>
+          <tr>
+            <th colspan="2" style="text-align: right;">Total Amount</th>
+            <th colspan="5" style="text-align: right;"><%= (requestData.total_amt ? requestData.total_amt.toFixed(2) : '0.00') %></th>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: right;">+ / - Amount</th>
+            <th colspan="5" style="text-align: right;"><%= (requestData.round_amt ? requestData.round_amt.toFixed(2) : '0.00') %></th>
+          </tr>
+          <tr>
+            <th colspan="2" style="text-align: right;">Net Amount</th>
+            <th colspan="5" style="text-align: right;">₹ <%= (requestData.net_amt ? requestData.net_amt.toFixed(2) : '0.00') %></th>
+          </tr>
+          <tr>
+            <td colspan="10" style="text-align: left;">
+                Amount (in words)<br>
+                <strong>₹ <%= requestData.net_amt_word || '--' %></strong>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header1">RECEIVED BY</td>
+            <td colspan="5" colspan="5" class="header1">AUTHORIZE BY</td>
+          </tr>
+          <tr style="height: 100px;">
+            <td colspan="2"></td>
+            <td colspan="5" colspan="5"></td>
+          </tr>
+          <tr>
+            <td colspan="10" style="text-align: left;">
+                Declaration<br>
+                We declare that this invoice shows the actual price of the Service/Goods described and that all particulars are true and correct.</strong>
+            </td>
+          </tr>
+          <tr style="line-height: 0.5;">
+            <td colspan="8"><strong>SUBJECT TO SURAT JURISDICTION</strong></td>
+          </tr>
+          <tr style="line-height: 0.5;">
+            <td colspan="8">This is a Computer generated Invoice</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

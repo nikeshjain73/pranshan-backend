@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Radiography Test Report</title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+                margin-bottom: 14px;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px 4px;
+                text-align: center;
+                font-size: 10px;
+            }
+            .header {
+                font-weight: bold;
+                font-size: 10px;
+            }
+            .header1, .header4 { font-weight: bold; font-size: 11px; }
+            .header2 { font-weight: bold; font-size: 10px; }
+            .header3 { font-weight: bold; font-size: 10px; text-align: left; }
+            .footer { font-weight: bold; text-align: left; font-size: 10px; margin-top: 20px; }
+            .truncate-cell {
+                height: 10px;
+                max-height: 10px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            @media print {
+                thead { display: table-header-group; }
+                tfoot { display: table-footer-group; }
+                tr.page-break { page-break-after: always; }
+            }
+        </style>
+    </head>
+    <body>
+        <% 
+            let itemsPerPage = 4; 
+            let totalPages = Math.ceil(items.length / itemsPerPage);
+            for (let page = 0; page < totalPages; page++) { 
+                let start = page * itemsPerPage;
+                let end = start + itemsPerPage;
+                let currentItems = items.slice(start, end);
+        %>
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="16" class="header">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <img src="<%= logoUrl1 %>" alt="Company Logo" style="max-width: 200px; height: 80px; margin-right: 20px;" />
+                            <div style="flex: 1; text-align: center; font-size: 17px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="16" class="header2">RADIOGRAPHY TEST REPORT (STRUCTURAL)</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header3">CLIENT</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.client || '--' %></td>
+                    <td colspan="2" class="header3">PO/W.O. NO.</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.wo_no || '--' %></td>
+                    <td colspan="3" class="header3">REPORT NO.</td>  
+                    <td colspan="4" style="text-align: left;"><%= headerInfo.report_no || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header3">PROJECT</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.project_name || '--' %></td>
+                    <td colspan="2" class="header3">PROCEDURE NO.</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.procedure_no || '--' %></td>
+                    <td colspan="3" class="header3">REPORT DATE</td>
+                    <td colspan="4" style="text-align: left;">
+                      <%= headerInfo.offer_date 
+                      ? new Date(headerInfo.offer_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                      : '--' %>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header3">SOURCE</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.source || '--' %></td>
+                    <td colspan="2" class="header3">FILM TYPE</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.film_type || '--' %></td>
+                    <td colspan="3" class="header3">TEST DATE</td>
+                    <td colspan="4" style="text-align: left;">
+                      <%= headerInfo.test_date 
+                      ? new Date(headerInfo.test_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                      : '--' %>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header3">STRENGHT</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.strength || '--' %></td>
+                    <td colspan="2" class="header3">SENSITIVITY</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.sensitivity || '--' %></td>
+                    <td colspan="3" class="header3">DENSITY</td>
+                    <td colspan="4" style="text-align: left;"><%= headerInfo.density || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="header3">PENETRAMETER</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.penetrameter || '--' %></td> 
+                    <td colspan="2" class="header3">ACCEPTANCE STANDARD</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.acceptance_standard || '--' %></td>
+                    <td colspan="2" class="header3">FRONT</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.front || '--' %></td>
+                    <td colspan="1" class="header3">BACK</td>
+                    <td colspan="2" style="text-align: left;"><%= headerInfo.back|| '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="16" class="header2">RESULT SUMMARY</td>
+                </tr>
+                <tr>
+                    <th>SR No.</th>
+                    <th>GRID NUMBER</th>
+                    <th>GRID QTY</th>
+                    <th>DRAWING NO.</th>
+                    <th>ASSEMBLY NUMBER</th>
+                    <th>PROFILE</th>
+                    <th>WELDING PROCESS</th>
+                    <th>WELDER NO.</th>
+                    <th>THICKNESS (mm)</th>
+                    <th>SFD</th>
+                    <th>EXPO TIME</th>
+                    <th>TECHNIQUE</th>
+                    <th>SEGMENT</th>
+                    <th>FILM SIZE</th>
+                    <th>OBSERVATION</th>
+                    <th>RESULT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% currentItems.forEach(function(detail, index) { %>
+                    <tr>
+                        <td><%= start + index + 1 %></td> 
+                        <td class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.used_grid_qty || '--' %></td>
+                        <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.profile || '--' %></td>
+                        <td class="truncate-cell"><%= detail.weldingProcess || '--' %></td>
+                        <td class="truncate-cell"><%= detail.welder_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.thickness || '--' %></td>
+                        <td class="truncate-cell"><%= detail.SFD || '--' %></td>
+                        <td class="truncate-cell"><%= detail.expo_time || '--' %></td>
+                        <td class="truncate-cell"><%= detail.technique || '--' %></td>
+                        <td class="truncate-cell"><%= detail.segment || '--' %></td>
+                        <td class="truncate-cell"><%= detail.film_size || '--' %></td>
+                        <td class="truncate-cell"><%= detail.observation || '--' %></td>
+                        <td class="truncate-cell"><%= detail.accept || '--' %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+            <tr>
+                <td colspan="2" class="header">NOTE</td>
+                <td colspan="15"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="6" class="header1">VE QC (L-II/III)</td>
+                <td colspan="8" class="header1">CLIENT-QC / TPI</td>
+            </tr>
+            <tr>
+                <td colspan="2">SIGNATURE</td>
+                <td colspan="6"></td>
+                <td colspan="8"></td>
+            </tr>
+            <tr>
+                <td colspan="2">NAME</td>
+                <td colspan="6"><%= headerInfo.qc_name || '--' %></td>
+                <td colspan="8"></td>
+            </tr>
+            <tr>
+                <td colspan="2">DATE</td>
+                <td colspan="6">
+                    <%= headerInfo.qc_date 
+                    ? new Date(headerInfo.qc_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                    : '--' %>
+                </td>
+                <td colspan="8"></td>
+            </tr>
+            <tr>
+              <td colspan="16" style="text-align: left;">VE-DOC-16 REV.00</td>
+            </tr>
+        </table>
+        <% if (page !== totalPages - 1) { %> 
+            <div class="page-break"></div> 
+        <% } } %>
+    </body>
+</html>

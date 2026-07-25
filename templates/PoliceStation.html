@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police verification</title>
+</head>
+
+<style>
+    .border-text {
+        border: 1px solid black;
+        border-collapse: collapse;
+        font-size: 10px;
+    }
+
+    .border-text td {
+        text-align: center;
+        padding: 10px;
+    }
+</style>
+
+
+<body style="font-size:12px!important; border: 3px solid #000;">
+    <div style=" padding: 10px; font-size:12px!important; padding: 15px;">
+        <table cellspacing="0" style="margin-bottom: 0; width:100%; border: 1px solid black;">
+            <tbody style="padding: 10px;">
+                <tr style="padding: 10px;">
+                    <td rowspan="2" colspan="2">
+                        <div
+                            style="padding:5px; width: 100px;  margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                            <img src="http://api.addonwebtech.com/uploads/d054f5cdfb3e22e1c0b07ecf33ea783b..png"
+                                alt="logo" height="100px">
+                        </div>
+                    </td>
+
+                    <td>
+                        <div style="padding:5px;">
+                            <h6
+                                style="color: black;text-align:center;line-height: 1.5; font-size: 12px; font-weight: bold; margin: 0;">
+                                Dahej Police Station District Bharuch
+                                <br>
+                                Phone number – 02641 256233
+                            </h6>
+                            <p style=" font-size:12 px; font-weight:bold;text-align: center;margin-bottom: 0;">EMail ID-
+                                :
+                                <span style="color: blue;">polstn-dahej-bha@gujarat.gov.in</span>
+                            </p>
+                        </div>
+                    </td>
+
+                    <td rowspan="2" colspan="2">
+                        <div
+                            style="padding:5px; width: 100px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                            <img src="http://api.addonwebtech.com/uploads/d054f5cdfb3e22e1c0b07ecf33ea783b..png"
+                                alt="logo" height="100px">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <div>
+                    <h4
+                        style="text-align: center; line-height: 1.5; font-size:13px;font-weight: 700; text-decoration: underline; margin-bottom: 10px;">
+                        Personal Identification Form for
+                        person coming from other state for work and living in<br> Dahej Police Station Extension</h4>
+                </div>
+                <tr>
+                    <td colspan="11" style="width: 100%;">
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default"
+                                style="margin-bottom: 10px; margin: 0;width: 20%;font-size:12px;;">
+                                Name :
+                            </label>
+                            <p class="Name-text"
+                                style="padding-bottom: 5px; font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:78%;">
+                                <%= emp.full_name %>
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:20%;font-size:12px;">Age :</label>
+                            <p class="Name-text"
+                                style="padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:78%;">
+                                <% let currentYear=new Date().getFullYear(); let age=currentYear -
+                                    emp.dob.getFullYear();%>
+                                    <%= age %>
+                            </p>
+                        </div>
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:20%;font-size:12px;;">Principal Address
+                                :
+                            </label>
+                            <p class="Name-text"
+                                style="padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:78%;">
+                                <!-- <%= emp.address+emp.address_two+emp.address_three+emp.city+emp.state+"-"+emp.pincode %> -->
+                                <%= emp.address %>
+                                    <% if (emp.address_two) { %>, <%= emp.address_two %>
+                                            <% } %>
+                                                <% if (emp.address_three) { %>, <%= emp.address_three %>
+                                                        <% } %>,
+                                                            <%= emp.city %>, <%= emp.state %>, <%= emp.pincode %>
+
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:20%;font-size:12px;;">Mobile Number :
+                            </label>
+                            <p class="Name-text"
+                                style="padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:78%;">
+                                <%= emp.mobile_number %>
+                            </p>
+                        </div>
+                    </td>
+                    <td colspan="1">
+                        <div
+                            style="width: 100px; height: 100px; border: 1px solid black; display: flex; align-items: center;object-fit: cover; overflow:hidden;">
+                            <% var profileSrc=emp.image ? emp.image
+                                : "http://api.addonwebtech.com/uploads/9c263c03c4896f37e81425d79ef9412e.jpg" ; %>
+
+                                <img src="<%= profileSrc %>" alt="profile-img"
+                                    style="width: 100%; object-fit: cover; margin: 0 auto;">
+
+                        </div>
+                        <p style="text-align: center;">(<%= emp?.employee_id %>)</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="12" style="width: 100%;">
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px; ">
+                            <label class="Name-default" style=" margin: 0; width:25%;font-size:12px;;">
+                                Aadhaar/Election/Licence Card :</label>
+                            <p class="Name-text"
+                                style="padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:75%;">
+                                <%= emp.adhar_no %>
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:15%;font-size:12px;">Vehicle Number :
+                            </label>
+                            <p class="Name-text"
+                                style=" padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:85%;">
+                            </p>
+                        </div>
+                        <div class="Name"
+                            style="margin-bottom:10px;border: 1px solid black; padding-inline: 15px; padding-block: 10px;">
+                            <h6 class="Name-default"
+                                style="text-align: center; margin-bottom: 10px;font-size: 14px;font-weight: 700; line-height: 1.5; margin: 0; padding-bottom: 10px;">
+                                Family Details:</h6>
+                            <!-- <hr> -->
+                            <table style="width:100%; padding: 5px;" class="border-text">
+                                <thead style="border: 1px solid #000;">
+                                    <tr>
+                                        <th class="border-text">Name</th>
+                                        <th class="border-text">Relation</th>
+                                        <th class="border-text">Mobile Number</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid black;border-collapse: collapse;">
+                                        <td class="border-text">
+                                            <%= emp.emergency_contact_person ? emp.emergency_contact_person : '' %>
+                                        </td>
+                                        <td class="border-text">
+                                            <%= emp.emergency_person_relation ? emp.emergency_person_relation : '' %>
+                                        </td>
+                                        <td class="border-text">
+                                            <%= emp.emergency_contact_number ? emp.emergency_contact_number : '' %>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid black;border-collapse: collapse;">
+                                        <td class="border-text"></td>
+                                        <td class="border-text"></td>
+                                        <td class="border-text"></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid black;border-collapse: collapse;">
+                                        <td class="border-text"></td>
+                                        <td class="border-text"></td>
+                                        <td class="border-text"></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid black;border-collapse: collapse;">
+                                        <td class="border-text"></td>
+                                        <td class="border-text"></td>
+                                        <td class="border-text"></td>
+                                    </tr>
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:45%;font-size:12px;;">Details of
+                                hometown police station:</label>
+                            <p class="Name-text"
+                                style=" padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:55%;">
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:45%;font-size:12px;;">Name, address and
+                                mobile number details of their Sarpunch/Mukhi :</label>
+                            <p class="Name-text"
+                                style=" padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:55%;">
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:45%;font-size:12px;;">Name, address and
+                                mobile number details of applicant :</label>
+                            <p class="Name-text"
+                                style=" padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:55%;">
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:50%;font-size:12px;;">Details of Past /
+                                Where were you working before / <br> What were you doing before / What were you working
+                                before :
+                            </label>
+                            <p class="Name-text"
+                                style=" padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:50%;">
+                            </p>
+                        </div>
+
+                        <div class="Name" style="display: flex; gap:5px; margin-bottom: 10px;">
+                            <label class="Name-default" style="margin: 0; width:45%;font-size:12px;;">Name, address and
+                                mobile
+                                number details of the owner of <br> the present shop/house/hotel/factory :</label>
+                            <p class="Name-text"
+                                style=" padding-bottom: 5px;font-size:12px; margin: 0; border-bottom-style: dotted; border-bottom:1px dotted #000; width:55%;">
+                                <!-- B.L. Patel - 8200653765 - D2E 345/397/398, Opp. Thirumalay Chemical Ltd. Jolwa, Dahej -
+                                392130 -->
+                                <%= emp.firm_id.name %> -  <%= emp.firm_id.mobile_number %> -
+                                <%= emp.firm_id.address %>
+                                <% if (emp.firm_id.address_two) { %>, <%= emp.firm_id.address_two %>
+                                        <% } %>
+                                            <% if (emp.firm_id.address_three) { %>, <%= emp.firm_id.address_three %>
+                                                    <% } %>,
+                                                        <%= emp.firm_id.city %>, <%= emp.firm_id.state %>, <%= emp.firm_id.pincode %>
+                            </p>
+                        </div>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style=" font-size:12px!important; padding: 5px;">
+        <table style=" padding: 5px; width: 100%;">
+            <tbody>
+                <tr>
+                    <td colspan="12">
+                        <div style="width: 100%; height: 60px;">
+                            <h3 style="text-align: center; font-size: 12px;">Other Detail
+                            </h3>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="6">
+                        <div style="height: 70px;">
+                            <h3 style="margin-bottom: 10px; font-size: 14px;font-weight: bolder;">Document Copy:-</h3>
+                            <p style="margin-bottom: 10px; font-size:12px;">(1) Xerox of Aadhar Card/Election
+                                Card/License
+                            </p>
+                            <p style="margin-bottom: 10px; font-size:12px;">(2) Passport size photograph – 02</p>
+                        </div>
+                    </td>
+                    <td colspan="6" style="vertical-align: baseline;">
+                        <h3 style=" font-size: 14px; font-weight: bolder;">Serial Number:-</h3>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+</body>
+
+</html>

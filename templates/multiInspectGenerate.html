@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inspect Summary</title>
+  <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 11px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 11px;
+      }
+      .footer {
+        font-weight: bold;
+        text-align: left;
+        font-size: 10px;
+        margin-top: 20px;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+      .truncate-cell {
+        height: 12px;
+        max-height: 12px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      @media print {
+        thead {
+          display: table-header-group;
+        }
+        tfoot {
+          display: table-footer-group;
+        }
+        tr.page-break {
+          page-break-after: always;
+        }
+      }
+  </style>
+</head>
+
+<body>
+  <%
+            let itemsPerPage = 5;
+            let totalPages = Math.ceil(items.length / itemsPerPage);
+            
+            function mergeSimilarEntries(entries) {
+                if (!Array.isArray(entries) || entries.length === 0) return ' --';
+            
+                const splitParts = entries.map(e => e.split('/'));
+                const prefixParts = splitParts[0].slice(0, -1).join('/');
+                const suffixes = splitParts.map(p => p[p.length - 1]);
+            
+                return prefixParts + '/' + suffixes.join(',');
+            }
+        
+            function breakIntoLines(str, lineLength = 2) {
+                if (!str || typeof str !== 'string') return ' --';
+                const chunks = [];
+                for (let i = 0; i < str.length; i += lineLength) {
+                    chunks.push(str.substring(i, i + lineLength));
+                }
+                return chunks.join('\n');
+            }
+        
+            for (let page = 0; page < totalPages; page++) {
+                let start = page * itemsPerPage;
+                let end = start + itemsPerPage;
+                let currentItems = items.slice(start, end);
+        %>
+      <table>
+        <thead>
+          <tr>
+              <td colspan="16" class="header">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <img
+                      src="<%= logoUrl1 %>"
+                      alt="Company Logo"
+                      style="max-width: 200px; height: 80px; margin-right: 20px;"
+                  />
+                  <div style="flex: 1; text-align: center; font-size: 20px;">
+                    <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                    GROUP OF COMPANIES<br />
+                  </div>
+                </div>
+              </td>
+          </tr> 
+          <tr>
+            <td colspan="16" class="header">
+                INSPECTION SUMMARY REPORT
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">CLIENT</td>
+            <td colspan="5"><%= headerInfo.client || '--' %></td>
+            <td colspan="1" class="header">PROJECT</td>
+            <td colspan="2"><%= headerInfo.project_name || '--' %></td>
+            <td colspan="2" class="header">WO NO./PO NO.</td>
+            <td colspan="3"><%= headerInfo.wo_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">REPORT NO</td>
+            <td colspan="5"><%= headerInfo.report_no || '--' %></td>
+            <td colspan="3" class="header"></td>
+            <td colspan="2" class="header">DATE</td>
+            <td colspan="3"><%= headerInfo.summary_date ? new Date(headerInfo.summary_date).toISOString().slice(0, 10).split('-').reverse().join('/') : '--' %></td>
+          </tr>
+          <tr>
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>GRID QTY</th>
+            <th>FIT-UP INSPECTION REPORT</th>
+            <th>WELD VISUAL INSPECTION REPORT</th>
+            <th>UT REPORT</th>
+            <th>RT REPORT</th>
+            <th>MPT REPORT</th>
+            <th>LPT REPORT</th>
+            <th>FINAL DIMENSION REPORT</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentItems.forEach((detail, index) => { %>
+            <tr>
+              <td class="truncate-cell"><%= start + index + 1 %></td> 
+              <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.rev  %></td>
+              <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.grid_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.is_grid_qty || '--' %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.fitup_inspection_report),20) %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.weld_inspection_report),20) %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.ut_report),20) %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.rt_report),20) %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.mpt_report),20) %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.lpt_report),20) %></td>
+              <td><%= breakIntoLines(mergeSimilarEntries(detail.fd_report),20) %></td>
+              <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+
+        <% if (page === totalPages - 1) { %> 
+          <tfoot>
+            <tr>
+              <td colspan="2"></td>
+              <td colspan="7" class="header">VE QC</td>
+              <td colspan="7" class="header">CLIENT TPIA</td>
+            </tr>
+            <tr>
+              <td colspan="2">SIGNATURE</td>
+              <td colspan="7"></td>
+              <td colspan="7"></td>
+            </tr>
+            <tr>
+              <td colspan="2">NAME</td>
+              <td colspan="7"></td>
+              <td colspan="7"></td>
+            </tr>
+            <tr>
+              <td colspan="2">DATE</td>
+              <td colspan="7"></td>
+              <td colspan="7"></td>
+            </tr>
+            <tr>
+              <td colspan="17" style="text-align: left;">VE-DOC-21 REV.00</td>
+            </tr>
+          </tfoot>
+        <% } %>
+      </table>
+      
+    <% if (page !== totalPages - 1) { %> 
+      <div class="page-break"></div> 
+    <% } } %>
+</body>
+
+</html>

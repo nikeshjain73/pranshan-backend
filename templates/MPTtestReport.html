@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magnetic Particle Test Report</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 12px;
+          text-align: left;
+      } 
+      .header2 {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+      .header3 {
+          font-weight: bold;
+          font-size: 12px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+    <div>
+      <table>
+        <thead>
+         
+            <tr>
+                <td colspan="14" class="header">
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <img
+                        src="<%= logoUrl1 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 10px;"
+                    />
+                    <div style="flex: 1; text-align: center; font-size: 24px;">
+                      <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                          GROUP OF COMPANIES<br />
+                    </div>
+                    <img
+                        src="<%= logoUrl2 %>"
+                        alt="Company Logo"
+                        style="max-width: 100px; height: 100px; margin-right: 0px;"
+                    />
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="16" class="header2">MAGNETIC PARTICLE TEST REPORT</td>
+              </tr>
+          <tr>
+            <td colspan="14" class="header2">JOB DETAILS</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">CLIENT</td>
+            <td colspan="4"><%= order.client || '--' %></td>
+            <td colspan="2" class="header">REPORT NO.</td>
+            <td colspan="4"><%= order.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">PROJECT</td>
+            <td colspan="4"><%= order.project_name || '--' %></td>
+            <td colspan="2" class="header">REPORT DATE</td>
+            <td colspan="4">
+              <!-- <%= order.report_date ? new Date(order.report_date).toLocaleDateString() : '--' %> -->
+              <%= order.report_date 
+              ? new Date(order.report_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">W.O. NO./CONTRACT NO</td>
+            <td colspan="4"><%= order.wo_no || '--' %></td>
+            <td colspan="2" class="header">TEST DATE</td>
+            <td colspan="4">
+              <!-- <%= order.test_date ? new Date(order.test_date).toLocaleDateString() : '--' %> -->
+              <%= order.test_date 
+              ? new Date(order.test_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">ACCEPTANCE STANDARD</td>
+            <td colspan="10"><%= order.acceptance_standard || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="14" class="header2">TEST DETAILS</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">Surface Condition</td>
+            <td colspan="4"><%= order.surface_condition || '--' %></td>
+            <td colspan="2" class="header">Extent of examination</td>
+            <td colspan="4"><%= order.extent_examination || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Examination Stage</td>
+            <td colspan="4"><%= order.examination_stage || '--' %></td>
+            <td colspan="2" class="header">Post Cleaning</td>
+            <td colspan="4"><%= order.post_cleaning || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Technique</td>
+            <td colspan="4"><%= order.technique || '--' %></td>
+            <td colspan="2" class="header">Magnetization</td>
+            <td colspan="4"><%= order.magnetization || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Lighting Equipment</td>
+            <td colspan="4"><%= order.light_equipment || '--' %></td>
+            <td colspan="2" class="header">Medium</td>
+            <td colspan="4"><%= order.medium || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Lighting Intensity</td>
+            <td colspan="4"><%= order.lighting_intensity || '--' %></td>
+            <td colspan="2" class="header">Yoke Spacing</td>
+            <td colspan="4"><%= order.yoke_spacing || '--' %></td>
+          </tr>
+          </tr> <tr>
+            <td colspan="3" class="header">Particle</td>
+            <td colspan="4"><%= order.particle || '--' %></td>
+            <td colspan="2" class="header">Yoke Sr. No.</td>
+            <td colspan="4"><%= order.yoke_sr_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="3" class="header">Yoke Make and Model</td>
+            <td colspan="4"><%= order.yoke_make_model || '--' %></td>
+            <td colspan="2" class="header">Particle Batch No.</td>
+            <td colspan="4"><%= order.particle_batch_no || '--' %></td>
+          </tr> <tr>
+            <td colspan="3" class="header">Contrast</td>
+            <td colspan="4"><%= order.contrast || '--' %></td>
+            <td colspan="2" class="header">Contrast Batch No.</td>
+            <td colspan="4"><%= order.contrast_batch_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="14" class="header2">RESULT SUMMARY</td>
+          </tr>
+          <tr class="">
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>PROFILE</th>
+            <th>TYPE OF WELD</th>
+            <th>WELDING PROCESS</th>
+            <th>WELDER NO.</th>
+            <th>THICKNESS (mm)</th>
+            <th>OBSERVATION</th>
+            <th>TEST RESULT (ACC/REJ)</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+            <% order.items.forEach(function(detail, index) { %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                  <td><%= detail.drawing_no || '--' %></td>
+                  <td><%= detail.assembly_no || '--' %></td>
+                  <td><%= detail.grid_no || '--' %></td>
+                  <td><%= detail.profile || '--' %></td>
+                  <td><%= detail.joint_type || '--' %></td>
+                  <td><%= detail.weld_process || '--' %></td>
+                  <td><%= detail.welder_no || '--' %></td>
+                  <td><%= detail.thickness || '--' %></td>
+                  <td><%= detail.observation || '--' %></td>
+                  <td><%= detail.accept || '--' %></td>
+                  <td><%= detail.remarks || '--' %></td>
+                </tr>
+                <% }) %>
+        </tbody>
+        <tr>
+          <td class="header">NOTE</td>
+          <td colspan="14"></td>
+        </tr>
+        <tr>
+          <td colspan="1"></td>
+          <td colspan="4" class="header3">EXAMINED BY (LEVEL I / II)</td>
+          <td colspan="4" class="header3">VE APPROVED BY (LEVEL II / III)</td>
+          <td colspan="4" class="header3">WITNESSED / REVIEWED / APPROVED BY (CLIENT / TPIA)</td>
+        </tr>
+        <tr>
+          <td>SIGNATURE</td>
+          <td colspan="4"></td>
+          <td colspan="4"></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td>NAME</td>
+          <td colspan="4"></td>
+          <td colspan="4"><%= order.qc_name || '--' %></td>
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td>DATE</td>
+          <td colspan="4"></td>
+          <td colspan="4">  
+            <!-- <%= order.qc_time ? new Date(order.qc_time).toLocaleDateString() : '--' %> -->
+            <%= order.qc_time 
+            ? new Date(order.qc_time).toISOString().slice(0, 10).split('-').reverse().join('/') 
+            : '--' %>
+          </td> 
+          <td colspan="4"></td>
+        </tr>
+        <tr>
+          <td colspan="16" style="text-align: left;"> VE-QA-FORMAT-29</td>
+        </tr>
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

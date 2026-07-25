@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Release Note</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .print-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 180px;
+      padding: 10px;
+      text-align: center;
+      background: white;
+    }
+
+    .print-header img {
+      height: 60px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Arial, sans-serif;
+      /* margin-bottom: 14px; */
+       
+      
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 9px;
+      word-wrap: break-word;       /* For old browsers */
+  word-break: break-word;      /* Break long words */
+  white-space: normal; 
+    
+     
+    }
+    
+    td:nth-child(8), /* Surface Report column */
+td:nth-child(9)  /* MIO Report column */ {
+  word-break: break-word;
+  white-space: normal;
+}
+
+    
+    thead {
+      display: table-header-group;
+     
+      
+    }
+
+
+    tfoot {
+      display: table-footer-group;
+    }
+
+@media print {
+   tr {
+                page-break-inside: avoid;
+            }
+  thead {
+    position: sticky;
+    top: 0;
+  }
+}
+    @media print {
+      .print-header {
+        position: sticky;
+        top: 0;
+      }
+    }
+    
+  </style>
+</head>
+<body>
+
+  
+  <table>
+    
+     <thead>
+            <tr>
+                     <td colspan="16" class="header">
+    <div style="display: flex; align-items: center; justify-content: center;">
+                            <img src="<%= logoUrl1 %>" alt="Company Logo"
+                            style="max-width: 90px; height: 40px; margin-right: 20px;" />
+                            <div style="flex: 1; text-align: center; font-size: 15px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED<br />
+                                GROUP OF COMPANIES<br />
+                                  </strong>
+                            </div>
+            </div>
+        </td>
+         </tr>
+          <tr>
+                    <td colspan="16" class="header">
+                       <strong> INSPECTION RELEASE NOTE (IRN)</strong>
+                    </td>
+         </tr>
+        <tr>
+            <td colspan="1" class="header"><strong> CLIENT </strong></td>
+            <td colspan="5"><%= headerInfo.client || '--' %></td>
+            <td colspan="1" class="header"><strong>REPORT NO </strong></td>
+            <td colspan="4"><%= headerInfo.report_no || '--' %></td>
+        </tr>
+        <tr>
+            <td colspan="1" class="header"><strong>PROJECT </strong></td>
+            <td colspan="5"><%= headerInfo.project_name || '--' %></td>
+            <td colspan="1" class="header"><strong>WO NO./PO NO.</strong></td>
+            <td colspan="4"><%= headerInfo.wo_no || '--' %></td>
+        </tr>     
+        <tr>
+            <td colspan="1" class="header"><strong>DATE </strong></td>
+            <td colspan="10">
+                <%= headerInfo.release_date ? new Date(headerInfo.release_date).toISOString().slice(0,
+                10).split('-').reverse().join('/') : '--' %>
+            </td>
+        </tr>
+        <tr>
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>GRID QTY</th>
+            <th>FD REPORT</th>
+            <th>SURFACE REPORT</th>
+            <th>MIO REPORT</th>
+            <th>FINAL COAT REPORT</th>
+            <th>REMARKS</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% items.forEach((detail, index) => { %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= detail.drawing_no || '--' %></td>
+          <td><%= detail.rev || 0 %></td>
+          <td><%= detail.assembly_no || '--' %></td>
+          <td><%= detail.grid_no || '--' %></td>
+          <td><%= detail.is_grid_qty || '--' %></td>
+          <td><%= detail.fd_report || '--' %></td>
+          <td><%= detail.surface_primer_report || '--' %></td>
+          <td><%= detail.mio_paint_report || '--' %></td>
+          <td><%= detail.final_coat_paint_report || '--' %></td>
+          <td><%= detail.remarks || '--' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"></td>
+        <td colspan="4"><strong>VE QC</strong></td>
+        <td colspan="5"><strong>CLIENT QC/TPI</strong></td>
+      </tr>
+      <tr>
+        <td colspan="2">SIGNATURE</td>
+        <td colspan="4"></td>
+        <td colspan="5"></td>
+      </tr>
+      <tr>
+        <td colspan="2">NAME</td>
+        <td colspan="4"></td>
+        <td colspan="5"></td>
+      </tr>
+      <tr>
+        <td colspan="2">DATE</td>
+        <td colspan="4"></td>
+        <td colspan="5"></td>
+      </tr>
+      <tr>
+        <td colspan="11" style="text-align: left;">VE-DOC-29 REV.00</td>
+      </tr>
+    </tfoot>
+  </table>
+
+</body>
+</html>
+
+

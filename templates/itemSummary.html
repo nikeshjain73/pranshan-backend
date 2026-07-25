@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            Item Summary Report
+        </title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+          }
+          .header {
+            font-weight: bold;
+            font-size: 14px;
+          } 
+          .header2 {
+            font-weight: bold;
+            font-size: 13px;
+            text-align: left;
+          } 
+          .header1 {
+            font-weight: bold;
+            font-size: 12px;
+          } 
+          .signature-section td {
+            height: 50px;
+          }
+          .remarks {
+            height: 100px;
+          }
+        </style>
+    </head>
+    <body>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="14" class="header">
+                          <div style="display: flex; align-items: center; justify-content: center;">
+                            <img
+                                src="<%= logoUrl1 %>"
+                                alt="Company Logo"
+                                style="max-width: 80px; height: 80px; margin-right: 0px;"
+                            />
+                            <div style="flex: 1; text-align: center; font-size: 16px; transform: scaleY(1.2);">
+                              <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                  GROUP OF COMPANIES<br />
+                            </div>
+                         </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="14" class="header">ITEM SUMMARY REPORT</th>
+                    </tr>
+                    <% if (requestData[0].sdate && requestData[0].edate) { %>
+                      <tr>
+                        <td colspan="10" class="header1">Date &nbsp;&nbsp; : &nbsp;&nbsp; <%= new Date(requestData[0].sdate).toLocaleDateString()%>&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;<%= new Date(requestData[0].edate).toLocaleDateString()%> </td>
+                    </tr>
+                    <% } %>
+                    <tr>
+                        <th style="width: 40px;">SR NO.</th>
+                        <th style="width: 300px;">ITEM NAME</th>
+                        <th style="width: 50px;">ITEM ID</th>
+                        <th style="width: 50px;">UNIT</th>
+                        <th style="width: 50px;">CATEGORY</th>
+                        <th style="width: 50px;">M CODE</th>
+                        <th style="width: 50px;">QTY</th>
+                        <th style="width: 50px;">AMOUNT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% requestData.forEach(function(transaction, transIndex) { %>
+                      <tr>
+                        <td><%= transIndex + 1 %></td>
+                        <td style="text-align: left;"><%= transaction.item_name || '--' %></td>
+                        <td style="text-align: right;"><%= transaction.itemId || '--' %></td>
+                        <td style="text-align: left;" ><%= transaction.unit || '--' %></td>
+                        <td style="text-align: left;" ><%= transaction.category || '--' %></td>
+                        <td style="text-align: left;" ><%= transaction.m_code || '--' %></td>
+                        <td style="text-align: right;"><%= (transaction.total_qty || 0).toFixed(3) %></td>
+                        <td style="text-align: right;"><%= (transaction.total_amt || 0).toFixed(2) %></td>
+                      </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

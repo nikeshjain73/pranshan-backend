@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DELIVERY CHALLAN AND PACKING LIST</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        .header {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .footer {
+            font-weight: bold;
+            text-align: left;
+            font-size: 10px;
+            margin-top: 20px;
+        }
+
+        .left-alignment {
+            text-align: left;
+        }
+
+        .truncate-cell {
+            height: 10px;
+            max-height: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        @media print {
+            thead {
+                display: table-header-group;
+                /* Repeat headers on each page */
+            }
+
+            tfoot {
+                display: table-footer-group;
+                /* Ensure footer is on the last page */
+            }
+
+            tr.page-break {
+                page-break-after: always;
+                /* Force page break after each table */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <% let itemsPerPage=18; let totalPages=Math.ceil(items.length / itemsPerPage); for (let page=0; page < totalPages;
+        page++) { let start=page * itemsPerPage; let end=start + itemsPerPage; let currentItems=items.slice(start, end);
+        %>
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="10" class="header">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <img src="<%= logoUrl1 %>" alt="Company Logo"
+                                style="max-width: 110px; max-height: 60px; margin-right: 20px;" />
+                            <div style="flex: 1; text-align: center; font-size: 18px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="18" class="header">DELIVERY CHALLAN AND PACKING LIST</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="header">CONSIGNMENT NO.</td>
+                    <td colspan="6" class="header"><%= headerInfo.consignment_no || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="1" class="header">CLIENT</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.client || '--' %></td>
+                    <td colspan="2" class="header">PO NO.</td>
+                    <td colspan="4" style="text-align: left;"><%= headerInfo.wo_no || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="1" class="header">PROJECT</td>
+                    <td colspan="3" style="text-align: left;"><%= headerInfo.project_name || '--' %></td>
+                    <td colspan="2" class="header">PACKING DATE</td>
+                    <td colspan="4" style="text-align: left;"><%= headerInfo.packing_date ? new Date(headerInfo.packing_date).toISOString().slice(0, 10).split('-').reverse().join('/') : '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="1" class="header">DESTINATION</td>
+                    <td colspan="9" style="text-align: left;"><%= headerInfo.destination || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="1" class="header">TRUCK_NO.</td>
+                    <td colspan="9" style="text-align: left;"><%= headerInfo.vehicle_no || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="1" class="header">DRIVER_NAME</td>
+                    <td colspan="9" style="text-align: left;"><%= headerInfo.driver_name || '--' %></td>
+                </tr>
+                <tr>
+                    <td colspan="1" class="header">GSTIN_NO.</td>
+                    <td colspan="9" style="text-align: left;"><%= headerInfo.gst_no || '--' %></td>
+                </tr>   
+                <tr>
+                    <td colspan="1" class="header">E_WAY_BILL_NO.</td>
+                    <td colspan="9" style="text-align: left;"><%= headerInfo.e_way_bill_no || '--' %></td>
+                </tr>   
+                <tr>
+                    <th>SR NO.</th>
+                    <th>DRAWING NO.</th>
+                    <th>REV.NO.</th>
+                    <th>ASSEMBLY NUMBER</th>
+                    <th>GRID NUMBER</th>
+                    <th>GRID QTY</th>
+                    <th>Unit Area</th>
+                    <th>IRN NO.</th>
+                    <th>UNIT ASSEMBLY WEIGHT(KG)</th>
+                    <th>TOTAL ASSEMBLY WEIGHT(KG)</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                <% currentItems.forEach((detail, index)=> { %>
+                    <tr>
+                        <td class="truncate-cell"><%= start + index + 1 %></td>
+                        <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.rev %></td>
+                        <td class="truncate-cell"><%= detail.assembly_no || detail.item_name || '--' %></td>
+                        <td class="truncate-cell"><%= detail.grid_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.rn_used_grid_qty || '--' %></td>
+                        <td class="truncate-cell"><%= detail.unit_area || '--' %></td>
+                        <td class="truncate-cell"><%= detail.irn_no || '--' %></td>
+                        <td class="truncate-cell"><%= detail.unit_assembly_weight || '--' %></td>
+                        <td class="truncate-cell"><%= detail.total_assembly_weight || '--' %></td>
+                      
+                    </tr>                      
+                    <% }) %>
+                    <% if (page === totalPages - 1) { %> 
+                </tbody>
+                    <tr>
+                <td colspan="8" class="header">Total Physical Weight (Weighment Bridge) in KGS:</td>
+                <td colspan="1"><%= headerInfo.physical_weight || '--' %></td>
+                <td colspan="1"></td>
+                     </tr>
+                <tr>
+
+                 <td colspan="5" class="header">Sum of total Qty & Sum of Total assembly weight</td>
+               <td colspan="1" class="truncate-cell">
+        <%= items.reduce((sum, d) => sum + (parseFloat(d.rn_used_grid_qty) || 0), 0).toFixed(2) %>
+      </td>
+      <td></td>
+      <td></td>
+      <td></td>
+       
+       <td colspan="1" class="truncate-cell">
+        <%= items.reduce((sum, d) => sum + (parseFloat(d.total_assembly_weight) || 0), 0).toFixed(2) %>
+      </td>
+      </tr>
+            <tr>
+                <td colspan="4" class="header">FOR VISHAL ENTERPRISE/VRISHAL ENGINEERING</td>
+                <td colspan="6" class="header">RECEIVED BY CLIENT/PARTY</td>
+            </tr>
+            <tr style="height: 70px;">
+                <td colspan="4" style="vertical-align: bottom; text-align: center; font-weight: bold;">AUTHORISED SIGNATORY</td>
+                <td colspan="6" style="vertical-align: bottom; text-align: center; font-weight: bold;">AUTHORISED SIGNATORY</td>
+            </tr>
+            <tr>
+                <td colspan="13" style="text-align: left;">VE-DOC-30 REV.00</td>
+            </tr>
+            <% } %>
+        </table>
+        
+        <% if (page !==totalPages - 1) { %>                    
+            <div class="page-break"></div>
+        <% } } %>
+</body>
+</html>

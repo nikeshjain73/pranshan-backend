@@ -1,0 +1,16 @@
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+package-lock.json
+# package.json
+node_modules/.package-lock.json
+pdfs
+xlsx
+uploads
+datacorrection.js
+drawing.xlsx

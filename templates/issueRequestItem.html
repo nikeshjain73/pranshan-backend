@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Material Issue Request</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      th, td {
+          border: 1px solid black;
+          padding: 8px;
+          text-align: center;
+          font-size: 12px;
+      }
+      .header {
+          font-weight: bold;
+          font-size: 14px;
+      } 
+
+      .signature-section td {
+          height: 50px;
+      }
+  
+      .remarks {
+          height: 100px;
+      }
+   
+    </style>
+  </head>
+  <body>
+    <% requestData.forEach(function(order, index) { %>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="18" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 120px; height: 100px; margin-right: 20px;"
+                />
+                <div style="flex: 1; text-align: center;  font-size: 24px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                </div>
+                <!-- <img
+                     src="<%= logoUrl2 %>"
+                    alt="Company Logo"
+                    style="max-width: 100px; height: 100px; margin-right: 0px;"
+                /> -->
+              </div>
+            </td>
+          </tr>          
+            <td colspan="6" class="header">PROJECT MATERIAL ISSUE REQUEST</td>
+            <td colspan="1" class="header">OFFER NO.</td>
+            <td colspan="5"><%= order.offer_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="1" class="header">CLIENT</td>
+            <td colspan="2"><%= order.client || '--' %></td>
+            <td colspan="1" class="header">PROJECT NAME</td>
+            <td colspan="2"><%= order.project_name || '--' %></td>
+            <td colspan="1" class="header">CONTRACTOR NAME</td>
+            <td colspan="2"><%= order.contractor_name || '--' %></td>
+            <td colspan="1" class="header">DATE :</td>
+            <td colspan="2">
+              <%= order.issued_date 
+              ? new Date(order.issued_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr class="">
+            <th>SR No.</th>
+            <th>DRAWING NO./LINE NO.</th>
+            <th>REV.NO.</th>
+            <th>SHEET NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <th>GRID NUMBER</th>
+            <th>ITEM NUMBER</th>
+            <th>PROFILE</th>
+            <th>REQUESTED LENGTH (mm)</th>
+            <th>REQUESTED WIDTH (mm)</th>
+            <th>REQUESTED Qty. (Nos)</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% order.items.forEach(function(detail, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= detail.drawing_no || '--' %></td>
+            <td><%= detail.rev || '--' %></td>
+            <td><%= detail.sheet_no || '--' %></td>
+            <td><%= detail.assembly_no || '--' %></td>
+            <td><%= detail.grid_no || '--' %></td>
+            <td><%= detail.item_no || '--' %></td>
+            <td><%= detail.profile || '--' %></td>
+            <td><%= detail.requested_length || '--' %></td>
+            <td><%= detail.requested_width || '--' %></td>
+            <td><%= detail.requested_qty || '--' %></td>
+            <td><%= detail.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        <tr>
+          <td colspan="2"></td> 
+          <td colspan="10" class="header">Requested BY</td>
+        </tr>
+        <tr>
+          <td colspan="2">SIGNATURE</td>
+          <td colspan="10"></td>
+        </tr>
+        <tr>
+          <td colspan="2">NAME</td>
+          <td colspan="10"><%= order.request_name || '--' %></td>
+        </tr>
+        <tr>
+          <td colspan="2">DATE</td>
+          <td colspan="10">
+            <!-- <%= order.request_date ? new
+            Date(order.request_date).toLocaleDateString() : '--' %></td> -->
+            <%= order.request_date 
+            ? new Date(order.request_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+            : '--' %>  
+          </tr>
+        <tr>
+          <td colspan="12" style="text-align: left;">VE-DOC-07 REV.00</td>
+        </tr>
+      </table>
+    </div>
+    <% }) %>
+  </body>
+</html>

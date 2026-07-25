@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fit Up </title>
+  <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+      .footer {
+        font-weight: bold;
+        text-align: left;
+        font-size: 10px;
+        margin-top: 20px;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      @media print {
+        thead {
+          display: table-header-group; /* Repeat headers on each page */
+        }
+        tfoot {
+          display: table-footer-group; /* Ensure footer is on the last page */
+        }
+        tr.page-break {
+          page-break-after: always; /* Force page break after each table */
+        }
+      }
+    </style>
+</head>
+
+<body>
+  <% 
+  const hasWpsAndAccept=items.some(detail=> detail.wps_no || detail.accept);
+  const itemCount = hasWpsAndAccept ? 7 : 10;
+  let itemsPerPage = itemCount; 
+  let totalPages = Math.ceil(items.length / itemsPerPage);
+  const projectColspan = hasWpsAndAccept ? 4 : 3;
+  const projectColspan2 = hasWpsAndAccept ? 6 : 5;
+  const reportColspan = hasWpsAndAccept ? 4 : 3;
+  for (let page = 0; page < totalPages; page++) { 
+      let start = page * itemsPerPage;
+      let end = start + itemsPerPage;
+      let currentItems = items.slice(start, end);
+  %>
+      <table>
+        <thead>
+          <tr>
+              <td colspan="15" class="header">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                  <img
+                      src="<%= logoUrl1 %>"
+                      alt="Company Logo"
+                      style="max-width: 200px; height: 80px; margin-right: 20px;"
+                  />
+                  <div style="flex: 1; text-align: center; font-size: 20px;">
+                    <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                    GROUP OF COMPANIES<br />
+                  </div>
+                   <img
+                      src="<%= headerInfo.company_logo %>"
+                      alt="Company Logo"
+                      style="max-width: 200px; height: 80px; margin-right: 20px;"
+                  />
+                </div>
+              </td>
+          </tr> 
+          <tr>
+            <td colspan="15" class="header">
+              <% if (hasWpsAndAccept) { %>
+                FIT-UP INSPECTION REPORT (STRUCTURE)
+              <% } else { %>
+                FIT-UP INSPECTION OFFER LIST
+              <% } %>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">CLIENT</td>
+            <td colspan="3"><%= headerInfo.client || '--' %></td>
+            <td colspan="2" class="header">PROJECT</td>
+            <td colspan="<%= projectColspan %>"><%= headerInfo.project_name || '--' %></td>
+            <td colspan="1" class="header">REPORT NO.</td>
+            <td colspan="<%=reportColspan %>"><%= headerInfo.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">WO NO./PO NO.</td>
+            <td colspan="3"><%= headerInfo.wo_no || '--' %></td>
+            <td colspan="<%=projectColspan2 %>"></td>
+            <td colspan="1" class="header">DATE :</td>
+            <td colspan="<%=reportColspan %>">
+              <%= headerInfo.date ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') : '--' %>
+            </td>
+          </tr>
+          <tr>
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>SHEET NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <!-- <th>GRID NUMBER</th> -->
+            <th>QTY</th>
+            <th>ITEM NUMBER</th>
+            <th>ITEM QTY(NOS)</th>
+            <th>PROFILE</th>
+            <th>IMIR NO.</th>
+            <th>HEAT NO.</th>
+            <th>JOINT TYPE</th>
+            <% if (hasWpsAndAccept) { %>
+              <th>WPS NO.</th>
+              <th>ACC/REJ</th>
+            <% } %>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentItems.forEach((detail, index) => { %>
+            <tr>
+              <td class="truncate-cell"><%= start + index + 1 %></td> 
+              <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.rev %></td>
+              <td class="truncate-cell"><%= detail.sheet_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+              <!-- <td class="truncate-cell"><%= detail.grid_no || '--' %></td> -->
+              <td class="truncate-cell"><%= detail.used_grid_qty || '--' %></td>
+              <td class="truncate-cell"><%= detail.item_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.issued_qty || '--' %></td>
+              <td class="truncate-cell"><%= detail.profile || '--' %></td>
+              <td class="truncate-cell"><%= detail.imir_no || '--' %></td>
+              <td class="truncate-cell"><%= detail.heat_no || '--' %></td>
+              <td class="truncate-cell">
+                <% if (detail.joint_type && detail.joint_type.length) { %>
+                  <%= detail.joint_type %>
+                    <% } else { %>
+                      --
+                    <% } %>
+              </td>
+              <% if (hasWpsAndAccept) { %>
+                <td class="truncate-cell"><%= detail.wps_no || '--' %></td>
+                <td class="truncate-cell"><%= detail.accept || '--' %></td>
+              <% } %>
+                <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+        <% if (hasWpsAndAccept) { %>
+          <tr>
+            <td colspan="11" class="header">INSPECTION CHECK</td>
+            <td colspan="5" class="header">REMARKS</td>
+          </tr>
+          <tr>
+            <td colspan="3" style="text-align: left;">
+              <div class="checkbox-item"><input type="checkbox" /> DIR & ORIENTATION</div>
+              <div class="checkbox-item"><input type="checkbox" /> FLANGE STRADLING </div>
+              <div class="checkbox-item"><input type="checkbox" /> PAINTING LINES FOR ERECTED SPOOLS</div>
+            </td>
+            <td colspan="2" style="text-align: left;">
+              <div class="checkbox-item"><input type="checkbox" /> W.E.P AS PER WPS</div>
+              <div class="checkbox-item"><input type="checkbox" /> EREC. COORDINATES</div>
+            </td>
+            <td colspan="3" style="text-align: left;">
+              <div class="checkbox-item"><input type="checkbox" /> DIMENSIONS</div>
+              <div class="checkbox-item"><input type="checkbox" /> PHYSICAL CONDITION</div>
+              <div class="checkbox-item"><input type="checkbox" /> EREC. VERTICALITY</div>
+            </td>
+            <td colspan="2" style="text-align: left;">
+              <div class="checkbox-item"><input type="checkbox" /> SQUARENESS</div>
+              <div class="checkbox-item"><input type="checkbox" /> ARC STRIKE</div>
+              <div class="checkbox-item"><input type="checkbox" /> PRESERVATION</div>
+            </td>
+            <td colspan="1" style="text-align: left;">
+              <div class="checkbox-item"><input type="checkbox" /> OFFSET</div>
+              <div class="checkbox-item"><input type="checkbox" /> SLOPE</div>
+              <div class="checkbox-item"><input type="checkbox" /> VISUAL</div>
+            </td>
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td colspan="7" class="header">VE QC</td>
+            <td colspan="7" class="header">CLIENT QC/TPI</td>
+          </tr>
+          <tr>
+            <td colspan="2">SIGNATURE</td>
+            <td colspan="7"></td>
+            <td colspan="7"></td>
+          </tr>
+          <tr>
+            <td colspan="2">NAME</td>
+            <td colspan="7">
+              <%= headerInfo.qc_name || '--' %>
+            </td>
+            <td colspan="7"></td>
+          </tr>
+          <tr>
+            <td colspan="2">DATE</td>
+            <td colspan="7">
+              <%= headerInfo.date ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') : '--' %>
+            </td>
+            <td colspan="7"></td>
+          </tr>
+          <tr>
+            <td colspan="17" style="text-align: left;">VE-DOC-04 REV.00</td>
+          </tr>
+          <% } else { %>
+            <tr>
+              <td colspan="2"></td>
+              <td colspan="13" class="header">OFFERED BY</td>
+            </tr>
+            <tr>
+              <td colspan="2" class="header">SIGNATURE</td>
+              <td colspan="13"></td>
+            </tr>
+            <tr>
+              <td colspan="2" class="header">NAME</td>
+              <td colspan="13">
+                <%= headerInfo.offer_name || '--' %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="header">DATE</td>
+              <td colspan="13">
+                <%= headerInfo.date ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') : '--'
+                  %>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="15" style="text-align: left;">VE-DOC-09 REV.00</td>
+            </tr>
+            <% } %>
+      </table>
+    <% if (page !== totalPages - 1) { %> 
+      <div class="page-break"></div> 
+    <% } } %>
+</body>
+
+</html>

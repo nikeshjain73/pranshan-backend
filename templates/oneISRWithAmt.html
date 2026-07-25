@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Long Distance(ISR)</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 9px;
+      }
+
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+
+      .header1 {
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      .header2 {
+        justify-content: space-between; 
+        align-items: center;
+        font-weight: bold;
+        font-size: 12px;
+      }
+      
+      .rupee-symbol {
+        float: left;
+      }
+      
+      .amount {
+        float: right;
+      }
+
+      .signature-section td {
+        height: 50px;
+      }
+
+      .remarks {
+        height: 100px;
+      }
+
+      .nested-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .nested-table td,
+      .nested-table th {
+        padding: 4px;
+        text-align: left;
+      }
+
+      .nested-table tbody tr > td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border: 0;
+      }
+
+      @media print {
+        thead {
+          display: table-header-group;
+        }
+
+        tfoot {
+          display: table-footer-group;
+        }
+
+        tr.page-break {
+          page-break-after: always;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <% 
+      let itemsPerPage = 11; 
+      let totalPages = Math.ceil(items.length / itemsPerPage);
+      for (let page = 0; page < totalPages; page++) { 
+          let start = page * itemsPerPage;
+          let end = start + itemsPerPage;
+          let currentItems = items.slice(start, end);
+    %>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="8" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                  src="<%= logoUrl1 %>"
+                  alt="Company Logo"
+                  style="max-width: 160px; height: 60px; margin-right: 20px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 16px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                  GROUP OF COMPANIES<br />
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="8" class="header1">LONG DELIVERY CHALLAN(ISR)</th>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <div style="text-align: left; line-height: 1.4; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 12px;">Dear Sir,</p>
+                <p style="margin: 0; font-size: 12px;">We are Vishal Enterprise (Engineers/ Contractors)  transferring the below listed  materials</p>
+                <p style="margin: 0; font-size: 12px;">on returnable basis from our Head Office, Surat to <%= headerInfo.party_name %></p>
+                <p style="margin: 0; font-size: 12px;"></p>
+                <p style="margin: 0; font-size: 12px;">*NOTE: Material is NOT for sale only transferred from Vishal Enterprise, HO, Ichhapore GIDC to <%= headerInfo.party_name %></p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <div style="text-align: left; line-height: 1; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 11px;"><strong>TO,</strong></p>
+              </div>
+            </td>
+            <td colspan="5">
+              <div style="text-align: left; line-height: 1; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 11px;"><strong>CHALLAN NO : </strong><%= headerInfo.challan_no || '--' %></p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3">
+              <div style="text-align: left; line-height: 1.4; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 14px; color: #3F00FF;">
+                  <strong>M/S <%= headerInfo.party_name || '--' %></strong>
+                </p>
+                <p style="margin: 0; font-size: 12px;"><%= headerInfo.address || '--' %></p>
+                <p style="margin: 0; font-size: 12px;"><strong>Contact No : </strong><%= headerInfo.party_phone || '--' %></p>
+                <p style="margin: 0; font-size: 12px;"><strong>GST No : </strong><%= headerInfo.party_gstNumber || '--' %></p>
+              </div>
+            </td>
+            <td colspan="5">
+              <table class="nested-table" style="border: 0;">
+                <tbody>
+                  <tr>
+                    <td style="width: 100px; font-size: 11px;"><strong>Iss. Return No. : </strong></td>
+                    <td style="font-size: 11px;"><%= headerInfo.voucher_no || '--' %></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 100px; font-size: 11px;"><strong>Iss. Return Date : </strong></td>
+                    <td style="font-size: 11px;"><%= headerInfo.trans_date ? new Date(headerInfo.trans_date).toLocaleDateString() : '--' %></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 100px; font-size: 11px;"><strong>Receiver's Name : </strong></td>
+                    <td style="font-size: 11px;"><%= headerInfo.receiver_name || '--' %></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 100px; font-size: 11px;"><strong>Vehicle No. : </strong></td>
+                    <td style="font-size: 11px;"><%= headerInfo.vehical_no || '--' %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="header">
+            <td>SR No.</td>
+            <td colspan="2">MATERIAL DESCRIPTION</td>
+            <td>UOM</td>
+            <td>QTY</td>
+            <td colspan="2">AMOUNT</td>
+            <td>REMARKS</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td colspan="2">Tools Tackles, Machinaries, Consumables Items (As per Annex I)</td>
+            <td>LOT</td>
+            <td>1</td>
+            <td class="header2" colspan="2">
+              <span class="rupee-symbol">₹</span>
+              <span class="amount"><%= (headerInfo.tax_amt ? headerInfo.tax_amt.toFixed(2) : '0.00') %></span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="3"></td>
+            <td colspan="2">CGST@</td>
+            <td class="header2" colspan="2">
+                <span class="rupee-symbol">₹</span>
+                <span class="amount"><%= (headerInfo.gst_amt ? (headerInfo.gst_amt/2).toFixed(2) : '0.00') %></span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="3"></td>
+            <td colspan="2">SGST@</td>
+            <td class="header2" colspan="2">
+                <span class="rupee-symbol">₹</span>
+                <span class="amount"><%= (headerInfo.gst_amt ? (headerInfo.gst_amt/2).toFixed(2) : '0.00') %></span>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="3"></td>
+            <td class="header1" colspan="2">Total Amount</td>
+            <td class="header2" colspan="2">
+                <span class="rupee-symbol">₹</span>
+                <span class="amount"><%= (headerInfo.total_amt ? headerInfo.total_amt.toFixed(2) : '0.00') %></span>
+              </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <div style="text-align: left; line-height: 1.4; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 12px;">Details of goods are as under as per Annexure - I</p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <div style="text-align: left; line-height: 1.4; margin-top: 0; padding: 0;">
+                <p style="margin: 0; font-size: 14px; color: #3F00FF;">
+                  <strong>FROM, Vishal Enterprise</strong>
+                </p>
+                <p style="margin: 0; font-size: 12px;"><strong>PAN No : </strong>AAYPM1959N</p>
+                <p style="margin: 0; font-size: 12px;"><strong>GST No : </strong>24AAYPM1959N1ZS</p>
+              </div>
+            </td>
+          </tr>
+          <tr></tr>
+          <tr>
+            <th>SR No.</th>
+            <th>HSN CODE</th>
+            <th>ITEM DESCRIPTION</th>
+            <th>UOM</th>
+            <th>QTY</th>
+            <th>RATE</th>
+            <th>AMOUNT</th>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentItems.forEach((detail, index) => { %>
+          <tr>
+            <td class="truncate-cell"><%= start + index + 1 %></td>
+            <td class="truncate-cell"><%= detail.hsn_code || '--' %></td>
+            <td class="truncate-cell"><%= detail.item_name || '--' %></td>
+            <td class="truncate-cell"><%= detail.unit || '--' %></td>
+            <td class="truncate-cell"><%= (detail.quantity ? detail.quantity.toFixed(3) : '0.000') %></td>
+            <td class="truncate-cell"><%= (detail.rate ? detail.rate.toFixed(2) : '0.00') %></td>
+            <td class="truncate-cell"><%= (detail.amount ? detail.amount.toFixed(2) : '0.00') %></td>
+            <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+          <tr>
+            <td colspan="8">
+              <div style="text-align: center; line-height: 1; margin-top: 0; padding: 0;">
+                <p class="header" style="margin: 0;">Material is not for Sale</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <% if (page !== totalPages - 1) { %>
+      <div class="page-break"></div>
+      <% } %>
+    </div>
+    <% } %>
+</body>
+</html>

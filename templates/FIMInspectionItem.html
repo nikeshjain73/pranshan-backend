@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Material Inspection FIM Report</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Arial, sans-serif;
+      margin-bottom: 40px;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 6px 4px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .header {
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .big-star {
+      font-size: 16px;
+      /* increase size */
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+    .status-type {
+      font-size: 9px;
+      font-weight: bold;
+      text-align: left;
+      display: block;
+    }
+
+    @media print {
+      thead {
+        display: table-header-group;
+      }
+
+      .page-break {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <% function dFormat(dateVal) { if (!dateVal) return "--" ; var d=new Date(dateVal); if (isNaN(d.getTime()))
+    return "--" ; return d.toISOString().slice(0, 10).split('-').reverse().join('/'); } %>
+    <% var itemGroups=[]; var sr=1; if (items && Array.isArray(items)) { items.forEach(function(it) { var sText='--' ;
+      if (it.status=='1' ) sText='ACCEPTED' ; else if (it.status=='2' ) sText='REJECTED' ; itemGroups.push({ srNo: sr++,
+      item_name: it.item_name || '--' , material_grade: it.material_grade || '--' , manufacture: it.manufacture || '--'
+      , inspected_weight: it.inspected_weight, heat_no: Array.isArray(it.heat_no) ? it.heat_no.join(", ") : (it.heat_no || '--'),
+          inspected_nos: it.inspected_nos,
+          inspected_length: it.inspected_length,
+          inspected_width: it.inspected_width,
+          tc_no: Array.isArray(it.tc_no) ? it.tc_no.join(" , ") : (it.tc_no || '--'),
+          remarks: it.remarks || '--',
+          status: sText,
+          selected: it.selected
+        });
+      });
+    }
+  %>
+  <%
+    var rowsPerPage = 15;
+    var pages = [];
+    for (var i = 0; i < itemGroups.length; i += rowsPerPage) {
+      pages.push(itemGroups.slice(i, i + rowsPerPage));
+    }
+  %>
+
+      <% pages.forEach(function(rows, pageIndex) { %>
+        <table>
+          <thead>
+            <tr>
+              <td colspan=" 15">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <img src="<%= logoUrl1 %>" style="max-width:90px; max-height:70px" />
+        <div style="text-align:center; flex:1; font-size:17px;">
+          <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+          GROUP OF COMPANIES
+        </div>
+      </div>
+      </td>
+      </tr>
+
+      <tr>
+        <td colspan="15" class="header">
+          FIM-INWARD MATERIAL INSPECTION REPORT (IMIR) - STRUCTURAL
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="header">CLIENT</td>
+        <td colspan="3">
+          <%= headerInfo.client || '--' %>
+        </td>
+
+        <td colspan="2" class="header">PROJECT</td>
+        <td colspan="3">
+          <%= headerInfo.project_name || '--' %>
+        </td>
+
+        <td colspan="2" class="header">FIM IMIR NO</td>
+        <td colspan="3">
+          <%= headerInfo.imir_no || '--' %>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="header">PO / WO NO.</td>
+        <td colspan="3">
+          <%= headerInfo.work_order_no || '--' %>
+        </td>
+
+        <td colspan="2" class="header">DATE</td>
+        <td colspan="3">
+          <%= dFormat(headerInfo.send_qc_time) %>
+        </td>
+
+        <td colspan="2" class="header">FIM LOT NO</td>
+        <td colspan="3">
+          <%= headerInfo.fim_lot_no || '--' %>
+        </td>
+      </tr>
+
+      <tr>
+        <th>SR No.</th>
+        <th>PACKING LIST NO.</th>
+        <th>SUPPLIER</th>
+        <th>SECTION DETAILS</th>
+        <th>MATERIAL GRADE</th>
+        <th>MANUFACTURE</th>
+        <th>INSPECTED QTY (KG)</th>
+        <th>HEAT/LOT NO</th>
+        <th>INSPECTED NOS</th>
+        <th>INSPECTED LENGTH (MM)</th>
+        <th>INSPECTED WIDTH (MM)</th>
+        <th>TC NO.</th>
+        <th>RGP NO</th>
+        <th>ACC/REJ</th>
+        <th>REMARKS</th>
+      </tr>
+      </thead>
+
+      <tbody>
+        <% rows.forEach(function(row) { %>
+          <tr>
+            <td>
+              <%= row.srNo %><%- headerInfo.status_type==='RANDOM WITNESSED' && row.selected===true
+                  ? '<span class="big-star">*</span>' : '' %>
+            </td>
+            <td>
+              <%= headerInfo.packing_no || '--' %>
+            </td>
+            <td>
+              <%= headerInfo.supplier || '--' %>
+            </td>
+            <td>
+              <%= row.item_name || '--' %>
+            </td>
+            <td>
+              <%= row.material_grade || '--' %>
+            </td>
+            <td>
+              <%= row.manufacture || '--' %>
+            </td>
+            <td>
+              <%= row.inspected_weight || '--' %>
+            </td>
+            <td>
+              <%= row.heat_no || '--' %>
+            </td>
+            <td>
+              <%= row.inspected_nos || '--' %>
+            </td>
+            <td>
+              <%= row.inspected_length || '--' %>
+            </td>
+            <td>
+              <%= row.inspected_width || '--' %>
+            </td>
+            <td>
+              <%= row.tc_no || '--' %>
+            </td>
+            <td>
+              <%= headerInfo.rgp_no || '--' %>
+            </td>
+            <td>
+              <%= row.status || '--' %>
+            </td>
+            <td>
+              <%= row.remarks || '--' %>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+
+      <tr>
+        <td class="header" colspan="2">REMARKS</td>
+        <td colspan="13"></td>
+      </tr>
+
+      <tr>
+        <td colspan="2"></td>
+        <td colspan="6" class="header">VE-QC</td>
+        <td colspan="7" class="header">
+          <span class="status-type">
+            <% if (headerInfo.qc_timestamp && headerInfo.client_status===1 && headerInfo.status_type) { %>
+              <%= headerInfo.status_type.toUpperCase() %>
+                <% } %>
+          </span>
+          CLIENT-QC / TPI
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">SIGNATURE</td>
+        <td colspan="6">
+          <% if (headerInfo.qc_timestamp && headerInfo.client_status==1) { %>
+            <img src="<%= headerInfo.received_signature %>" alt="Prepared By Signature"
+              style="max-height: 50px; display: block; margin: auto;" />
+            <% } %>
+        </td>
+        <td colspan="7">
+          <% if (headerInfo.qc_timestamp && headerInfo.client_status==1) { %>
+            <img src="<%= headerInfo.client_signature %>" alt="Prepared By Signature"
+              style="max-height: 50px; display: block; margin: auto;" />
+            <% } %>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">NAME</td>
+        <td colspan="6">
+          <%= headerInfo.qc_by || '--' %>
+        </td>
+        <td colspan="7">
+          <%= headerInfo.client_user || '--' %>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2">DATE</td>
+        <td colspan="6">
+          <%= dFormat(headerInfo.qc_date) %>
+        </td>
+        <td colspan="7"></td>
+      </tr>
+
+      <tr>
+        <td colspan="15" style="text-align:left;">VE-DOC-03 REV.00</td>
+      </tr>
+      </table>
+
+      <% if (pageIndex !==pages.length - 1) { %>
+        <div class="page-break"></div>
+        <% } %>
+          <% }) %>
+</body>
+
+</html>

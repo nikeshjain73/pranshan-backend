@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weld Visual </title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: Arial, sans-serif;
+        margin-bottom: 14px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px 4px;
+        text-align: center;
+        font-size: 9px;
+      }
+      .header {
+        font-weight: bold;
+        font-size: 10px;
+      }
+      .footer {
+        font-weight: bold;
+        text-align: left;
+        font-size: 10px;
+        margin-top: 20px;
+      }
+      .left-alignment {
+        text-align: left;
+      }
+      .truncate-cell {
+        height: 10px;
+        max-height: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      @media print {
+        thead {
+          display: table-header-group; /* Repeat headers on each page */
+        }
+        tfoot {
+          display: table-footer-group; /* Ensure footer is on the last page */
+        }
+        tr.page-break {
+          page-break-after: always; /* Force page break after each table */
+        }
+      }
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+      .signature-section td {
+          height: 50px;
+      }
+      .remarks {
+          height: 100px;
+      }
+      .checkbox-section td {
+          text-align: left;
+          padding: 4px;
+      }
+      .checkbox-section input[type="checkbox"] {
+          margin-right: 8px;
+      }
+      .checkbox-section {
+          font-size: 12px;
+          font-weight: normal;
+      }
+    </style>
+  </head>
+  <body>
+    <% 
+    const hasWpsAndAccept=items.some(detail=> detail.accept);
+    const itemCount = hasWpsAndAccept ? 5 : 11;
+    let itemsPerPage = itemCount; 
+    let totalPages = Math.ceil(items.length / itemsPerPage);
+    const projectColspan = hasWpsAndAccept ? 4 : 3;
+    for (let page = 0; page < totalPages; page++) { 
+        let start = page * itemsPerPage;
+        let end = start + itemsPerPage;
+        let currentItems = items.slice(start, end);
+    %>
+      <table>
+        <thead>
+          <tr>
+            <td colspan="17" class="header">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img
+                    src="<%= logoUrl1 %>"
+                    alt="Company Logo"
+                    style="max-width: 200px; height: 80px; margin-right: 20px;"
+                />
+                <div style="flex: 1; text-align: center; font-size: 20px;">
+                  <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                  GROUP OF COMPANIES<br />
+                </div>
+              </div>
+            </td>
+          </tr> 
+        <tr>
+          <td colspan="16" class="header">
+            <% if (hasWpsAndAccept) { %>
+              WELD VISUAL INSPECTION REPORT (STRUCTURE)
+            <% } else { %>
+              WELD VISUAL INSPECTION OFFER
+            <% } %>
+          </td>
+        </tr>  
+          <tr>
+            <td colspan="2" class="header">CLIENT</td>
+            <td colspan="3"><%= headerInfo.client || '--' %></td>
+            <td colspan="2" class="header">PROJECT</td>
+            <td colspan="3"><%= headerInfo.project_name || '--' %></td>
+            <td colspan="2" class="header">REPORT NO.</td>
+            <td colspan=<%= projectColspan %>><%= headerInfo.report_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="header">WO NO./PO NO.</td>
+            <td colspan="3"><%= headerInfo.wo_no || '--' %></td>
+            <td colspan="5" class="header"></td>
+            <td colspan="2" class="header">Date :</td>
+            <td colspan=<%= projectColspan %>>
+              <%= headerInfo.date 
+              ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr>
+            <th>SR No.</th>
+            <th>DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <!-- <th>GRID NUMBER</th> -->
+            <th>QTY</th>
+            <th>ITEM NUMBER</th>
+            <th>ITEM QTY(Nos)</th>
+            <th>PROFILE</th>
+            <th>TYPE OF WELD</th>
+            <th>WPS NO.</th>
+            <th>WELDING PROCESS</th>
+            <th>WELDER NO.</th>
+            <th>FIT-UP REPORT NO.</th>
+            <% if (hasWpsAndAccept) { %>
+              <th>ACC/REJ</th>
+            <% } %>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentItems.forEach(function(detail, index) { %>
+          <tr>
+            <td class="truncate-cell"><%= start + index + 1 %></td>
+            <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.rev  %></td>
+            <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+            <!-- <td class="truncate-cell"><%= detail.grid_no || '--' %></td> -->
+            <td class="truncate-cell"><%= detail.used_grid_qty || '--' %></td>
+            <td class="truncate-cell"><%= detail.item_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.qty || '--' %></td>
+            <td class="truncate-cell"><%= detail.profile || '--' %></td>
+            <td class="truncate-cell"><%= detail.joint_type || '--' %></td>
+            <td class="truncate-cell"><%= detail.wps_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.weldingProcess || '--' %></td>
+            <td class="truncate-cell"><%= detail.welder_no || '--' %></td>
+            <td class="truncate-cell"><%= detail.fitup_no || '--' %></td>
+            <% if (hasWpsAndAccept) { %>
+              <td class="truncate-cell"><%= detail.accept || '--' %></td>
+            <% } %>
+            <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+        <% if (hasWpsAndAccept) { %>
+            <tr>
+              <td colspan="2" class="header">QC CHECK SHEET</td>
+              <td colspan="16" class="header">CHECKED  &nbsp;&nbsp; &#10004; &nbsp; &#10008; &nbsp;&nbsp; NOT APPLICABLE</td>
+            </tr>
+            <tr>
+              <td colspan="2" class="header">DOCUMENT VERIFICATION</td>
+              <td colspan="2" class="header">MARKING VERIFICATION CHECK</td>
+              <td colspan="9" class="header">WELD SURFACE DEFECT CHECK</td>
+              <td colspan="3" class="header">VISUAL CHECK</td>
+            </tr>
+            <tr>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> APPROVED NDT DRG./TESTPLAN WITH LATEST REV.<br />
+                <input type="checkbox" /> QUALIFIED WELDER LIST<br />
+                <input type="checkbox" /> APPROVED WPS
+              </td>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> JOINT NO.<br />
+                <input type="checkbox" /> WELDER NO.
+              </td>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> SPATTER<br />
+                <input type="checkbox" /> UNDER CUT
+              </td>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> REINFORCEMENT<br />
+                <input type="checkbox" /> LUMPS/HIGH SPOT
+              </td>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> POROSITY/PIN HOLES<br />
+                <input type="checkbox" /> BEAD APEARANCE/WEAVING
+              </td>
+              <td colspan="1" style="text-align: left;">
+                <input type="checkbox" /> SLAG<br />
+                <input type="checkbox" /> WELD SIZE
+              </td>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> CRACK<br />
+                <input type="checkbox" /> BUNDER FILL
+              </td>
+              <td colspan="1" style="text-align: left;">
+                <input type="checkbox" /> ARC STRIKE<br />
+                <input type="checkbox" /> CLEAT MARK<br />
+                <input type="checkbox" /> PHYSICAL CONDITION
+              </td>
+              <td colspan="2" style="text-align: left;">
+                <input type="checkbox" /> DISTORTION<br />
+                <input type="checkbox" /> CORNER SEALING/ROUNDING
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
+              <td colspan="8" class="header">VE QC</td>
+              <td colspan="6" class="header">CLIENT QC/TPI</td>
+            </tr>
+            <tr>
+              <td colspan="2">SIGNATURE</td>
+              <td colspan="8"></td>
+              <td colspan="6"></td>
+            </tr>
+            <tr>
+              <td colspan="2">NAME</td>
+              <td colspan="8"><%= headerInfo.qc_name || '--' %></td>
+              <td colspan="6"></td>
+            </tr>
+            <tr>
+              <td colspan="2">DATE</td>
+              <td colspan="8">
+                <%= headerInfo.date 
+                ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                : '--' %>  
+              </td>
+              <td colspan="6"></td>
+            </tr>
+            <tr>
+              <td colspan="17" style="text-align: left;">VE-DOC-05 REV.00</td>
+            </tr>
+            <% } else { %>
+              <tr>
+                <td colspan="2"></td>
+                <td colspan="13" class="header">OFFERED BY</td>
+              </tr>
+              <tr>
+                <td colspan="2">SIGNATURE</td>
+                <td colspan="13"></td>
+              </tr>
+              <tr>
+                <td colspan="2">NAME</td>
+                <td colspan="13"><%= headerInfo.offer_name || '--' %></td>
+              </tr>
+              <tr>
+                <td colspan="2">DATE</td>
+                <td colspan="13">
+                  <%= headerInfo.date 
+                  ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                  : '--' %>  
+                </td>
+              </tr>
+              <tr>
+                <td colspan="17" style="text-align: left;">VE-DOC-10 REV.00</td>
+              </tr>
+            <% } %>
+      </table>
+      <% if (page !== totalPages - 1) { %> 
+        <div class="page-break"></div> 
+      <% } } %>
+  </body>
+</html>

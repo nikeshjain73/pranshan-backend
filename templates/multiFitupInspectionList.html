@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitup Inspection List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px; /* Space between tables */
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .header {
+            font-weight: bold;
+            font-size: 14px;
+        } 
+        @media print {
+            thead {
+                display: table-header-group; /* Repeat headers on each page */
+            }
+            tr.page-break {
+                page-break-after: always; /* Force page break after each table */
+            }
+        }
+    </style>
+</head>
+<body>      
+
+<% 
+    let itemsPerPage = 6; 
+    let totalPages = Math.ceil(items.length / itemsPerPage);
+    for (let page = 0; page < totalPages; page++) { 
+        let start = page * itemsPerPage;
+        let end = start + itemsPerPage;
+        let currentItems = items.slice(start, end);
+%>
+    <table>
+        <thead>
+            <tr>
+                <td colspan="18" class="header">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center;">
+                            <img
+                                src="<%= logoUrl1 %>"
+                                alt="Company Logo"
+                                style="max-width: 100px; height: 100px; margin-right: 20px;"
+                            />
+                            <img
+                                src="<%= logoUrl2 %>"
+                                alt="Company Logo"
+                                style="max-width: 100px; height: 100px;"
+                            />
+                            <div style="text-align: center; font-size: 24px; margin-left: 20px;">
+                                <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                GROUP OF COMPANIES<br />
+                            </div>
+                        </div>
+                       
+                        <img
+                            src="<%= logoUrl2 %>"
+                            alt="Company Logo"
+                            style="max-width: 100px; height: 100px;"
+                        />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="18" class="header">FIT-UP INSPECTION LIST</td>
+            </tr> 
+            <tr>
+                <td colspan="1" class="header">CLIENT</td>
+                <td colspan="5"><%= headerInfo.client %></td>
+                <td colspan="2" class="header">PROJECT</td>
+                <td colspan="10"><%= headerInfo.project_name %></td>  
+            </tr>
+            <tr>
+                <td colspan="1" class="header">WO NO./PO NO.</td>
+                <td colspan="5"><%= headerInfo.wo_no %></td>
+                <td colspan="2" class="header">PROJECT PO NO.</td>
+                <td colspan="10"><%= headerInfo.project_po_no %></td>  
+            </tr>
+
+          
+            <tr>
+                <th style="width: 5%;">SR No.</th>
+                <th style="width: 10%;">REPORT NO.</th>
+                <th style="width: 10%;">DATE</th>
+                <th style="width: 10%;">DRAWING NO.</th>
+                <th style="width: 5%;">REV.NO.</th>
+                <th style="width: 5%;">SHEET NO.</th>
+                <th style="width: 10%;">ASSEMBLY NUMBER</th>
+                <th style="width: 10%;">GRID NUMBER</th>
+                <th style="width: 10%;">ITEM NUMBER</th>
+                <th style="width: 5%;">QTY(Nos)</th>
+                <th style="width: 5%;">PROFILE</th>
+                <th style="width: 5%;">IMIR NO.</th>
+                <th style="width: 5%;">HEAT NO.</th>
+                <th style="width: 5%;">WPS NO.</th>
+                <th style="width: 5%;">ACC/REJ</th>
+                <th style="width: 5%;">JOINT TYPE</th>
+                <th>REMARKS</th>             
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+        <% currentItems.forEach((item, index) => { %>
+            <tr>
+                <td><%= start + index + 1 %></td> 
+                <td><%= item.report_no %></td>
+                <td><%= item.date %></td>
+                <td><%= item.drawing_no %></td>
+                <td><%= item.rev %></td>
+                <td><%= item.sheet_no %></td>
+                <td><%= item.assembly_no %></td>
+                <td><%= item.grid_no %></td>
+                <td><%= item.item_no %></td>
+                <td><%= item.issued_qty %></td>
+                <td><%= item.profile %></td>
+                <td><%= item.imir_no %></td>
+                <td><%= item.heat_no %></td>
+                <td><%= item.joint_type %></td>            
+                <td><%= item.wps_no || '--' %></td> 
+                <td><%= item.accept || '--' %></td> 
+                <td class="remarks"><%= item.remarks || '--' %></td> 
+            </tr>
+
+        <% }); %>
+
+        <tr>
+                <td colspan="10" class="header">INSPECTION CHECK</td>
+                <td colspan="8" class="header">REMARKS</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> DIR & ORIENTATION</div>
+                  <div class="checkbox-item"><input type="checkbox" /> FLANGE STRADLING </div>
+                  <div class="checkbox-item"><input type="checkbox" /> PAINTING LINES FOR ERECTED SPOOLS</div>
+                </td>
+                <td colspan="3" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> W.E.P AS PER WPS</div>
+                  <div class="checkbox-item"><input type="checkbox" /> EREC. COORDINATES</div>
+                </td>
+                <td colspan="3" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> DIMENSIONS</div>
+                  <div class="checkbox-item"><input type="checkbox" /> PHYSICAL CONDITION</div>
+                  <div class="checkbox-item"><input type="checkbox" /> EREC. VERTICALITY</div>
+                </td>
+                <td colspan="3" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> SQUARENESS</div>
+                  <div class="checkbox-item"><input type="checkbox" /> ARC STRIKE</div>
+                  <div class="checkbox-item"><input type="checkbox" /> PRESERVATION</div>
+                </td>
+                <td colspan="3" style="text-align: left;" >
+                  <div class="checkbox-item"><input type="checkbox" /> OFFSET</div>
+                  <div class="checkbox-item"><input type="checkbox" /> SLOPE</div>
+                  <div class="checkbox-item"><input type="checkbox" /> VISUAL</div>
+                </td>
+                <td colspan="3"></td>
+              </tr>
+              <tr>
+                <td colspan="3"></td>
+                <td colspan="7" class="header">VE QC</td>
+                <td colspan="8" class="header">CLIENT QC/TPI</td>
+              </tr>
+              <tr>
+                <td colspan="3">SIGNATURE</td>
+                <td colspan="7"></td>
+                <td colspan="8"></td>
+              </tr>
+              <tr>
+                <td colspan="3">NAME</td>
+                <td colspan="7"></td>
+                <td colspan="8"></td>
+              </tr>
+              <tr>
+                <td colspan="3">DATE</td>
+                <td colspan="7"></td>
+                <td colspan="8"></td>
+              </tr>
+              <tr>
+                <td colspan="18" style="text-align: left;">VE-STR-10</td>
+              </tr>
+           
+        </tbody>
+
+    </table>
+
+<% if (page !== totalPages - 1) { %> 
+    <div class="page-break"></div> 
+<% } } %>
+
+</body>
+</html>

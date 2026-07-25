@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Final Dimension</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+            margin-bottom: 14px;
+        }
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 9px;
+        }
+        .header {
+            font-weight: bold;
+            font-size: 10px;
+        }
+        .footer {
+            font-weight: bold;
+            text-align: left;
+            font-size: 10px;
+            margin-top: 20px;
+        }
+        .left-alignment {
+            text-align: left;
+        }
+        .truncate-cell {
+            height: 10px;
+            max-height: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        @media print {
+            thead {
+              display: table-header-group; /* Repeat headers on each page */
+            }
+            tfoot {
+              display: table-footer-group; /* Ensure footer is on the last page */
+            }
+            tr.page-break {
+              page-break-after: always; /* Force page break after each table */
+            }
+        }
+    </style>
+</head>
+<body>
+    <% 
+        const hasWpsAndAccept=items.some(detail=> detail.actual_dimension);
+        let itemsPerPage = 8; 
+        let totalPages = Math.ceil(items.length / itemsPerPage);
+        for (let page = 0; page < totalPages; page++) { 
+            let start = page * itemsPerPage;
+            let end = start + itemsPerPage;
+            let currentItems = items.slice(start, end);
+    %>
+      <table>
+        <thead>
+            <tr>
+                <td colspan="15" class="header">
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <img
+                        src="<%= logoUrl1 %>"
+                        alt="Company Logo"
+                        style="max-width: 200px; height: 80px; margin-right: 20px;"
+                    />
+                    <div style="flex: 1; text-align: center; font-size: 20px;">
+                      <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                      GROUP OF COMPANIES<br />
+                    </div>
+                  </div>
+                </td>
+            </tr> 
+            <td colspan="15" class="header">
+                <% if (hasWpsAndAccept) { %>
+                    FINAL DIMENSIONAL INSPECTION REPORT (STRUCTURE)
+                <% } else { %>
+                    FINAL DIMENSIONAL INSPECTION OFFER LIST
+                <% } %>
+            </td>
+          </tr> 
+          <tr>
+            <td colspan="1" class="header">CLIENT</td>
+            <td colspan="3"><%= headerInfo.client || '--' %></td>
+            <td colspan="1" class="header">DATE</td>
+            <td colspan="7">
+              <%= headerInfo.date 
+              ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+              : '--' %>  
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" class="header">PROJECT</td>
+            <td colspan="3"><%= headerInfo.project_name || '--' %></td>
+            <td colspan="1" class="header">WO NO./PO NO.</td>
+            <td colspan="7"><%= headerInfo.wo_no || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="1" class="header">REPORT NO.</td>
+            <td colspan="3"><%= headerInfo.report_no || '--' %></td>  
+            <td colspan="7"></td>  
+          </tr>
+          <tr class="header">
+            <th>SR No.</th>
+            <th>FAB.DRAWING NO.</th>
+            <th>REV.NO.</th>
+            <th>ASSEMBLY NUMBER</th>
+            <!-- <th>GRID NUMBER</th> -->
+            <th>QTY</th>
+            <th>REQUIRED DIMENSION</th>
+            <% if (hasWpsAndAccept) { %>
+                <th>ACTUAL DIMENSION</th>
+                <th>ACC/REJ</th>
+            <% } %>
+            <th>REMARKS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% currentItems.forEach((detail, index) => { %>
+            <tr>
+                <td class="truncate-cell"><%= start + index + 1 %></td> 
+                <td class="truncate-cell"><%= detail.drawing_no || '--' %></td>
+                <td class="truncate-cell"><%= detail.rev %></td>
+                <td class="truncate-cell"><%= detail.assembly_no || '--' %></td>
+                <!-- <td class="truncate-cell"><%= detail.grid_no || '--' %></td> -->
+                <td class="truncate-cell"><%= detail.used_grid_qty || '--' %></td>
+                <td class="truncate-cell"><%= detail.required_dimension || '--' %></td>
+                <% if (hasWpsAndAccept) { %>
+                  <td class="truncate-cell"><%= detail.actual_dimension || '--' %></td>
+                  <td class="truncate-cell"><%= detail.accept || '--' %></td>
+                <% } %>
+                <td class="truncate-cell"><%= detail.remarks || '--' %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+        <tr>
+          <td colspan="1" class="header">NOTE</td>
+          <td colspan="10"></td>
+        </tr>
+        <% if (hasWpsAndAccept) { %>
+          <tr>
+            <td colspan="1"></td>
+            <td colspan="4" class="header">VE QC</td>
+            <td colspan="5" class="header">CLIENT QC/TPI</td>
+          </tr>
+          <tr>
+            <td colspan="1">SIGNATURE</td>
+            <td colspan="4"></td>
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <td colspan="1">NAME</td>
+            <td colspan="4"><%= headerInfo.qc_name || '--' %></td>
+            <td colspan="5"></td>
+          </tr>
+          <tr>
+            <td colspan="1">DATE</td>
+            <td colspan="4"><%= headerInfo.qc_date 
+                ? new Date(headerInfo.qc_date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                : '--' %> </td>
+            <td colspan="5"></td>                    
+          </tr>
+          <tr>
+            <td colspan="17" style="text-align: left;">VE-DOC-12 REV.00</td>
+          </tr>
+        <% } else { %>
+          <tr>
+            <td colspan="1"></td>
+            <td colspan="8" class="header">OFFER BY</td>
+          </tr>
+          <tr>
+            <td colspan="1">SIGNATURE</td>
+            <td colspan="8"></td>
+          </tr>
+          <tr>
+            <td colspan="1">NAME</td>
+            <td colspan="8"><%= headerInfo.offer_name || '--' %></td>
+          </tr>
+          <tr>
+            <td colspan="1">DATE</td>
+            <td colspan="8"><%= headerInfo.date 
+                ? new Date(headerInfo.date).toISOString().slice(0, 10).split('-').reverse().join('/') 
+                : '--' %> </td>
+          </tr>
+          <tr>
+            <td colspan="17" style="text-align: left;">VE-DOC-11 REV.00</td>
+          </tr>
+        <% } %>
+      </table> 
+      <% if (page !== totalPages - 1) { %> 
+        <div class="page-break"></div> 
+      <% } } %>
+  </body>
+</html>

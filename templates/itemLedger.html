@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Item Ledger Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .header {
+            font-weight: bold;
+            font-size: 14px;
+        } 
+        .header1 {
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .header2 {
+            font-size: 12px;
+            color: red;
+        }
+        .header3 {
+            font-size: 12px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td colspan="30" class="header">
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <img
+                                src="<%= logoUrl1 %>"
+                                alt="Company Logo"
+                                style="max-width: 80px; height: 80px; margin-right: 0px;"
+                            />
+                            <div style="flex: 1; text-align: center; font-size: 16px; transform: scaleY(1.2);">
+                              <strong>VISHAL ENTERPRISE & VRISHAL ENGINEERING PRIVATE LIMITED</strong><br />
+                                  GROUP OF COMPANIES<br />
+                            </div>
+                            <img
+                                src="<%= logoUrl2 %>"
+                                alt="Company Logo"
+                                style="max-width: 80px; height: 80px; margin-right: 0px;"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="30" class="header">ITEM LEDGER REPORT</th>
+                </tr>
+                <% if (requestData[0].sdate && requestData[0].edate) { %>
+                    <tr>
+                        <td colspan="10" class="header1">Date &nbsp;&nbsp; : &nbsp;&nbsp; <%= new Date(requestData[0].sdate).toLocaleDateString()%>&nbsp;&nbsp;&nbsp; To &nbsp;&nbsp;&nbsp;<%= new Date(requestData[0].edate).toLocaleDateString()%> </td>
+                    </tr>
+                <% } %>
+                <tr>
+                    <th style="width: 80px;">DATE</th>
+                    <th style="width: 80px;">VO NO.</th>
+                    <th style="width: 50px;">TYPE</th>
+                    <th style="width: 300px;">DESCRIPTION</th>
+                    <th style="width: 80px;">BILL NO.</th>
+                    <th style="width: 80px;">IN</th>
+                    <th style="width: 80px;">OUT</th>
+                    <th style="width: 100px;">BALANCE QTY</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% requestData.forEach(function(transaction, transIndex) { %>
+                    <% 
+                        let total_in = 0;
+                        let total_out = 0;
+                        let runningBalance = transaction.opening_balance; // Initialize running balance for the transaction
+                    %>
+                    <tr>
+                        <td colspan="5" class="header1" style="text-align: left;"><%= transaction.item_name %> &nbsp; &nbsp;( &nbsp; <%= transaction.unit %>  &nbsp;) </td>
+                        <td colspan="5" class="header1" style="text-align: left;">OP Balance &nbsp; :<span style="margin-right: 80px;"></span><%= (transaction.opening_balance ? transaction.opening_balance.toFixed(3) : '0') %></td>
+                    </tr>
+
+                    <% transaction.order_details.forEach(function(order) { %>
+                        <% order.tag_details.forEach(function(tag, tagIndex) { %>
+                            <% if (tag.trans_details && tag.trans_details.length) { %>
+                                <% tag.trans_details.forEach(function(detail, detailIndex) { %>
+                                    <% 
+                                        let op_balance = runningBalance;
+                                        runningBalance += (detail.item_details.in - detail.item_details.out); 
+                                        total_in += detail.item_details.in;
+                                        total_out += detail.item_details.out;
+                                    %>
+                                    
+                                    <tr>
+                                        <td style="text-align: left;"><%= new Date(order.trans_date).toLocaleDateString() %></td>
+                                        <td style="text-align: left;"><%= detail.voucher_no %></td>
+                                        <td style="text-align: left;"><%= tag.tag_name %></td>
+                                        <td style="text-align: left;"><%= detail.party_name %></td>
+                                        <td style="text-align: right;"><%= detail.bill_no %></td>
+                                        <td style="text-align: right;" class="header3"><%= (detail.item_details.in ? detail.item_details.in.toFixed(3) : '0') %></td>
+                                        <td style="text-align: right;" class="header2"><%= (detail.item_details.out ? detail.item_details.out.toFixed(3) : '0') %></td>
+                                        <td style="text-align: right;" class="header1"><%= (runningBalance ? runningBalance.toFixed(3) : '0') %></td>
+                                    </tr>
+                                <% }); %>
+                            <% } %>
+                        <% }); %>
+                    <% }); %>
+                    
+                    <tr style="height:50px">
+                        <td class="header" colspan="5" style="text-align: right;">Total</td>
+                        <td class="header" style="text-align: right;"><%= (total_in ? total_in.toFixed(3) : '0') %></td>
+                        <td class="header" style="text-align: right;"><%= (total_out ? total_out.toFixed(3) : '0') %></td>
+                        <td></td>
+                    </tr>
+
+                    <tr style="height:30px">
+                        <td colspan="20"></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
