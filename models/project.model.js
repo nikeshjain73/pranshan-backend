@@ -24,21 +24,21 @@ const ProjectSchema = new Schema({
     details: {
         type: String,
     },
-    location: {
-        // type: String,
-        type: Schema.Types.ObjectId,
-        ref: 'erp-project-location',
-        required: true,
-    },
-    label: {
-        type: [{
-            labelId: {
-                type: Schema.Types.ObjectId,
-                ref: 'project-type',
-            }
-        }],
-        default: []
-    },
+// location: {
+    //     // type: String,
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'erp-project-location',
+    //     required: true,
+    // },
+// label: {
+    //     type: [{
+    //         labelId: {
+    //             type: Schema.Types.ObjectId,
+    //             ref: 'project-type',
+    //         }
+    //     }],
+    //     default: []
+    // },
     startDate: {
         type: Date,
     },
@@ -48,30 +48,30 @@ const ProjectSchema = new Schema({
     po_date: {
         type: Date,
     },
-    projectManager: {
-        type: Schema.Types.ObjectId,
-        ref: 'Auth-Person',
-        required: true,
-    },
-    department: {
-        type: Schema.Types.ObjectId,
-        // required: true,
-        ref: 'department',
-    },
-    party: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'store-party',
-    },
-    contractor: {
-        type: [{
-            conId: {
-                type: Schema.Types.ObjectId,
-                ref: 'Contractor',
-            }
-        }],
-        default: []
-    },
+    // projectManager: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Auth-Person',
+    //     required: true,
+    // },
+    // department: {
+    //     type: Schema.Types.ObjectId,
+    //     // required: true,
+    //     ref: 'department',
+    // },
+    // party: {
+    //     type: Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'store-party',
+    // },
+    // contractor: {
+    //     type: [{
+    //         conId: {
+    //             type: Schema.Types.ObjectId,
+    //             ref: 'Contractor',
+    //         }
+    //     }],
+    //     default: []
+    // },
     company_logo: {
         type: String,
         default: null,

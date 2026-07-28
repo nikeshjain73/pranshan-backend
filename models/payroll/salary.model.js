@@ -96,6 +96,10 @@ const salarySchema = new Schema({
         type: String,
         default: '',
     },
+    bank_pass_book:{
+        type: String,
+        default: '',
+    },
     is_pf: {
         type: Boolean,
         default: false,

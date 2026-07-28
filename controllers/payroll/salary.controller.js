@@ -322,6 +322,7 @@ exports.manageSalary = async (req, res) => {
                 remark: remark,
                 ot_hourly_salary: ot_hourly_salary,
                 perhour_ot_salary: perhour_ot_salary,
+                bank_pass_book: req.file ? req.file.filename : '',
             });
 
             if (!id) {
@@ -341,7 +342,7 @@ exports.manageSalary = async (req, res) => {
                 //     return;
                 // }
 
-                await Salary.findByIdAndUpdate(id, {
+                let updateData = {
                     employee: employee,
                     salary_type: salary_type,
                     work_day_id: work_day_id,
@@ -376,7 +377,13 @@ exports.manageSalary = async (req, res) => {
                     ot_hourly_salary: ot_hourly_salary,
                     perhour_ot_salary: perhour_ot_salary,
                     status: status,
-                }).then(data => {
+                }
+                if(req.file){
+                    updateData.bank_pass_book = req.file.filename;
+                } else if (req.body.remove_passbook === 'true') {
+                    updateData.bank_pass_book = '';
+                }
+                await Salary.findByIdAndUpdate(id, updateData).then(data => {
                     if (data) {
                         sendResponse(res, 200, true, {}, "Salary updated successfully")
                     } else {
@@ -463,7 +470,7 @@ exports.manageBankDetail = async (req, res) => {
                 bank_branch_name: bank_branch_name,
                 bank_account_no: bank_account_no,
                 bank_account_ifsc: bank_account_ifsc,
-               
+                bank_pass_book: req.file ? req.file.filename : '',
             });
 
             if (!id) {
@@ -483,7 +490,7 @@ exports.manageBankDetail = async (req, res) => {
                 //     return;
                 // }
 
-                await Salary.findByIdAndUpdate(id, {
+                let updateData = {
                     employee: employee,
                     firm_id: firm_id,
                     year_id: year_id,
@@ -492,8 +499,13 @@ exports.manageBankDetail = async (req, res) => {
                     bank_branch_name: bank_branch_name,
                     bank_account_no: bank_account_no,
                     bank_account_ifsc: bank_account_ifsc,
-                
-                }).then(data => {
+                }
+                if(req.file){
+                    updateDataB.bank_pass_book = req.file.filename;
+                } else if (req.body.remove_passbook === 'true') {
+                    updateDataB.bank_pass_book = '';
+                }
+                await Salary.findByIdAndUpdate(id, updateDataB).then(data => {
                     if (data) {
                         sendResponse(res, 200, true, {}, "Salary updated successfully")
                     } else {

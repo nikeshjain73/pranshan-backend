@@ -10,19 +10,7 @@ exports.getProjects = async (req, res) => {
     try {
       await Project.find({ status: true, deleted: false }, { deleted: 0 })
         .sort({ name: 1 })
-        .populate("projectManager", "name")
-        .populate({
-          path: "party",
-          select: "name partyGroup address address_two address_three pincode city state",
-          populate: {
-            path: "partyGroup",
-            select: "name",
-          },
-        })
-        .populate("department", "name")
-        .populate("location", "name")
         .populate("firm_id", "name gst_no")
-        .populate("contractor.conId", "name email mobile status")
         .populate("year_id", "start_year  end_year")
         .sort({ voucher_no: -1 })
         .then((data) => {
@@ -75,16 +63,6 @@ exports.getAdminProjects = async (req, res) => {
   if (req.user && !req.error) {
     try {
       let data = await Project.find({ deleted: false }, { deleted: 0 })
-        .populate("projectManager", "name")
-        .populate({
-          path: "party",
-          select: "name partyGroup",
-          populate: { path: "partyGroup", select: "name" }
-        })
-        .populate("department", "name")
-        .populate("location", "name")
-        .populate("label.labelId", "projectTypeName")
-        .populate("contractor.conId", "name email mobile status")
         .populate("firm_id", "name gst_no")
         .populate("year_id", "start_year end_year")
         .sort({ voucher_no: -1 });
@@ -130,12 +108,12 @@ exports.manageProject = async (req, res) => {
     label,
     startDate,
     endDate,
-    department,
-    projectManager,
-    party,
+    // department,
+    // projectManager,
+    // party,
     status,
     work_order_no,
-    contractor,
+    // contractor,
     po_date,
     company_logo,
     id,
@@ -146,18 +124,18 @@ console.log(req.body,'project body');
       firm_id &&
       year_id &&
       name &&
-      location &&
+      // location &&
       // department &&
-      projectManager &&
+      // projectManager &&
       work_order_no &&
-      po_date &&
-      party
+      po_date
+      // party
     ) {
-      const conData = contractor && JSON.parse(contractor);
-      const labelData = label && JSON.parse(label);
-      console.log(labelData,'labelData')
-      console.log(conData,'conData')
-      const depart = department === "" || department === "undefined" ? null : department;
+      // const conData = contractor && JSON.parse(contractor);
+      // const labelData = label && JSON.parse(label);
+      // console.log(labelData,'labelData')
+      // console.log(conData,'conData')
+      // const depart = department === "" || department === "undefined" ? null : department;
 
       const lastProject = await Project.findOne({}).sort({ voucher_no: -1 });
       const new_voucher_no = lastProject ? parseInt(lastProject.voucher_no) + 1 : 10001;
@@ -167,15 +145,15 @@ console.log(req.body,'project body');
         year_id,
         name: name,
         details: details,
-        location: location,
-        label: labelData,
+        // location: location,
+        // label: labelData,
         startDate: startDate ? startDate : null,
         endDate: endDate ? endDate : null,
-        department: depart,
-        projectManager: projectManager,
+        // department: depart,
+        // projectManager: projectManager,
         work_order_no: work_order_no,
-        party: party,
-        contractor: conData,
+        // party: party,
+        // contractor: conData,
         voucher_no: new_voucher_no,
         po_date: po_date,
         company_logo: company_logo,
@@ -196,16 +174,16 @@ console.log(req.body,'project body');
           year_id,
           name,
           details,
-          location,
-          label: labelData,
+          // location,
+          // label: labelData,
           startDate: startDate !== "Invalid date" ? startDate : null,
           endDate: endDate !== "Invalid date" ? endDate : null,
-          department: depart,
-          projectManager,
-          party,
+          // department: depart,
+          // projectManager,
+          // party,
           work_order_no,
           status,
-          contractor: conData,
+          // contractor: conData,
           po_date: po_date !== "Invalid date" ? po_date : null,
         };
 
@@ -261,15 +239,6 @@ exports.getOneProject = async (req, res) => {
   try {
 
     await Project.findById(pId, { deleted: 0 })
-      .populate({
-        path: "party",
-        select: "name partyGroup address pincode city state gstNumber",
-        populate: {
-          path: "partyGroup",
-          select: "name",
-        },
-      })
-
       .then(data => {
         if (!data) {
           sendResponse(res, 200, true, {}, "Project not found")

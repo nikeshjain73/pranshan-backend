@@ -281,7 +281,7 @@ exports.manageEmploy = async (req, res) => {
         emp_type, education, nationality, emergency_person_dob,
         emergency_person_aadhar_number, emergency_person_aadhar_photo,
         other_document_imgs, esic_ip, pf_no, married_status,
-        id
+        id, projects
     } = req.body;
     if (uan_no && uan_no.length > 20) {
         sendResponse(res, 400, false, {}, "UAN number should not exceed 20 characters");
@@ -341,6 +341,7 @@ exports.manageEmploy = async (req, res) => {
             const shiftTwo = shift_two === 'undefined' ? null : shift_two;
 
             const otherDocumentImages = JSON.parse(other_document_imgs || '[]');
+            const parsedProjects = projects ? JSON.parse(projects) : [];
             const employee = new Employee({
                 employee_id: employee_id,
                 import_id: import_id,
@@ -408,6 +409,7 @@ exports.manageEmploy = async (req, res) => {
                 esic_ip: esic_ip,
                 pf_no: pf_no,
                 married_status: married_status,
+                projects: parsedProjects,
             });
 
 
@@ -487,6 +489,7 @@ exports.manageEmploy = async (req, res) => {
                     pf_no: pf_no,
                     married_status: married_status,
                     status: status,
+                    projects: parsedProjects,
                 }).then(data => {
                     if (data) {
                         sendResponse(res, 200, true, {}, "Employee updated successfully")

@@ -275,8 +275,19 @@ module.exports = (app) => {
 
   // REMOVED UNUSED: router.get("/get-salary", salary.getSalary);
   router.get("/get-admin-salary", salary.getAdminSalary);
-  router.post("/manage-salary", salary.manageSalary);
-  router.post("/manage-bank-detail", salary.manageBankDetail);
+
+  const salaryStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads"); // folder where files will be stored
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+  const salaryUpload = multer({ storage: salaryStorage });
+
+  router.post("/manage-salary", salaryUpload.single("bank_pass_book"), salary.manageSalary);
+  router.post("/manage-bank-detail", salaryUpload.single("bank_pass_book"), salary.manageBankDetail);
 
   router.delete("/delete-salary", salary.deleteSalary);
   router.post("/employee-salary", salary.employeeSalary);

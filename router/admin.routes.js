@@ -255,9 +255,10 @@ module.exports = (app) => {
   // REMOVED UNUSED: router.delete("/delete-client", client.deleteClient);
 
   // Project
-  // REMOVED UNUSED: router.get("/get-project", project.getProjects);
-  // REMOVED UNUSED: router.post("/manage-project", project.manageProject);
-  // REMOVED UNUSED: router.delete("/delete-project", project.deleteProject);
+  router.get("/get-project", project.getProjects);
+  router.get("/get-admin-project", project.getAdminProjects);
+  router.post("/manage-project", project.manageProject);
+  router.delete("/delete-project", project.deleteProject);
 
   // Transport
   // REMOVED UNUSED: router.get("/get-transport", transport.getTransport);

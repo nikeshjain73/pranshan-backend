@@ -242,6 +242,13 @@ const employeeSchema = new Schema({
     punch_machine_no: {
         type: Number,
         default: null
+    },
+    projects: {
+        type: [{
+            type: Schema.Types.ObjectId,
+            ref: 'bussiness-project'
+        }],
+        default: []
     }
 }, { timestamps: true });
 
