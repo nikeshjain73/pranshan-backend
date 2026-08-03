@@ -196,7 +196,7 @@ module.exports = (app) => {
 // ==============================================================================================
   router.post("/login", user.loginUser);
   // REMOVED UNUSED: router.post("/logout", user.logoutUser);
-  // REMOVED UNUSED: router.get("/get-year", year.getYear);
+  router.get("/get-year", year.getYear);
 
   router.post("/forget-password", user.userForgetPassword);
   router.post("/verify-otp", user.userVerifyOtp);
