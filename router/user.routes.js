@@ -511,9 +511,9 @@ module.exports = (app) => {
   );
 
   router.get("/get-project", project.getProjects);
-  // REMOVED UNUSED: router.get("/get-admin-project", project.getAdminProjects);
-  // REMOVED UNUSED: router.post("/manage-project", project.manageProject);
-  // REMOVED UNUSED: router.delete("/delete-project", project.deleteProject);
+   router.get("/get-admin-project", project.getAdminProjects);
+  router.post("/manage-project", project.manageProject);
+  router.delete("/delete-project", project.deleteProject);
 
   // REMOVED UNUSED: router.post("/get-party", party.getParty);
   // REMOVED UNUSED: router.post("/get-admin-party", party.getAdminParty);
