@@ -427,7 +427,7 @@ module.exports = (app) => {
   router.post("/manage-employee-type", employeeType.manageEmployeeType);
   router.delete("/delete-employee-type", employeeType.deleteEmployeeType);
 
-  // REMOVED UNUSED: router.post('/import-employee', employee.importEmployeeData);
+  router.post('/import-employee', employee.importEmployeeData);
   // REMOVED UNUSED: router.post('/get-monthly-sheet', employee.getMonthlySheet);
   router.post('/import-monthly-data', employee.importMonthlyData);
   router.post('/get-salary-report', employee.generateExcelReport);
@@ -511,7 +511,7 @@ module.exports = (app) => {
   );
 
   router.get("/get-project", project.getProjects);
-   router.get("/get-admin-project", project.getAdminProjects);
+  router.get("/get-admin-project", project.getAdminProjects);
   router.post("/manage-project", project.manageProject);
   router.delete("/delete-project", project.deleteProject);
 

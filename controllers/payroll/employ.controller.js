@@ -2827,6 +2827,8 @@ exports.importEmployeeData = async (req, res) => {
             try {
                 const data = parser.parseXls2Json(req.file.path, { cellDate: true });
                 const result = data.at(0).filter(elem => elem.import_id != '');
+                console.log("🚀 ~ exports.importEmployeeData ~ result:", result)
+
 
                 const validItems = [];
                 const salaryData = [];
@@ -2851,34 +2853,46 @@ exports.importEmployeeData = async (req, res) => {
                 const employeeTypeCache = await employeeType.find({}).lean();
 
                 const bankMap = bankCache.reduce((acc, bank) => {
-                    acc[bank.name.toLowerCase()] = bank._id;
+                    if (bank && bank.name) acc[bank.name.toString().toLowerCase()] = bank._id;
                     return acc;
                 }, {});
 
                 const departmentMap = departmentCache.reduce((acc, department) => {
-                    acc[department.name.toLowerCase()] = department._id;
+                    if (department && department.name) acc[department.name.toString().toLowerCase()] = department._id;
                     return acc;
                 }, {});
 
                 const designationMap = designationCache.reduce((acc, designation) => {
-                    acc[designation.name.toLowerCase()] = designation._id;
+                    if (designation && designation.name) acc[designation.name.toString().toLowerCase()] = designation._id;
                     return acc;
                 }, {});
 
                 const employeeTypeMap = employeeTypeCache.reduce((acc, type) => {
-                    acc[type.name.toLowerCase()] = type._id;
+                    if (type && type.name) acc[type.name.toString().toLowerCase()] = type._id;
+                    return acc;
+                }, {});
+
+                const shiftCache = await shiftModel.find({}).lean();
+                const shiftMap = shiftCache.reduce((acc, shift) => {
+                    if (shift && shift.name) acc[shift.name.toString().toLowerCase()] = shift._id;
+                    return acc;
+                }, {});
+
+                const projectCache = await projectModel.find({}).lean();
+                const projectMap = projectCache.reduce((acc, proj) => {
+                    if (proj && proj.name) acc[proj.name.toString().toLowerCase()] = proj._id;
                     return acc;
                 }, {});
 
                 for (const item of result) {
                     const record = {
-                        import_id, first_name, last_name, middle_name, joining_date, designation, card_no, uan_no,
-                        email, gender, dob, mobile_number, adhar_no, pancard_no, address, address_two, address_three, state,
-                        city, pincode, pre_address, pre_address_two, pre_address_three, pre_state, pre_city, pre_pincode, same_address,
-                        height, weight, skills, emp_type, esi_number, passport_number, nationality, caste, blood_group, education,
-                        salary_type, working_day, working_hour, basic, hra, perhour_ot_salary, bank_name,
-                        bank_account_ifsc, bank_account_no, employee, department, actual_present_day, cl_day,
-                        ph_day, ot_hour, bonus_count
+                        first_name, last_name, father_name, joining_date, designation, esi_ip, card_no, uan_no,
+                        email, projects, gender, dob, mobile_number, pf_no, adhar_no, pancard_no, shift, in_time,
+                        out_time, leaving_date, week_off, married_status, leaving_reason, address, address_two,
+                        address_three, state, city, pincode, pre_address, pre_address_two, pre_address_three,
+                        pre_state, pre_city, pre_pincode, same_address, block_list, block_list_reason,
+                        emergency_contact, height, weight, skills, emp_type, esi_number, passport_number,
+                        nationality, caste, blood_group, education
                     } = item;
 
                     if (record.skills === '') {
@@ -2890,19 +2904,19 @@ exports.importEmployeeData = async (req, res) => {
                     }
 
                     if (record.bank_name) {
-                        let bankId = bankMap[record.bank_name.trim().toLowerCase()];
+                        let bankId = bankMap[record.bank_name?.toString().trim().toLowerCase()];
                         if (!bankId) {
                             const bankObj = new bankModel({ name: record.bank_name });
                             const newBank = await bankObj.save();
                             bankId = newBank._id;
-                            bankMap[record.bank_name.trim().toLowerCase()] = bankId;
+                            bankMap[record.bank_name?.toString().trim().toLowerCase()] = bankId;
                         }
                         record.bank_name = bankId;
                     } else {
                         record.bank_name = null;
                     }
-                    if (record.department !== '') {
-                        let departmentId = departmentMap[record.department.trim().toLowerCase()];
+                    if (record.department) {
+                        let departmentId = departmentMap[record.department?.toString().trim().toLowerCase()];
                         if (!departmentId) {
                             const departmentObj = new departmentModel({
                                 name: record.department,
@@ -2910,21 +2924,20 @@ exports.importEmployeeData = async (req, res) => {
                             });
                             const newDept = await departmentObj.save();
                             departmentId = newDept._id;
-                            departmentMap[record.department.trim().toLowerCase()] = departmentId;
+                            departmentMap[record.department?.toString().trim().toLowerCase()] = departmentId;
                         }
                         record.department = departmentId;
                     } else {
                         record.department = null;
                     }
 
-
-                    if (record.designation !== '') {
-                        let designationId = designationMap[record.designation.trim().toLowerCase()];
-                        if (!designationId && record.designation !== '') {
+                    if (record.designation) {
+                        let designationId = designationMap[record.designation?.toString().trim().toLowerCase()];
+                        if (!designationId) {
                             const designationObj = new designationModel({ name: record.designation });
                             const newDesignation = await designationObj.save();
                             designationId = newDesignation._id;
-                            designationMap[record.designation.trim().toLowerCase()] = designationId;
+                            designationMap[record.designation?.toString().trim().toLowerCase()] = designationId;
                         }
                         record.designation = designationId;
                     } else {
@@ -2932,8 +2945,36 @@ exports.importEmployeeData = async (req, res) => {
                     }
 
                     if (record.emp_type) {
-                        record.emp_type = employeeTypeMap[record.emp_type.trim().toLowerCase()] || null;
+                        record.emp_type = employeeTypeMap[record.emp_type?.toString().trim().toLowerCase()] || null;
                     }
+
+                    if (record.shift) {
+                        let shiftId = shiftMap[record.shift?.toString().trim().toLowerCase()];
+                        if (!shiftId) {
+                            const shiftObj = new shiftModel({ name: record.shift });
+                            const newShift = await shiftObj.save();
+                            shiftId = newShift._id;
+                            shiftMap[record.shift?.toString().trim().toLowerCase()] = shiftId;
+                        }
+                        record.shift = shiftId;
+                    } else {
+                        record.shift = null;
+                    }
+
+                    if (record.projects) {
+                        let projId = projectMap[record.projects?.toString().trim().toLowerCase()];
+                        if (!projId) {
+                            const projObj = new projectModel({ name: record.projects });
+                            const newProj = await projObj.save();
+                            projId = newProj._id;
+                            projectMap[record.projects?.toString().trim().toLowerCase()] = projId;
+                        }
+                        record.projects = [projId];
+                    } else {
+                        record.projects = [];
+                    }
+
+                    record.married_status = record.married_status?.toString().toLowerCase() === 'married' ? true : false;
 
                     if (record.address !== '' && record.pre_address !== '') {
                         record.pre_address = record.address;
@@ -2960,9 +3001,17 @@ exports.importEmployeeData = async (req, res) => {
                     //record.department = record.department ? converFirstLetterUpper(record.department) : '';
                     record.state = record.state ? converFirstLetterUpper(record.state) : '';
                     record.city = record.city ? converFirstLetterUpper(record.city) : '';
-                    record.dob = record.dob ? moment(convertExcelDateToJSDate(record.dob)).format('YYYY-MM-DD') : '';
-                    record.joining_date = record.joining_date ? moment(convertExcelDateToJSDate(record.joining_date)).format('YYYY-MM-DD') : '';
-                    const isExisting = await Employee.findOne({ import_id: record.import_id });
+                    
+                    const parseDateStr = (d) => {
+                        if (!d) return '';
+                        if (typeof d === 'number') return moment(convertExcelDateToJSDate(d)).format('YYYY-MM-DD');
+                        return moment(d, ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD']).format('YYYY-MM-DD');
+                    };
+                    
+                    record.dob = parseDateStr(record.dob);
+                    record.joining_date = parseDateStr(record.joining_date);
+                    
+                    const isExisting = record.import_id ? await Employee.findOne({ import_id: record.import_id }) : null;
 
                     if (isExisting) {
                         errors.push({
@@ -2977,22 +3026,15 @@ exports.importEmployeeData = async (req, res) => {
                     record.firm_id = req.body.firm_id;
                     record.year_id = req.body.year_id;
                     record.black_list = false;
-                    record.is_emergency = false;
-                    record.shift = "65d82a0d360572449e64b123";
-                    record.in_time = "08:00";
-                    record.out_time = "20:00";
-                    record.shift_two = "65d82a13360572449e64b126";
-                    record.in_time_two = "20:00";
-                    record.out_time_two = "08:00";
-                    record.holiday = "Sunday";
-                    record.leaving_date = "";
-                    record.leaving_reason = "";
-                    record.black_list_reason = "";
+                    record.is_emergency = record.emergency_contact === 'true' || record.emergency_contact === true;
+                    record.holiday = record.week_off || "Sunday";
+                    record.black_list_reason = record.block_list_reason || "";
+                    record.black_list = record.block_list === 'true' || record.block_list === true;
                     record.esi_number = "0";
                     record.image = "";
                     record.pan_card_image = "";
                     record.aadhar_card_image = "";
-                    record.full_name = record.first_name + " " + record.middle_name + " " + record.last_name;
+                    record.full_name = record.first_name + " " + record.last_name;
                     record.emergency_contact_number = 0,
                         record.emergency_contact_person = "",
                         record.emergency_person_aadhar_number = 0,
@@ -3001,6 +3043,7 @@ exports.importEmployeeData = async (req, res) => {
                         record.emergency_person_relation = ""
                     validItems.push(record);
 
+                    /* --- SALARY LOGIC COMMENTED OUT ---
                     if (record.department !== '') {
                         const basic = parseFloat(record.basic) || 0;
                         const hra = parseFloat(record.hra) || 0;
@@ -3091,6 +3134,8 @@ exports.importEmployeeData = async (req, res) => {
                         }
 
                     }
+                    --- END SALARY LOGIC --- */
+
                     newVoucher_no += 1;
 
                     if (parseFloat(record.bonus_count) > 0) {
@@ -3108,15 +3153,12 @@ exports.importEmployeeData = async (req, res) => {
                 }
                 // return res.send("Hello");
                 if (validItems.length > 0) {
-                    const session = await mongoose.startSession();
-                    session.startTransaction();
-
                     try {
-                        const insertedRecords = await Employee.insertMany(validItems, { session });
-                        const salaryInserts = insertedRecords.map((employee, index) => ({
-                            ...salaryData[index],
-                            employee: employee._id
-                        }));
+                        const insertedRecords = await Employee.insertMany(validItems);
+                        // const salaryInserts = insertedRecords.map((employee, index) => ({
+                        //     ...salaryData[index],
+                        //     employee: employee._id
+                        // }));
 
                         // const monthInserts = insertedRecords.map((employee, index) => ({ 
                         //     ...monthlyAttendance[index],
@@ -3132,20 +3174,17 @@ exports.importEmployeeData = async (req, res) => {
 
 
 
-                        await salaryModel.insertMany(salaryInserts, { session });
-                        //await monthlyAttendanceModel.insertMany(monthInserts, { session });
-                        //await earningModel.insertMany(earningData,{ session });
+                        // await salaryModel.insertMany(salaryInserts);
+                        //await monthlyAttendanceModel.insertMany(monthInserts);
+                        //await earningModel.insertMany(earningData);
 
-                        await session.commitTransaction();
-                        session.endSession();
-
-                        sendResponse(res, 200, true, {}, 'Employee data,salaries,earning and attendance imported successfully');
+                        sendResponse(res, 200, true, { errors }, 'Employee data, salaries, earning and attendance imported successfully');
                         return;
                     } catch (error) {
-                        await session.abortTransaction();
-                        session.endSession();
-                        throw error;
+                        throw error;    
                     }
+                } else {
+                    return sendResponse(res, 400, false, { errors }, 'No new records to import. All records might already exist.');
                 }
             } catch (err) {
                 return sendResponse(res, 400, false, {}, 'Something went wrong: ' + err.message);

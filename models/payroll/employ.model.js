@@ -13,6 +13,9 @@ const employeeSchema = new Schema({
     middle_name: {
         type: String,
     },
+    father_name: {
+        type: String,
+    },
     last_name: {
         type: String,
     },
