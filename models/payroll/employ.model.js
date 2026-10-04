@@ -6,6 +6,7 @@ const employeeSchema = new Schema({
     //personal
     card_no: {
         type: String,
+        default: null
     },
     first_name: {
         type: String,
@@ -37,6 +38,7 @@ const employeeSchema = new Schema({
     },
     email: {
         type: String,
+        default: null
     },
     // document
     adhar_no: {
@@ -110,7 +112,8 @@ const employeeSchema = new Schema({
         type: String
     },
     black_list: {
-        type: Boolean
+        type: Boolean,
+        default: false,
     },
     shift: {
         type: Schema.Types.ObjectId,
@@ -202,6 +205,7 @@ const employeeSchema = new Schema({
     },
     blood_group: {
         type: String,
+        default: null
     },
     passport_number: {
         type: String,
